@@ -451,6 +451,9 @@ def analyze(args):
     if BROWSER:
         render_previews(proj, rows)
     out.write_text(google_report.render(args.project, proj, rows, stats, google_report.load_notes(proj)), encoding="utf-8")
+    import google_app_report
+    if any(google_report.campaign_type(r) == google_app_report.APP for r in rows):
+        print(f"  → {google_app_report.render(args.project, proj, rows, order)[0]}")
     print(f"\n✔ {sum(1 for s in stats if s['total'])} đối thủ có QC Google, {len(rows)} creative "
           f"({sum(r['active'] for r in rows)} đang chạy) → {out}")
 

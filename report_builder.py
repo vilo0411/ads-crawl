@@ -391,7 +391,8 @@ def insights(group, stats, rows, others):
         out.append("Đối thủ dồn vào 1 mục tiêu: " + "; ".join(dom[:5]) + more + ".")
     mixed = [s["short"] for s in live if s["ads"] >= 5 and len([1 for st in STAGES if s["stages"].get(st)]) == 3]
     if mixed:
-        out.append(f"Chạy đủ 3 tầng phễu (nhận biết + cân nhắc + chuyển đổi) cùng lúc: <b>{esc(', '.join(mixed))}</b>. Đây là dấu hiệu có nuôi dưỡng và retarget.")
+        out.append(f"Có QC ở đủ 3 tầng phễu theo CTA/đích đến (nhận biết + cân nhắc + chuyển đổi): "
+                   f"<b>{esc(', '.join(mixed))}</b>. Dữ liệu không cho biết đối tượng nhắm chọn nên không thể xác nhận retargeting.")
     fast = max(live, key=lambda s: s["cre_new_14d"])
     if fast["cre_new_14d"]:
         out.append(f"<b>{esc(fast['short'])}</b> ra nhiều ý tưởng mới nhất: {fast['cre_new_14d']} mẫu mới trong 14 ngày "
@@ -482,11 +483,11 @@ def tk_funnel(rows):
     st, n = Counter(r["stage"] for r in rows), len(rows)
     conv, aware = pct(st.get("Chuyển đổi", 0), n), pct(st.get("Nhận biết", 0), n)
     if conv >= 70:
-        return tk(f"{conv:.0f}% QC nằm ở tầng <b>Chuyển đổi</b>, tầng Nhận biết chỉ {aware:.0f}%. Đối thủ dồn tiền vào chốt khách, rất ít "
-                  "nội dung nuôi dưỡng: đây là khoảng trống nếu muốn khác biệt bằng nội dung kiến thức.")
+        return tk(f"{conv:.0f}% QC được xếp tầng <b>Chuyển đổi</b> theo CTA/đích đến, tầng Nhận biết là {aware:.0f}%. "
+                  "Tỷ lệ này phản ánh số QC đang quan sát được, không phản ánh ngân sách hay vai trò nuôi dưỡng của nội dung.")
     if aware >= 40:
-        return tk(f"{aware:.0f}% QC ở tầng <b>Nhận biết</b>: nhóm này đang đầu tư xây thương hiệu / nội dung nhiều hơn chốt trực tiếp.")
-    return tk(f"Ngân sách chia khá đều giữa các tầng (Chuyển đổi {conv:.0f}%, Nhận biết {aware:.0f}%), có dấu hiệu chạy phễu nhiều bước.")
+        return tk(f"{aware:.0f}% QC được xếp tầng <b>Nhận biết</b> theo CTA/đích đến; đây là phân bố loại hành động, không phải phân bổ ngân sách.")
+    return tk(f"Số QC phân bố tương đối đều giữa các tầng theo CTA/đích đến (Chuyển đổi {conv:.0f}%, Nhận biết {aware:.0f}%).")
 
 
 def tk_landing(rows):
@@ -533,9 +534,9 @@ def tk_groups(by_group):
     a1, a2 = q1 / m1, q2 / m2
     out = f"Nhóm {esc(g1)} trung bình {vn(a1)} QC mỗi mẫu, nhóm {esc(g2)} {vn(a2)} QC mỗi mẫu."
     if a2 > a1 * 1.5:
-        out += f" {esc(g2)} dồn tiền vào ít thiết kế và nhân bản rất mạnh, còn {esc(g1)} thử nhiều ý tưởng hơn."
+        out += f" {esc(g2)} tập trung nhiều QC vào ít thiết kế, còn {esc(g1)} có nhiều mẫu khác nhau hơn."
     elif a1 > a2 * 1.5:
-        out += f" {esc(g1)} dồn tiền vào ít thiết kế hơn, còn {esc(g2)} thử nhiều ý tưởng hơn."
+        out += f" {esc(g1)} tập trung nhiều QC vào ít thiết kế hơn, còn {esc(g2)} có nhiều mẫu khác nhau hơn."
     o1, o2 = Counter(r["objective"] for r in r1).most_common(1)[0][0], Counter(r["objective"] for r in r2).most_common(1)[0][0]
     out += (f" Cả hai nhóm đều chủ yếu chạy {esc(o1)}." if o1 == o2
             else f" Mục tiêu chính: {esc(g1)} là {esc(o1)}, {esc(g2)} là {esc(o2)}.")
@@ -557,10 +558,10 @@ def tk_compare(stats):
     keep = max(live, key=lambda s: (s["cre_30d"], s["cre_median_days"]))
     if keep["cre_30d"]:
         out.append(f"<b>{esc(keep['short'])}</b> giữ mẫu lâu nhất ({keep['cre_30d']} mẫu chạy ≥ 30 ngày, một mẫu thường chạy "
-                   f"{keep['cre_median_days']:.0f} ngày): có mẫu đang hiệu quả đáng xem trước.")
+                   f"{keep['cre_median_days']:.0f} ngày): có mẫu được duy trì lâu, đáng xem trước.")
     dup = max(live, key=lambda s: s["avg_copies"])
     if dup["avg_copies"] >= 2:
-        out.append(f"<b>{esc(dup['short'])}</b> nhân bản mạnh nhất (×{vn(dup['avg_copies'])} QC mỗi mẫu), tức là đang đẩy mạnh một số ít mẫu.")
+        out.append(f"<b>{esc(dup['short'])}</b> có nhiều QC liên quan trên mỗi mẫu nhất (×{vn(dup['avg_copies'])}); đây là tín hiệu triển khai rộng, không phải dữ liệu ngân sách.")
     if idle:
         out.append(f"{names(idle)} không chạy QC lúc cào.")
     return tk(*out)
@@ -624,9 +625,9 @@ def tk_profile(s, creatives, lands):
     d = Counter(dest_detail(r) for r in rs if r["objective"] == o).most_common(1)[0][0]
     out.append(f"{esc(s['short'])} chủ yếu chạy <b>{esc(o)}</b> ({pct(c, s['ads']):.0f}% QC), xoáy vào chủ đề <b>{esc(t)}</b> và dẫn về {esc(d)}.")
     if all(s["stages"].get(st) for st in STAGES):
-        out.append("Chạy đủ 3 tầng phễu cùng lúc, có dấu hiệu nuôi dưỡng rồi chốt.")
+        out.append("Có QC ở đủ 3 tầng phễu theo CTA/đích đến; dữ liệu không cho biết đối tượng nhắm chọn hay hành trình thực tế sau cú nhấp.")
     elif s["stages"].get("Chuyển đổi", 0) == s["ads"]:
-        out.append("100% QC là chốt trực tiếp, không có nội dung nuôi dưỡng.")
+        out.append("100% QC hướng tới hành động chuyển đổi theo CTA/đích đến; cách phân loại này không khẳng định nội dung thiếu vai trò nuôi dưỡng.")
     return tk(*out)
 
 
@@ -771,7 +772,7 @@ def compare_section(stats, rows, today):
     obj_keys = [k for k in OBJ_ORDER if any(r["objective"] == k for r in rows)]
     return f"""
 <div class="box read"><b>Cách đọc:</b> <b>Mẫu</b> là một thiết kế quảng cáo (các bản chỉ đổi chữ / con số được tính chung). Đối thủ thường chạy 1 mẫu thành nhiều
-<b>QC</b> (nhiều bản) để test hoặc đẩy mạnh, nên tính theo <b>mẫu</b> mới thấy họ có bao nhiêu ý tưởng thật. Bấm tên đối thủ để xem hồ sơ.</div>
+<b>QC</b> (nhiều bản) trong quá trình triển khai, nên tính theo <b>mẫu</b> mới thấy họ có bao nhiêu ý tưởng khác nhau. Bấm tên đối thủ để xem hồ sơ.</div>
 {tk_compare(stats)}
 <div class="box tw"><table class="cmp"><tr><th>Đối thủ</th>
 <th>Mẫu đang chạy<small>và tổng số QC</small></th>
@@ -836,11 +837,11 @@ def profile_section(s, creatives, today):
 <div class="kpi"><b>{s['cre_30d']}</b>mẫu chạy ≥ 30 ngày</div>
 <div class="kpi"><b>×{vn(s['avg_copies'])}</b>QC mỗi mẫu (nhiều nhất ×{s['max_dup']})</div></div>
 <h4>Loại chiến dịch → chủ đề → trang đích</h4>
-<p class="muted">Tầng phễu: {stages}. % tính trên số QC.</p>{tk_profile(s, creatives, lands)}{flow_rows(rs)}
+<p class="muted">Tầng phễu theo CTA/đích đến: {stages}. % tính trên số QC, không phải ngân sách hay kết quả chuyển đổi.</p>{tk_profile(s, creatives, lands)}{flow_rows(rs)}
 <div class="grid2"><div><h4>Số mẫu có QC mới theo 7 ngày</h4>{tk_spark(s, today)}<div class="spark">{spark}</div><div class="muted sprk"><span>{week_span(WEEKS - 1, today)[0]:%d/%m}</span><span>7 ngày qua</span></div></div>
 <div><h4>Ưu đãi trích từ caption (số QC)</h4>{tk_offers_profile(rs)}{f"<table class='mini'>{off_rows}</table>" if off_rows else "<p class='muted'>Không thấy con số ưu đãi.</p>"}</div></div>
-<h4>Mẫu đáng học nhất · {min(TOP, len(creatives))} / {len(creatives)} mẫu</h4>
-<p class="muted">Xếp theo số ngày chạy × số QC: mẫu chạy càng lâu và được nhân càng nhiều bản thì càng có khả năng đang hiệu quả.</p>
+<h4>Mẫu có tín hiệu đáng chú ý · {min(TOP, len(creatives))} / {len(creatives)} mẫu</h4>
+<p class="muted">Xếp theo thời gian duy trì và số QC liên quan. Đây là tín hiệu về mức độ duy trì/triển khai, không phải bằng chứng về chi tiêu, tương tác trên bài hay hiệu quả kinh doanh.</p>
 {tk_top_creatives(creatives)}<div class="cards">{cards}</div>{more}
 {f"<h4>Trang đích</h4>{tk_lands(lands)}<div class='lps'>{land_cards}</div>" if land_cards else ""}
 </section>"""
@@ -1134,20 +1135,23 @@ def render(project, proj, rows, stats, has_landings=False, signal_keys=None):
 <section data-panel="limits" hidden><h2>Thuật ngữ</h2>
 <div class="box"><table class="mini gl">
 <tr><td>QC</td><td>Một quảng cáo trên Ad Library (1 mã ID).</td></tr>
-<tr><td>Mẫu</td><td>Một thiết kế quảng cáo (hình / video). Các QC cùng thiết kế được tính là 1 mẫu, dù caption, nút bấm, trang đích hay con số ưu đãi trên ảnh khác nhau (nhận diện bằng so khớp ảnh thumbnail). Một mẫu thường được chạy thành nhiều QC để test, hoặc để đẩy mạnh.</td></tr>
-<tr><td>Biến thể</td><td>Các bản của cùng 1 mẫu chỉ khác chữ / con số trên ảnh, ví dụ "Tải app 0đ – nhận tới 80K" và "… 100K". Đối thủ có nhiều biến thể = đang test thông điệp trên cùng 1 thiết kế.</td></tr>
-<tr><td>QC mỗi mẫu</td><td>Trung bình 1 mẫu đang chạy bằng bao nhiêu QC. ×4 = mỗi ý tưởng được chạy khoảng 4 bản. "Nhiều nhất ×9" = mẫu được đẩy mạnh nhất có 9 bản.</td></tr>
+<tr><td>Mẫu</td><td>Một thiết kế quảng cáo (hình / video). Các QC cùng thiết kế được tính là 1 mẫu, dù caption, nút bấm, trang đích hay con số ưu đãi trên ảnh khác nhau (nhận diện bằng so khớp ảnh thumbnail). Một mẫu có thể được triển khai thành nhiều QC.</td></tr>
+<tr><td>Biến thể</td><td>Các bản của cùng 1 mẫu chỉ khác chữ / con số trên ảnh, ví dụ "Tải app 0đ – nhận tới 80K" và "… 100K". Nhiều biến thể cho thấy mức độ triển khai trên cùng thiết kế; dữ liệu không xác nhận mục đích test.</td></tr>
+<tr><td>QC mỗi mẫu</td><td>Trung bình 1 mẫu đang chạy bằng bao nhiêu QC. ×4 = mỗi ý tưởng có khoảng 4 QC liên quan. "Nhiều nhất ×9" = mẫu có nhiều QC liên quan nhất có 9 bản.</td></tr>
 <tr><td>Mẫu thường chạy</td><td>Trung vị số ngày chạy của các mẫu: một nửa số mẫu chạy lâu hơn con số này, một nửa ngắn hơn. Ngày chạy của mẫu = bản chạy lâu nhất.</td></tr>
-<tr><td>Mẫu ≥ 30 ngày</td><td>Số mẫu đã chạy từ 30 ngày trở lên. Đối thủ ít khi giữ mẫu không hiệu quả lâu như vậy.</td></tr>
+<tr><td>Mẫu ≥ 30 ngày</td><td>Số mẫu đã chạy từ 30 ngày trở lên. Đây là tín hiệu mẫu được duy trì, không phải bằng chứng trực tiếp về hiệu quả.</td></tr>
 <tr><td>Mẫu mới</td><td>Mẫu có QC đầu tiên bắt đầu chạy trong 14 ngày gần nhất.</td></tr>
 <tr><td>Loại chiến dịch</td><td>Mục tiêu chiến dịch suy ra từ nút bấm và trang đích (Meta không công bố). Xem quy tắc bên dưới.</td></tr>
-<tr><td>Tầng phễu</td><td>Nhận biết = like trang, tương tác, xem video · Cân nhắc = dẫn về bài viết, landing, form ngoài · Chuyển đổi = cài app, lead form, tin nhắn, chuyển đổi trên web.</td></tr>
+<tr><td>Tầng phễu</td><td>Phân loại theo CTA/đích đến, không theo phong cách nội dung: Nhận biết = like trang, tương tác, xem video · Cân nhắc = dẫn về bài viết, landing, form ngoài · Chuyển đổi = cài app, lead form, tin nhắn, chuyển đổi trên web. Video kiến thức dẫn tới mở tài khoản vẫn được tính là Chuyển đổi.</td></tr>
 </table></div>
 <h2>Giới hạn dữ liệu & cách suy luận</h2>
 <div class="box"><ul class="ins">
 <li><b>Chỉ thấy QC đang chạy.</b> Meta chỉ công bố QC đã dừng, chi tiêu và lượt hiển thị cho QC chính trị và QC ở EU. Với QC thương mại ở VN, lọc "đang chạy + đã dừng" vẫn chỉ trả về QC đang chạy (đã thử ngày 28/10/2026).</li>
 <li><b>Loại chiến dịch là suy luận</b>, vì Ad Library không có trường objective. Quy tắc: nút Cài đặt / đích App Store, Google Play → <i>Cài app</i> (tin cậy cao); nút Gửi tin nhắn / Zalo → <i>Tin nhắn</i>; nút Thích trang → <i>Like trang</i>; link về fb.me / facebook kèm nút Đăng ký, Áp dụng → <i>Lead form trên FB</i>; không link / nút xem trang → <i>Tương tác / video view</i>; Google Form, Zoom → <i>Traffic → form/webinar ngoài</i>; bài báo → <i>Traffic → bài viết / PR</i>; landing có form + Meta Pixel → <i>Lead / chuyển đổi trên web</i>; còn lại → <i>Traffic → landing</i> (tin cậy thấp). Cột objective_confidence trong all_ads.csv ghi mức tin cậy cho từng QC.</li>
 <li><b>Số QC không phải ngân sách.</b> Một đối thủ có nhiều QC có thể chỉ là đang dùng DCO hoặc nhân bản nhiều biến thể.</li>
+<li><b>Số QC đo mức độ active, không phải thị phần.</b> Các tỷ lệ trong báo cáo tính trên số QC đang quan sát được tại thời điểm cào.</li>
+<li><b>Không có tương tác trên bài quảng cáo.</b> <code>page_like_count</code> chỉ phản ánh quy mô fanpage, không được dùng để đánh giá hay xếp hạng creative.</li>
+<li><b>Creative có tín hiệu đáng chú ý</b> được xếp theo thời gian duy trì và số QC liên quan. Đây không phải bằng chứng về chi tiêu, tương tác trên bài hoặc hiệu quả kinh doanh.</li>
 <li><b>Ưu đãi và chủ đề</b> được trích bằng từ khoá trong caption, có thể sót hoặc nhầm; cần đối chiếu với thể lệ trên trang đích.</li>
 <li><b>Trang đích</b> được mở bằng trình duyệt mobile (iPhone). Deep link mở app được ghi nhận là App Store / Google Play. Meta Pixel được phát hiện qua script connect.facebook.net / fbq.</li>
 </ul></div></section>

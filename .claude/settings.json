@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)",
+      "Bash(grep -v \"^# \\\\|^$\" competitors.txt)",
+      "Bash(grep -v \"^# \\\\|^$\" google_competitors.txt)",
+      "Bash(PYTHONIOENCODING=utf-8 python google_app_report.py --project chung-khoan)",
+      "Bash(python -m pip install -q -r requirements.txt)",
+      "Bash(PYTHONIOENCODING=utf-8 python google_ads_intel.py report --project chung-khoan)"
+    ]
+  }
+}

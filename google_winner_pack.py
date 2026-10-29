@@ -94,12 +94,12 @@ def meta_of(v, rank, video):
 
 def write_index(win_dir, packs, n_rows, n_videos):
     lines = [
-        "# Video YouTube thắng trong Google Ads của đối thủ",
+        "# Creative có tín hiệu thắng · video YouTube trong Google Ads",
         "",
         f"Cập nhật {time.strftime('%d/%m/%Y %H:%M')} · {n_rows} creative Google → {n_videos} video YouTube khác nhau.",
         "",
-        "Hạng: **Win chắc** = hiển thị ≥ 60 ngày, hoặc ≥ 30 ngày và dùng trong ≥ 2 creative · **Đang lên** = 14–59 ngày, "
-        "hoặc vừa có creative mới · **Đang test** = < 14 ngày. \"Ngày hiển thị\" là số ngày Google thực sự phân phối.",
+        "Các nhãn chỉ phản ánh tín hiệu quan sát được: **Tín hiệu bền** = hiển thị ≥ 60 ngày, hoặc ≥ 30 ngày và dùng trong ≥ 2 creative · **Triển khai rộng** = 14–59 ngày, "
+        "hoặc vừa có creative mới · **Chưa đủ dữ liệu** = < 14 ngày. \"Ngày hiển thị\" là số ngày Google ghi nhận phân phối. Số creative đo mức độ active/triển khai, không đại diện cho ngân sách, impression share hay hiệu quả kinh doanh.",
         "",
         "| # | Hạng | Đối thủ | Ngày hiển thị | Số creative | Đang chạy | Độ dài | Khung | Nền tảng | Tiêu đề | Gói |",
         "|---|---|---|---|---|---|---|---|---|---|---|",

@@ -41,7 +41,7 @@ MODEL_SEARCH = [
 # Font của design system DSC nếu đã cài (Google Fonts), không thì Arial
 FONT = next((str(f) for d in [Path.home() / "Library/Fonts", Path("/Library/Fonts")] if d.exists()
              for f in sorted(d.glob("PlusJakartaSans*.ttf"))), "/System/Library/Fonts/Supplemental/Arial.ttf")
-TIERS = ["Win chắc", "Đang lên", "Đang test"]
+TIERS = ["Tín hiệu bền", "Triển khai rộng", "Chưa đủ dữ liệu"]
 
 
 # ───────────────────────── Chọn video thắng ─────────────────────────
@@ -335,20 +335,20 @@ def main():
 
 def write_index(win_dir, packs, images, n_ads, n_creatives):
     lines = [
-        "# Video thắng của đối thủ",
+        "# Creative có tín hiệu thắng · video đối thủ",
         "",
         f"Cập nhật {time.strftime('%d/%m/%Y %H:%M')} · {n_ads} QC → {n_creatives} creative khác nhau sau khi gộp bản trùng.",
         "",
-        "Hạng: **Win chắc** = chạy ≥ 60 ngày, hoặc ≥ 30 ngày và có ≥ 2 bản · **Đang lên** = 14–59 ngày, hoặc vừa có bản mới · **Đang test** = < 14 ngày.",
+        "Các nhãn chỉ phản ánh tín hiệu quan sát được: **Tín hiệu bền** = chạy ≥ 60 ngày, hoặc ≥ 30 ngày và có ≥ 2 bản · **Triển khai rộng** = 14–59 ngày, hoặc vừa có bản mới · **Chưa đủ dữ liệu** = < 14 ngày. Số QC đo mức độ active, không đại diện cho ngân sách hay thị phần. Dữ liệu không có tương tác trên bài quảng cáo; `page_like_count` chỉ là quy mô fanpage và không được dùng để xếp hạng creative.",
         "",
-        "| # | Hạng | Fanpage | Ngày chạy | Số bản | Độ dài | Khung | Kênh chốt | Gói |",
+        "| # | Hạng | Fanpage | Ngày chạy | Số bản | Độ dài | Khung | Đích sau CTA | Gói |",
         "|---|---|---|---|---|---|---|---|---|",
     ]
     for out, m in packs:
         lines.append(f"| {m['rank']} | {m['tier']} | {m['page_name']} | {m['days_running']} | {m['copies']} | "
                      f"{m['video_duration'] or '?'}s | {m['aspect'] or '?'} | {m['destination']} | [{out.name}]({out.name}/) |")
     if images:
-        lines += ["", "## QC ảnh thắng (chỉ liệt kê)", "", "| Hạng | Fanpage | Ngày chạy | Số bản | Caption | Link |",
+        lines += ["", "## QC ảnh có tín hiệu đáng chú ý (chỉ liệt kê)", "", "| Hạng | Fanpage | Ngày chạy | Số bản | Caption | Link |",
                   "|---|---|---|---|---|---|"]
         for c in images:
             cap = (c["rep"]["body"] or "").replace("\n", " ").replace("|", "/")[:90]

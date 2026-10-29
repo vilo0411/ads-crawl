@@ -3,7 +3,7 @@
   "_updated": "29/10/2026",
   "Top 10": {
     "1": [
-      "Trên Google, <b>chỉ 4/10 công ty top 10 đang chạy</b> và SSI chiếm gần 3/4 số creative của nhóm. <b>Google đang ít cạnh tranh hơn Facebook rất nhiều</b> ở nhóm dẫn đầu, nên giá thầu cho từ khoá và đối tượng tài chính có thể còn rẻ.",
+      "Trên Google, <b>chỉ 4/10 công ty top 10 đang chạy</b> và SSI chiếm gần 3/4 số creative của nhóm trong snapshot. Điều này cho thấy ít đối thủ active hơn Facebook, nhưng không đủ để suy ra mức cạnh tranh đấu giá hay giá thầu.",
       "SSI là hình mẫu để học vì họ <b>always-on</b>: 2 video đã hiển thị 587 ngày, 184 creative đã hiển thị ≥ 30 ngày. Họ không chạy theo đợt khuyến mãi mà giữ cố định một bộ QC Search thương hiệu cùng vài video Performance Max / Demand Gen và App campaign."
     ],
     "2": [
@@ -12,15 +12,15 @@
     ],
     "3": [
       "Nhóm top 10 có tỉ lệ <b>QC chữ (Search) cao nhất (40%)</b>, gần như toàn bộ là của SSI. Đây là QC tìm kiếm thương hiệu chạy nhiều năm để giữ vị trí trên từ khoá tên mình.",
-      "Vietcap là bên duy nhất dồn vào video, với video demo công cụ Vietcap IQ quay người thật (xem winners_google #11)."
+      "Vietcap là bên có tỷ trọng video cao nhất trong số creative đang quan sát được, với video demo công cụ Vietcap IQ quay người thật (xem winners_google #11)."
     ],
     "4": [
       "KIS ngừng ra creative mới từ 30/09, đúng ngày hết đợt \"tặng 100K/250K\" (winners_google #7–9). Đây là rủi ro của video gắn khuyến mãi theo tháng.",
-      "VNDirect vừa quay lại với 12 banner mới trong 4 tuần, chỉ chạy Display. Đây là một đợt nhận diện, không phải chuyển đổi."
+      "VNDirect vừa quay lại với 12 banner mới trong 4 tuần, đều được phân loại Display. Không có dữ liệu objective hay conversion để xác nhận vai trò thực tế của đợt này."
     ],
     "5": [
       "Video sống lâu nhất là video <b>không gắn tháng hay mức quà</b>: SSI \"Chạm tay có ngay tài khoản\" (15s, motion, không lời) và \"Hướng dẫn mở tài khoản\" (37s, từng bước). Chi tiết: <b>winners_google/analysis.md</b>.",
-      "Các video này mở bằng 1–3 giây màn hình trống mà vẫn sống lâu, vì nhiều vị trí trong App campaign, Performance Max và bumper không cho bỏ qua. Chỉ cần làm hook tốt ngay từ khung đầu là đã có lợi thế (Concept A trong brief_google.md)."
+      "Các video này mở bằng 1–3 giây màn hình trống nhưng vẫn được duy trì lâu. Chưa có dữ liệu placement hay retention để xác định nguyên nhân; hook rõ từ khung đầu là giả thuyết nên kiểm thử (Concept A trong brief_google.md)."
     ],
     "6": [
       "SSI có QC Search và ảnh hiển thị tới 1.520 ngày, tức hơn 4 năm. Bộ QC tìm kiếm thương hiệu của họ gần như không đổi.",
@@ -36,16 +36,16 @@
   "Ngoài Top 10": {
     "xu": [
       "<b>Xu hướng chính: nhóm ngoài đang tấn công Google trong khi top 10 đứng yên.</b> 45% creative đang chạy của nhóm ngoài mới ra trong 14 ngày (top 10 chỉ 9%), và trung vị ngày hiển thị chỉ 16 ngày (top 10 là 109 ngày): họ test liên tục.",
-      "Nhóm ngoài <b>dùng Google như kênh phủ nhận diện và kéo cài app</b> (nhiều banner Display và Play), còn top 10 dùng như kênh giữ thương hiệu (QC Search thương hiệu của SSI). Nếu ta không thuộc top 10, đối thủ trực tiếp trên Google là LPS, Nhất Việt và Shinhan, không phải SSI.",
+      "Nhóm ngoài có nhiều banner Display và creative mang nhãn Play, trong khi top 10 nổi bật với QC Search thương hiệu của SSI. Đây là khác biệt về cơ cấu creative quan sát được, không xác nhận objective hay ngân sách.",
       "Chủ đề video của nhóm ngoài nghiêng về <b>miễn/giảm phí</b>, còn top 10 nghiêng về quà. Nhóm ngoài cạnh tranh bằng giá vì không có lợi thế thương hiệu."
     ],
     "1": [
-      "<b>LPS</b> mở đợt Google cùng lúc với đợt đẩy mạnh bên Facebook (23 creative mới trong 14 ngày, chủ yếu video). Cần theo dõi xem 4 tuần nữa họ giữ lại creative nào: đó sẽ là mẫu thắng.",
+      "<b>LPS</b> mở đợt Google cùng lúc với đợt active mạnh bên Facebook (23 creative mới trong 14 ngày, chủ yếu video). Cần theo dõi sau 4 tuần creative nào tiếp tục được duy trì; đây là tín hiệu đáng chú ý, không phải bằng chứng hiệu quả.",
       "<b>DNSE và DSC</b> là hai bên always-on của nhóm ngoài (trung vị 105 và 94 ngày). DSC không có trong danh sách Facebook, nên Google có thể là kênh chính của họ."
     ],
     "2": [
-      "<b>LPS chiếm gần 2/3 số creative trên Play</b>, nhiều khả năng là App campaign tối ưu lượt cài. Nếu mục tiêu của ta là cài app thì đây là đối thủ trực tiếp trên kênh này.",
-      "Nhất Việt và AAS chỉ chạy banner GDN: phủ nhận diện giá rẻ, không cạnh tranh trực tiếp với QC tìm kiếm hay video."
+      "<b>LPS chiếm gần 2/3 số creative có nhãn Play</b> trong snapshot. Đây là tín hiệu active mạnh ở loại hình được suy luận là App campaign; dữ liệu không cho biết lượt cài, CPI hay ngân sách.",
+      "Nhất Việt và AAS chỉ xuất hiện với banner được phân loại GDN trong snapshot; dữ liệu không cho biết CPM, objective hay mức độ cạnh tranh đấu giá."
     ],
     "3": [
       "Hơn nửa creative đang chạy của nhóm ngoài là ảnh (chủ yếu banner của Nhất Việt). Bỏ Nhất Việt ra thì nhóm này cân bằng giữa ảnh và video."
@@ -71,13 +71,13 @@
     ],
     "LPS": [
       "Vừa mở đợt mới ngày 21/10, đồng thời với đợt đẩy mạnh bên Facebook. Thông điệp: <b>0 phí, 0% lãi margin, ưu đãi đặc quyền 16 triệu</b>. Họ cạnh tranh bằng giá.",
-      "Chạy cả Play: nhiều khả năng là App campaign cho app Loop. Theo dõi sau 4 tuần xem mẫu nào còn sống, đó là mẫu thắng."
+      "Có nhãn Play, phù hợp với dấu hiệu App campaign cho app Loop. Theo dõi sau 4 tuần xem mẫu nào còn được duy trì; dữ liệu không cho biết lượt cài hay CPI."
     ],
     "DNSE": [
       "Ít mẫu nhưng chạy rất lâu (trung vị 105 ngày). Video \"Tài khoản không ngủ\" (36s, dọc, có giọng đọc, lãi 4,3%/năm) chạy 214 ngày: bán một tính năng có con số thay vì bán \"mở tài khoản\"."
     ],
     "Nhất Việt - VFS": [
-      "Gần như chỉ chạy banner Display (GDN) và vừa tung 20 banner mới. Đây là phủ nhận diện giá rẻ, không cạnh tranh ở Search hay YouTube."
+      "Gần như chỉ xuất hiện với banner Display (GDN) và vừa tung 20 banner mới. Không có dữ liệu chi phí, objective hoặc cạnh tranh đấu giá."
     ],
     "Shinhan - SSV": [
       "Kho creative lớn nhất (333 mọi thời điểm, 80 video). Đợt mới quảng bá <b>VinaStalk</b>, mạng xã hội cho nhà đầu tư, kèm quà 300K. Video dựng từ banner tĩnh nên hình yếu."
@@ -86,7 +86,7 @@
       "Video duy nhất có người thật quay thật: demo công cụ Vietcap IQ cho nhà đầu tư có kinh nghiệm. Hook là câu hỏi \"Đâu là mã cổ phiếu tiềm năng?\", chạy từ 09/2025."
     ],
     "VPS": [
-      "Dẫn đầu thị phần nhưng hiện không chạy gì trên Google. Đợt gần nhất (tới 13/10) là video kiến thức 98s về Direct Indexing, tự nói ra 3 rủi ro: kiểu nội dung tạo tin tưởng, không phải QC mở tài khoản."
+      "Trong dữ liệu quan sát hiện không thấy VPS có creative Google đang chạy. Đợt gần nhất (tới 13/10) là video kiến thức 98s về Direct Indexing, tự nói ra 3 rủi ro; đây không phải thông điệp mở tài khoản trực diện."
     ],
     "DSC": [
       "Không có trong danh sách Facebook nhưng chạy Google đều: phim thương hiệu 60s chạy 281 ngày, QC Search và ảnh trên 260 ngày. Google có thể là kênh chính của họ."

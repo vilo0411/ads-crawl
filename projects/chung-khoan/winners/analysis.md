@@ -1,15 +1,15 @@
-# Phân tích video thắng · Chứng khoán
+# Phân tích creative có tín hiệu thắng · Chứng khoán
 
-Dữ liệu ngày 28/10/2026 lấy từ Meta Ad Library (VN) và chỉ gồm QC đang chạy. Có 843 QC của 21 CTCK, gộp bản trùng còn 169 creative. Chọn ra 12 video thắng, mỗi CTCK tối đa 3 video. Danh sách ảnh thắng nằm trong [index.md](index.md).
+Dữ liệu ngày 28/10/2026 lấy từ Meta Ad Library (VN) và chỉ gồm QC đang chạy. Có 843 QC của 21 CTCK, gộp bản trùng còn 169 creative. Chọn ra 12 video có tín hiệu đáng chú ý, mỗi CTCK tối đa 3 video để giữ độ đa dạng giữa các thương hiệu. Danh sách ảnh nằm trong [index.md](index.md).
 
-> Cách đọc: "Ngày chạy" và "số bản" chỉ là tín hiệu thay thế cho hiệu quả, vì Ad Library không công bố chi tiêu hay kết quả. Ngành này **khác hẳn tấm lợp ở chỗ QC rất ngắn hạn**: 91% QC mới chạy dưới 30 ngày, vì mỗi chương trình ưu đãi đều có hạn. Do đó "Win" ở đây được hiểu là **một khung creative sống qua nhiều đợt ưu đãi**, và phải đọc kèm số bản nhân.
+> Cách đọc: "Ngày chạy" và "số bản" phản ánh mức độ duy trì/triển khai, không chứng minh hiệu quả kinh doanh. Ad Library không công bố chi tiêu, lượt hiển thị, tương tác trên bài quảng cáo, đối tượng nhắm chọn hay kết quả chuyển đổi. `page_like_count` chỉ phản ánh quy mô fanpage và không được dùng để xếp hạng creative. Số QC đo mức độ active, không đại diện cho ngân sách hay thị phần. Ngành này **khác hẳn tấm lợp ở chỗ QC rất ngắn hạn**: 91% QC mới chạy dưới 30 ngày, thường gắn với chương trình ưu đãi có hạn. Vì vậy, "tín hiệu thắng" ở đây chỉ có nghĩa là creative được duy trì lâu, triển khai thành nhiều bản hoặc tái sử dụng.
 
 **Bức tranh chung (từ [report.html](../report.html)):**
-- **LPS chiếm 51% số QC** (427/843): 293 creative và 203 QC mới trong 14 ngày. Hai creative ảnh của LPS được nhân 166–168 bản. Đây là chiến dịch cài app quy mô lớn, nên mọi tỉ lệ toàn ngành đều bị LPS kéo lệch. Khi xem, nên lọc theo từng công ty.
+- **LPS chiếm 51% số QC đang quan sát được** (427/843): 293 creative và 203 QC mới trong 14 ngày. Hai creative ảnh của LPS có 166–168 bản liên quan. Đây là mức độ active lớn trong snapshot, không phải thị phần ngân sách. Các tỉ lệ toàn ngành bị LPS kéo lệch nên cần đọc thêm theo từng công ty.
 - MBS có 148 QC (88 QC mới trong 14 ngày) và KIS có 85 QC. Ba CTCK này cộng lại chiếm 78% số QC.
 - **TCBS, Vietcap, HSC, Mirae Asset hiện không có QC** trên fanpage chính. Bước discover theo từ khoá cũng không tìm thấy fanpage nào khác của họ đang chạy QC.
 - Định dạng: ảnh đơn 69%, DCO 15%, video chỉ 13%. Video chủ yếu ở khung 9:16; khung 1:1 vẫn phổ biến ở SSI và LPS.
-- Kênh chốt: 94% dẫn ra Website hoặc App Store. CTA "Cài đặt ngay" chiếm 53%, tức đây chủ yếu là **chiến dịch cài app**, không phải lead form hay Messenger như ngành tấm lợp.
+- Đích sau CTA: 94% dẫn ra Website hoặc App Store. CTA "Cài đặt ngay" chiếm 53%, nên loại hình được suy luận chủ yếu là **cài app**, không phải lead form hay Messenger như ngành tấm lợp.
 
 ---
 
@@ -34,17 +34,17 @@ Dữ liệu ngày 28/10/2026 lấy từ Meta Ad Library (VN) và chỉ gồm QC 
 
 ---
 
-## Điểm chung của nhóm thắng
+## Điểm chung của nhóm có tín hiệu thắng
 
 1. **Có 2 trường phái tách biệt rõ:**
    - **Ưu đãi trực diện** (SSI #1 #6, KIS #5 #7 #8, LPS #9): motion graphic 10–15 giây, **không lời thoại**, thông điệp gói trong 1 dòng chữ to: "Tặng X khi mở tài khoản". Nhóm này chạy theo kiểu thay quà theo đợt nhưng giữ nguyên khung creative.
    - **Kiến thức dẫn dắt** (HDS #3 #4, MBS #10, VPS #11 #12): 43–98 giây, có voice, mở đầu bằng một câu hỏi hoặc hiểu lầm của F0. Nhóm này đạt **thời gian chạy dài nhất ngoài SSI** (HDS 119 ngày), vì nội dung không hết hạn như ưu đãi.
 2. **Quà là cổ phiếu chứ không còn là tiền mặt:** PAN, CTG (SSI), LPB (LPS), 3 cổ phiếu (KIS), VIB/POW (MBS). Cổ phiếu tạo cảm giác "đã là nhà đầu tư" ngay từ bước đầu. SSI còn đi xa hơn với **Gemini AI**, một món quà ngoài ngành.
-3. **Scale bằng cách nhân bản và thay caption, không làm video mới.** KIS dùng 1 video 10 giây cho 3 caption với tổng 35 bản; LPS ×32; SSI ×7. Chi phí sản xuất gần như bằng 0 cho mỗi biến thể.
-4. **Video ngắn và câm hoạt động tốt cho ưu đãi.** 6/12 video không có lời thoại, độ dài 10–15 giây. Người xem chỉ cần đọc được 1 con số.
+3. **Triển khai nhiều bản và thay caption trên cùng khung creative.** KIS dùng 1 video 10 giây cho 3 caption với tổng 35 bản; LPS ×32; SSI ×7. Dữ liệu cho thấy mức độ triển khai/tái sử dụng, nhưng không cho biết ngân sách hoặc cách Meta phân phối từng bản.
+4. **Video ngắn, không lời thoại xuất hiện nhiều trong nhóm ưu đãi được duy trì/triển khai rộng.** 6/12 video không có lời thoại, độ dài 10–15 giây. Chưa có dữ liệu tương tác hay chuyển đổi để kết luận mức độ hiệu quả.
 5. **Video kiến thức gắn ưu đãi ở cuối, không ở đầu.** MBS #10 dạy breakout đến giây 49 mới chèn banner mở tài khoản. HDS chỉ kêu gọi follow page. Nhóm này là **phễu nuôi dưỡng (nurture)**, không phải phễu chốt.
 6. **Gần như không ai dùng người thật nói chuyện.** Chỉ MBS #10 có talking head. Nhân vật còn lại là người mẫu stock (KIS) hoặc hoạt hình (HDS).
-7. **Chốt qua app/website 100%, không dùng Messenger hay Zalo.** Hành trình là: quảng cáo → cài app → eKYC → nạp tiền → giao dịch.
+7. **Các video được chọn đều dẫn về app/website, không dùng Messenger hay Zalo làm CTA.** Dữ liệu chỉ quan sát được điểm đến sau cú nhấp; không xác nhận người dùng đã cài app, eKYC, nạp tiền hay giao dịch.
 
 ## Khoảng trống chưa ai khai thác
 

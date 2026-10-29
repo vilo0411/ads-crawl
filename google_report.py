@@ -70,8 +70,8 @@ def auto_insights(rows, stats):
                       + f". Ba đối thủ này chiếm <b>{pct(sum(s['active'] for s in top), n_act):.0f}%</b> số creative đang chạy.")
     paused = [s["label"] for s in sorted(live, key=lambda s: -s["total"]) if not s["active"] and s["total"] >= 15]
     if paused:
-        out[1].append(f"Từng chạy nhiều nhưng hiện <b>không có creative nào đang chạy</b>: {names(paused)}. "
-                      "Google không phải kênh chính của họ, hoặc họ đang tạm nghỉ giữa hai đợt.")
+        out[1].append(f"Từng có nhiều creative nhưng hiện <b>không có creative nào được xếp đang chạy</b>: {names(paused)}. "
+                      "Dữ liệu không cho biết họ dừng kênh, tạm nghỉ hay đang chạy ngoài phạm vi quan sát.")
     launching = [s for s in live if s["new_14d"] >= 5 and s["new_14d"] >= 0.5 * max(s["active"], 1)]
     if launching:
         out[1].append("Vừa mở đợt mới (phần lớn creative đang chạy mới ra trong 14 ngày): "
@@ -145,7 +145,7 @@ def auto_insights(rows, stats):
             + (f" (\"{esc(r['video_title'][:50])}\")" if r["video_title"] else "") for r in best) + ".")
         long_ = Counter(r["competitor"] for r in pool if r["days_shown"] >= 60)
         if long_:
-            out[sec].append("Số creative ≥ 60 ngày hiển thị, tức gần như chắc đang hiệu quả: "
+            out[sec].append("Số creative ≥ 60 ngày hiển thị (tín hiệu được duy trì lâu, không phải bằng chứng hiệu quả): "
                             + ", ".join(f"<b>{esc(k)}</b> {v}" for k, v in long_.most_common(5)) + ".")
     files = [r for r in act if r["youtube_id"] and re.search(r"\.(mp4|mov)$|^\d{3,4}x\d{3,4}", r["video_title"], re.I)]
     if files:
@@ -428,7 +428,7 @@ def profile_insights(s, cr):
     best = [c for c in cr if c["active"]][:1]
     if best:
         c = best[0]
-        out.append(f"Mẫu chạy tốt nhất đang hoạt động: <b>{esc(c['format'])}</b> {c['days']} ngày hiển thị"
+        out.append(f"Mẫu được duy trì lâu nhất đang hoạt động: <b>{esc(c['format'])}</b> {c['days']} ngày hiển thị"
                    + (f" (\"{esc(c['title'][:60])}\")" if c["title"] else "") + (f", dùng trong {c['copies']} creative" if c["copies"] > 1 else "") + ".")
     return out
 
@@ -441,7 +441,7 @@ def winner_links(proj, s):
     packs = [p for p in sorted(d.iterdir()) if p.is_dir() and any(p.name.endswith("_" + i) for i in ids)]
     if not packs:
         return ""
-    return ("<h4>Gói phân tích video thắng</h4><p class='muted'>" + " · ".join(
+    return ("<h4>Gói phân tích video có tín hiệu đáng chú ý</h4><p class='muted'>" + " · ".join(
         f"<a href='winners_google/{esc(p.name)}/storyboard.jpg' target='_blank'>{esc(p.name)}</a>" for p in packs)
             + " · <a href='winners_google/analysis.md' target='_blank'>analysis.md</a></p>")
 
@@ -481,8 +481,8 @@ def profile_section(s, cr, proj, notes):
 <div><h4>Định dạng</h4>{rb.bar_rows(fm, len(base))}</div></div>
 <h4>Nền tảng Google gắn nhãn <small class="muted">· QC chữ luôn kèm YouTube vì Google hiện QC tìm kiếm cả trong ô tìm kiếm của YouTube</small></h4>{rb.bar_rows(pl, len(base))}
 <h4>Creative mới theo tuần ({WEEKS} tuần)</h4><div class="spark">{spark}</div><div class="muted sprk"><span>{WEEKS} tuần trước</span><span>tuần này</span></div>
-<h4>Mẫu đáng học nhất · {min(TOP, len(cr))} / {len(cr)} mẫu</h4>
-<p class="muted">Ưu tiên mẫu đang chạy, rồi xếp theo số ngày hiển thị và số creative dùng chung mẫu đó. Bấm ảnh để mở trên Transparency Center.</p>
+<h4>Mẫu có tín hiệu đáng chú ý · {min(TOP, len(cr))} / {len(cr)} mẫu</h4>
+<p class="muted">Ưu tiên mẫu đang chạy, rồi xếp theo số ngày hiển thị và số creative dùng chung. Đây là tín hiệu duy trì/triển khai, không phải bằng chứng về ngân sách, lượt hiển thị hay hiệu quả. Bấm ảnh để mở trên Transparency Center.</p>
 <div class="cards">{cards}</div>{more}
 {winner_links(proj, s)}
 </section>"""
@@ -683,10 +683,10 @@ def render(project, proj, rows, stats, notes=None):
 <section data-panel="limits" hidden><h2>Thuật ngữ</h2>
 <div class="box"><table class="mini gl">
 <tr><td>Creative</td><td>Một mã CR… trên Transparency Center. Một video hay ảnh được đưa vào nhiều chiến dịch / kích thước sẽ thành nhiều creative.</td></tr>
-<tr><td>Mẫu</td><td>Một video YouTube hoặc một ảnh. Các creative dùng chung video / ảnh được gộp làm 1 mẫu. Mẫu dùng trong nhiều creative = đang được đẩy rộng.</td></tr>
+<tr><td>Mẫu</td><td>Một video YouTube hoặc một ảnh. Các creative dùng chung video / ảnh được gộp làm 1 mẫu. Mẫu dùng trong nhiều creative = được triển khai rộng; không đồng nghĩa ngân sách lớn.</td></tr>
 <tr><td>Nhận xét</td><td>Ý gạch đầu dòng thường = tự tính từ số liệu, cập nhật mỗi lần chạy. Ý có dấu ✎ = nhận xét viết tay của người phân tích (google_notes.json).</td></tr>
 <tr><td>Đang chạy</td><td>Có lần hiển thị cuối trong {ACTIVE_DAYS} ngày gần nhất.</td></tr>
-<tr><td>Ngày hiển thị</td><td>Số ngày Google thực sự phân phối creative (không phải từ ngày đầu đến ngày cuối). ≥ 30 ngày gần như chắc là đang hiệu quả.</td></tr>
+<tr><td>Ngày hiển thị</td><td>Số ngày Google ghi nhận creative có phân phối (không phải từ ngày đầu đến ngày cuối). Thời gian dài là tín hiệu được duy trì, không phải bằng chứng trực tiếp về hiệu quả.</td></tr>
 <tr><td>Nền tảng</td><td>Search, YouTube, Play, Maps, Shopping lấy từ bộ lọc của Google. "{esc(OTHER)}" = không thuộc bộ lọc nào, chủ yếu mạng hiển thị (GDN). </td></tr>
 <tr><td>Loại chiến dịch</td><td>Suy luận, vì Google không công bố: QC chữ có Search → <b>Search</b> (Google tự hiện cả trên YouTube, Maps, tab Mua sắm) · video / ảnh có Play → <b>App (cài app)</b> · video / ảnh có Search hoặc Maps nhưng không có Play → <b>PMax / Demand Gen</b> · chỉ YouTube → <b>Video YouTube</b> · chỉ "{esc(OTHER)}" → <b>Display (GDN)</b>.</td></tr>
 </table></div>
@@ -696,6 +696,8 @@ def render(project, proj, rows, stats, notes=None):
 <li><b>QC Search chỉ có ảnh chụp</b>, không có chữ, nên không phân tích được thông điệp QC Search tự động. Bấm vào ảnh để đọc.</li>
 <li><b>Thông điệp video</b> chỉ đọc từ tiêu đề YouTube. Nhiều tiêu đề là tên file; muốn đọc thông điệp thật thì xem gói winners_google (khung hình + lời thoại).</li>
 <li><b>Số creative không phải ngân sách.</b> App campaign và Performance Max tự sinh nhiều creative từ ít tài sản.</li>
+<li><b>Số creative đo mức độ active/triển khai, không phải thị phần.</b> Không có dữ liệu impression share, chi tiêu hay tỷ trọng ngân sách.</li>
+<li><b>Creative có tín hiệu đáng chú ý</b> được xếp theo ngày hiển thị và số creative dùng chung mẫu. Báo cáo không khẳng định hiệu quả kinh doanh.</li>
 <li>Dữ liệu lấy qua API nội bộ của Transparency Center; Google có thể đổi bất kỳ lúc nào.</li>
 </ul></div></section>
 {dsc.footer('Google Ads đối thủ · ' + esc(project), time.strftime('%d/%m/%Y'))}
