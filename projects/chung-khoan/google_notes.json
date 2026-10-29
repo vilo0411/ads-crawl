@@ -1,0 +1,98 @@
+{
+  "_note": "Nhận xét viết tay cho report_google.html. Mỗi nhóm (tên đúng như tab) → số mục → danh sách câu. 'xu' = khung xu hướng ở tab nhóm ngoài. 'Hồ sơ' → tên đối thủ (đúng như trong google_competitors.txt) → nhận xét trong tab Hồ sơ. Cho phép thẻ <b>. Cập nhật '_updated' mỗi lần sửa.",
+  "_updated": "29/10/2026",
+  "Top 10": {
+    "1": [
+      "Trên Google, <b>chỉ 4/10 công ty top 10 đang chạy</b> và SSI chiếm gần 3/4 số creative của nhóm. <b>Google đang ít cạnh tranh hơn Facebook rất nhiều</b> ở nhóm dẫn đầu, nên giá thầu cho từ khoá và đối tượng tài chính có thể còn rẻ.",
+      "SSI là hình mẫu để học vì họ <b>always-on</b>: 2 video đã hiển thị 587 ngày, 184 creative đã hiển thị ≥ 30 ngày. Họ không chạy theo đợt khuyến mãi mà giữ cố định một bộ QC Search thương hiệu cùng vài video Performance Max / Demand Gen và App campaign."
+    ],
+    "2": [
+      "Nhãn Maps và Shopping ở nhóm này gần như đều đến từ <b>QC chữ của SSI</b>. Đây là chiến dịch Search thường, vì Google tự hiện QC tìm kiếm cả trên Google Maps, tab Mua sắm và ô tìm kiếm của YouTube. Không ai chạy QC bản đồ hay mua sắm riêng.",
+      "Ở top 10, chỉ SSI (và một ít KIS) chạy Search đều đặn, chủ yếu là từ khoá thương hiệu và bảng giá. Muốn biết chính xác từ khoá họ bid thì Transparency không trả lời được, cần Keyword Planner hoặc SEMrush."
+    ],
+    "3": [
+      "Nhóm top 10 có tỉ lệ <b>QC chữ (Search) cao nhất (40%)</b>, gần như toàn bộ là của SSI. Đây là QC tìm kiếm thương hiệu chạy nhiều năm để giữ vị trí trên từ khoá tên mình.",
+      "Vietcap là bên duy nhất dồn vào video, với video demo công cụ Vietcap IQ quay người thật (xem winners_google #11)."
+    ],
+    "4": [
+      "KIS ngừng ra creative mới từ 30/09, đúng ngày hết đợt \"tặng 100K/250K\" (winners_google #7–9). Đây là rủi ro của video gắn khuyến mãi theo tháng.",
+      "VNDirect vừa quay lại với 12 banner mới trong 4 tuần, chỉ chạy Display. Đây là một đợt nhận diện, không phải chuyển đổi."
+    ],
+    "5": [
+      "Video sống lâu nhất là video <b>không gắn tháng hay mức quà</b>: SSI \"Chạm tay có ngay tài khoản\" (15s, motion, không lời) và \"Hướng dẫn mở tài khoản\" (37s, từng bước). Chi tiết: <b>winners_google/analysis.md</b>.",
+      "Các video này mở bằng 1–3 giây màn hình trống mà vẫn sống lâu, vì nhiều vị trí trong App campaign, Performance Max và bumper không cho bỏ qua. Chỉ cần làm hook tốt ngay từ khung đầu là đã có lợi thế (Concept A trong brief_google.md)."
+    ],
+    "6": [
+      "SSI có QC Search và ảnh hiển thị tới 1.520 ngày, tức hơn 4 năm. Bộ QC tìm kiếm thương hiệu của họ gần như không đổi.",
+      "Bấm vào từng ảnh QC Search để xem tiêu đề và mô tả họ đang dùng. Google chỉ lưu QC chữ dưới dạng ảnh chụp."
+    ],
+    "7": [
+      "Nhóm top 10 gần như <b>không tung gì mới</b> (8 creative trong 14 ngày, chỉ từ KIS và VNDirect). Họ đang chạy bằng tài sản cũ."
+    ],
+    "8": [
+      "Tiêu đề video của top 10 nghiêng về quà và mở tài khoản (KIS, SSI). Nhưng đọc từ chính video thì thông điệp sống lâu nhất lại là <b>tích sản dài hạn và công cụ</b>: SSI \"hạt giống tích sản\", VPS Direct Indexing, Vietcap IQ."
+    ]
+  },
+  "Ngoài Top 10": {
+    "xu": [
+      "<b>Xu hướng chính: nhóm ngoài đang tấn công Google trong khi top 10 đứng yên.</b> 45% creative đang chạy của nhóm ngoài mới ra trong 14 ngày (top 10 chỉ 9%), và trung vị ngày hiển thị chỉ 16 ngày (top 10 là 109 ngày): họ test liên tục.",
+      "Nhóm ngoài <b>dùng Google như kênh phủ nhận diện và kéo cài app</b> (nhiều banner Display và Play), còn top 10 dùng như kênh giữ thương hiệu (QC Search thương hiệu của SSI). Nếu ta không thuộc top 10, đối thủ trực tiếp trên Google là LPS, Nhất Việt và Shinhan, không phải SSI.",
+      "Chủ đề video của nhóm ngoài nghiêng về <b>miễn/giảm phí</b>, còn top 10 nghiêng về quà. Nhóm ngoài cạnh tranh bằng giá vì không có lợi thế thương hiệu."
+    ],
+    "1": [
+      "<b>LPS</b> mở đợt Google cùng lúc với đợt đẩy mạnh bên Facebook (23 creative mới trong 14 ngày, chủ yếu video). Cần theo dõi xem 4 tuần nữa họ giữ lại creative nào: đó sẽ là mẫu thắng.",
+      "<b>DNSE và DSC</b> là hai bên always-on của nhóm ngoài (trung vị 105 và 94 ngày). DSC không có trong danh sách Facebook, nên Google có thể là kênh chính của họ."
+    ],
+    "2": [
+      "<b>LPS chiếm gần 2/3 số creative trên Play</b>, nhiều khả năng là App campaign tối ưu lượt cài. Nếu mục tiêu của ta là cài app thì đây là đối thủ trực tiếp trên kênh này.",
+      "Nhất Việt và AAS chỉ chạy banner GDN: phủ nhận diện giá rẻ, không cạnh tranh trực tiếp với QC tìm kiếm hay video."
+    ],
+    "3": [
+      "Hơn nửa creative đang chạy của nhóm ngoài là ảnh (chủ yếu banner của Nhất Việt). Bỏ Nhất Việt ra thì nhóm này cân bằng giữa ảnh và video."
+    ],
+    "4": [
+      "LPS, Nhất Việt và AAS cùng tăng tốc trong 4 tuần gần đây. Có thể là mùa cao điểm mở tài khoản cuối năm, nên đối chiếu với nhịp bên Facebook."
+    ],
+    "5": [
+      "Ba video đáng học nhất của nhóm ngoài: DNSE \"Tài khoản không ngủ\" (bán một tính năng có con số: lãi 4,3%/năm), DSC \"Dẫn lối thành công\" (phim thương hiệu 60s) và ABS \"Giải thưởng quốc tế\" (template 3D rẻ, có QR). Chi tiết: winners_google #3, #5, #6."
+    ],
+    "7": [
+      "Video mới của Shinhan quảng bá <b>VinaStalk</b>, mạng xã hội cho nhà đầu tư, là hướng sản phẩm mới trong ngành. KBSV có một tài khoản riêng gần như chỉ chạy video."
+    ]
+  },
+  "Hồ sơ": {
+    "SSI": [
+      "Hình mẫu always-on: QC Search thương hiệu chạy tới 1.520 ngày, 2 video YouTube 587 ngày (\"Chạm tay có ngay tài khoản\", \"Hướng dẫn mở tài khoản\"). Thông điệp không gắn tháng hay mức quà nên không bao giờ hết hạn.",
+      "Quà cổ phiếu được kể thành câu chuyện: \"hạt giống tích sản, nhận 02 cổ phiếu PAN, trở thành cổ đông\" (winners_google #4)."
+    ],
+    "KIS": [
+      "Một template motion 10 giây, thay số mỗi tháng (\"Chào bạn mới tặng 100K/250K\"). Cả 3 video dừng cùng ngày 30/09 khi hết đợt: rẻ và nhanh, nhưng chết theo chương trình.",
+      "Hiện còn chạy chủ yếu QC Search và ảnh. Nên theo dõi xem đầu tháng sau có tung template mới không."
+    ],
+    "LPS": [
+      "Vừa mở đợt mới ngày 21/10, đồng thời với đợt đẩy mạnh bên Facebook. Thông điệp: <b>0 phí, 0% lãi margin, ưu đãi đặc quyền 16 triệu</b>. Họ cạnh tranh bằng giá.",
+      "Chạy cả Play: nhiều khả năng là App campaign cho app Loop. Theo dõi sau 4 tuần xem mẫu nào còn sống, đó là mẫu thắng."
+    ],
+    "DNSE": [
+      "Ít mẫu nhưng chạy rất lâu (trung vị 105 ngày). Video \"Tài khoản không ngủ\" (36s, dọc, có giọng đọc, lãi 4,3%/năm) chạy 214 ngày: bán một tính năng có con số thay vì bán \"mở tài khoản\"."
+    ],
+    "Nhất Việt - VFS": [
+      "Gần như chỉ chạy banner Display (GDN) và vừa tung 20 banner mới. Đây là phủ nhận diện giá rẻ, không cạnh tranh ở Search hay YouTube."
+    ],
+    "Shinhan - SSV": [
+      "Kho creative lớn nhất (333 mọi thời điểm, 80 video). Đợt mới quảng bá <b>VinaStalk</b>, mạng xã hội cho nhà đầu tư, kèm quà 300K. Video dựng từ banner tĩnh nên hình yếu."
+    ],
+    "Vietcap": [
+      "Video duy nhất có người thật quay thật: demo công cụ Vietcap IQ cho nhà đầu tư có kinh nghiệm. Hook là câu hỏi \"Đâu là mã cổ phiếu tiềm năng?\", chạy từ 09/2025."
+    ],
+    "VPS": [
+      "Dẫn đầu thị phần nhưng hiện không chạy gì trên Google. Đợt gần nhất (tới 13/10) là video kiến thức 98s về Direct Indexing, tự nói ra 3 rủi ro: kiểu nội dung tạo tin tưởng, không phải QC mở tài khoản."
+    ],
+    "DSC": [
+      "Không có trong danh sách Facebook nhưng chạy Google đều: phim thương hiệu 60s chạy 281 ngày, QC Search và ảnh trên 260 ngày. Google có thể là kênh chính của họ."
+    ],
+    "An Bình - ABS": [
+      "Dùng giải thưởng làm bằng chứng thay cho ưu đãi: template 3D cúp vàng kèm mã QR, 13s dọc, chạy 141 ngày trên Search, YouTube và Play."
+    ]
+  }
+}

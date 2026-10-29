@@ -1,0 +1,35 @@
+# Mỗi dòng 1 Page ID. Dòng bắt đầu bằng # sẽ bị bỏ qua, riêng dòng "#@ Tên nhóm" là mở nhóm mới.
+# Danh sách đã lọc 28/10/2026: chỉ giữ fanpage CHÍNH THỨC của công ty chứng khoán.
+# Bản đầy đủ của bước discover (203 fanpage): competitors_discover_raw.txt
+
+#@ Top 10
+108015722146379   # VPS
+132771703438783   # SSI
+1504697249783367  # TCBS (discover không thấy QC)
+343028851058      # Vietcap (discover không thấy QC)
+1517153298580277  # HSC (discover không thấy QC)
+349312325177779   # MBS
+123434971018658   # VNDirect
+561500030387546   # KIS
+303619527172219   # Mirae Asset (discover không thấy QC)
+107578535212906   # VPBankS
+
+#@ Xu hướng
+197779796755847   # Chứng khoán LPS (242 QC khớp)
+273872576046675   # Nhất Việt - VFS
+101384519398514   # Shinhan - SSV
+390676534851790   # An Bình - ABS
+131656534155296   # Yuanta - YSVN
+2033102266712313  # DNSE
+1197026010336908  # Smart Invest - AAS
+458482900870297   # KB Securities Vietnam
+107317735256838   # ACBS
+134188476770555   # Rồng Việt
+2070825876552556  # TPS - Tiên Phong
+106218628765203   # KIRIN
+171970319483394   # Tân Việt
+1112132331974304  # HD Securities
+151091451760284   # VCBS
+
+# Đã loại: page tuyển dụng (SSI Careers, MBS HN08), chi nhánh/môi giới cá nhân (VPS Bình Định, LPS Cát Linh),
+# KOL/cộng đồng (Cafe CHỨNG KHOÁN, Một Phút Chứng Khoán, Mie, Ex Invest, Tản mạn PTKT, Người Quan Sát, siêu cổ phiếu, NCB, F1)

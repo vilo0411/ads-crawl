@@ -1,0 +1,29 @@
+{
+  "rank": 1,
+  "tier": "Win chắc",
+  "page_name": "Chứng Khoán SSI",
+  "page_id": "132771703438783",
+  "days_running": 164,
+  "copies": 7,
+  "latest_copy_start": "2026-09-23",
+  "start_date": "2026-05-17",
+  "format": "Dynamic (DCO)",
+  "aspect": "1:1 (vuông)",
+  "video_duration": 15.0,
+  "platforms": "FACEBOOK,INSTAGRAM,AUDIENCE_NETWORK,MESSENGER,THREADS",
+  "cta": "Cài đặt ngay",
+  "destination": "Website",
+  "link_url": "http://play.google.com/store/apps/details?id=org.ssi.iBoardSSI.Pro",
+  "title": "{{product.name}}",
+  "caption": "{{product.brand}}",
+  "signals": [],
+  "library_links": [
+    "https://www.facebook.com/ads/library/?id=1313551797395581",
+    "https://www.facebook.com/ads/library/?id=948384834698056",
+    "https://www.facebook.com/ads/library/?id=36760960070184330",
+    "https://www.facebook.com/ads/library/?id=2546620755809032",
+    "https://www.facebook.com/ads/library/?id=1607555794113230",
+    "https://www.facebook.com/ads/library/?id=1738477383855607",
+    "https://www.facebook.com/ads/library/?id=1111849034529061"
+  ]
+}

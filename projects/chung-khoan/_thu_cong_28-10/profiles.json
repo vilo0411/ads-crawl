@@ -1,0 +1,153 @@
+[
+  {
+    "brand": "VPS",
+    "tab": 8,
+    "pid": "108015722146379",
+    "angle": "Giáo dục tích sản dài hạn → đăng ký webinar",
+    "audience": "Suy luận: người có tiền tiết kiệm, muốn phân bổ tài sản và tích sản dài hạn.",
+    "finding": "Hai video Direct Indexing thuộc series Tích sản dài hạn 101; hai mẫu ảnh/DCO dẫn vào webinar về phân bổ tài sản năm 2027, tổ chức 03/11/2026.",
+    "funnel": "Video kiến thức → chuyên đề với chuyên gia → đăng ký Zoom. CTA Apply now/Learn more; có mẫu không có nút.",
+    "lesson": "Dùng chủ đề kế hoạch tài chính để thu hút nhu cầu tư vấn trước khi chào sản phẩm. Chưa chứng minh được có retargeting giữa các mẫu.",
+    "risk": "4 ad ID không phản ánh toàn bộ mạng lưới môi giới VPS.",
+    "examples": [
+      "38790086283938700",
+      "1599092837985296"
+    ]
+  },
+  {
+    "brand": "SSI",
+    "tab": 9,
+    "pid": "132771703438783",
+    "angle": "Quiz chân dung nhà đầu tư + quà mở tài khoản + dùng thử margin",
+    "audience": "Suy luận: người mới đầu tư, người tò mò phong cách đầu tư, khách chưa sử dụng margin gần đây.",
+    "finding": "Quiz 8 câu/2 phút, quà đến 100.000đ; mở tài khoản eKYC/VNeID; thử thách tích điểm; Margin 0.0. Có mẫu nói trực tiếp với người đã xem ProfitX hoặc đã làm quiz.",
+    "funnel": "Quiz → mở tài khoản iBoard; cài app → kích hoạt, nạp tiền, giao dịch; ưu đãi margin → đăng ký gói trong app.",
+    "lesson": "Nội dung tạo tương tác có bước chuyển sang mở tài khoản rõ ràng. Câu chữ gợi ý nhắm lại khách đã quan tâm; cấu hình đối tượng thực tế không công khai.",
+    "risk": "Một số mẫu vẫn active nhưng copy ghi hết hạn 31/05. Có placeholder DCO {{product.brand}}: phải đọc cards/UI, không tính đó là nội dung hoàn chỉnh. Margin 0.0 hoàn lãi trên dư nợ tối đa 50 triệu/ngày trong 30 ngày; không phải tặng 50 triệu tiền lãi.",
+    "examples": [
+      "1993316048242422",
+      "2112142409375122",
+      "1361040839485955"
+    ],
+    "source": "https://www.ssi.com.vn/tin-tuc/tin-tuc-su-kien-ssi/ra-mat-chuong-trinh-khuyen-mai-ssi-margin-0-0"
+  },
+  {
+    "brand": "TCBS",
+    "tab": 10,
+    "pid": "1504697249783367",
+    "angle": "Chưa thấy quảng cáo phù hợp trên fanpage được kiểm tra",
+    "audience": "Chưa đủ dữ liệu ads để xác định. Website hướng tới người dùng tự giao dịch và quản lý tài sản.",
+    "finding": "Ad Library hiển thị Techcom Securities - TCBS và No ads match your search criteria ở bộ lọc VN/active. Website có định vị Zero Fee, TCInvest, công cụ phân tích và quản lý tài sản.",
+    "funnel": "Chỉ quan sát website: trang quyền lợi → mở tài khoản online. Chưa xác minh phễu Facebook Ads.",
+    "lesson": "Theo dõi thêm tên sản phẩm TCInvest và các trang liên quan trong các đợt sau; chưa kết luận hướng quảng cáo.",
+    "risk": "Không suy rộng kết quả của một fanpage/thời điểm thành TCBS không chạy ads. Zero Fee vẫn có khoản thu cho Sở theo điều kiện công bố.",
+    "examples": [],
+    "source": "https://www.tcbs.com.vn/ca-nhan/uu-dai/mo-tai-khoan-chung-khoan-tcbs/"
+  },
+  {
+    "brand": "Vietcap",
+    "tab": 11,
+    "pid": "343028851058",
+    "angle": "Chưa thấy quảng cáo phù hợp trên fanpage được kiểm tra",
+    "audience": "Chưa đủ dữ liệu ads để xác định.",
+    "finding": "Đối chiếu fanpage chungkhoanVietcap với website chính thức; Ad Library theo Page ID báo không có mẫu phù hợp. Website có chương trình ưu đãi và nội dung đầu tư nhưng đó chưa phải bằng chứng paid ads.",
+    "funnel": "Chưa xác minh được từ mẫu quảng cáo.",
+    "lesson": "Theo dõi fanpage chính thức và sản phẩm/landing page riêng; tách nội dung organic khỏi paid.",
+    "risk": "Không xếp mức đầu tư quảng cáo hay hiệu quả của Vietcap từ kết quả rỗng.",
+    "examples": [],
+    "source": "https://www.vietcap.com.vn/tin-tuc/canh-bao-nhung-thu-doa-lua-dao-mao-danh"
+  },
+  {
+    "brand": "HSC",
+    "tab": 12,
+    "pid": "1517153298580277",
+    "angle": "Chưa thấy quảng cáo phù hợp trên fanpage được kiểm tra",
+    "audience": "Chưa đủ dữ liệu ads. Website nhấn mạnh nghiên cứu, tư vấn và công cụ giao dịch.",
+    "finding": "Đối chiếu ctychungkhoanhsc với nguồn chính thức; Ad Library không có mẫu phù hợp. Website và fanpage có nội dung nghiên cứu/sự kiện, không mặc định đó là quảng cáo.",
+    "funnel": "Chưa xác minh được từ mẫu quảng cáo.",
+    "lesson": "Trong đợt sau bổ sung kiểm tra fanpage Dòng tiền thông minh được HSC công bố; chưa kiểm tra trang đó trong bộ số liệu này.",
+    "risk": "Kết quả chỉ bao phủ fanpage chính đã kiểm tra, chưa bao phủ các kênh vệ tinh.",
+    "examples": [],
+    "source": "https://www.hsc.com.vn/vi/canh-bao-lua-dao-mao-danh-hsc"
+  },
+  {
+    "brand": "MBS",
+    "tab": 13,
+    "pid": "349312325177779",
+    "angle": "Ưu đãi theo hành vi: mở mới → nạp vốn → giao dịch → margin",
+    "audience": "Suy luận: F0, khách giao dịch chủ động, khách có NAV lớn và khách ưu tiên MB.",
+    "finding": "Margin 7,5%/năm cho khách mở mới, 9,9% cho nhóm giao dịch chủ động, hoàn lãi lần đầu; thưởng MPoint theo nạp ròng; cashback 0,03%; chương trình vàng; quà tới 15 cổ phiếu theo điều kiện/nhóm khách. Đồng thời chạy video giáo dục và nội dung báo cáo.",
+    "funnel": "Quảng cáo → deep link app MBS/MB → mở tài khoản, nạp tiền, giao dịch. Có nhánh Google Form đăng ký chương trình vàng.",
+    "lesson": "Đáng học cách tách ưu đãi theo từng hành vi và diễn giải lãi suất thành số tiền có thể tiết kiệm. 148 ad ID thu được; nhiều ID dùng cùng thông điệp, không phải 148 concept.",
+    "risk": "Con số tiết kiệm và phần thưởng là claim có điều kiện, cần thể lệ. Lượng ad ID cao không chứng minh ngân sách, thị phần hiển thị hay hiệu quả cao nhất.",
+    "examples": [
+      "1883815682596845",
+      "1055252160449064",
+      "1677177993981455",
+      "2543302702761704"
+    ],
+    "source": "https://www.mbs.com.vn/uu-dai-lai-suat-7-5-doc-quyen-danh-rieng-cho-khach-hang-mo-moi-su-dung-dich-vu-giao-dich-chu-dong/"
+  },
+  {
+    "brand": "VNDirect",
+    "tab": 14,
+    "pid": "123434971018658",
+    "angle": "DTRADE: cá nhân hóa giao diện và giảm thao tác đặt lệnh",
+    "audience": "Suy luận từ copy: trader thường xuyên theo dõi nhiều dữ liệu và giao dịch trong phiên.",
+    "finding": "Ba nhóm body chính: ra mắt DTRADE The New Era, giao dịch một chạm, hướng dẫn tạo không gian giao dịch. Mẫu nhấn mạnh kéo thả widget, liên kết theo màu và dùng trên trình duyệt.",
+    "funnel": "Carousel/DCO/nhiều ảnh → dtrade.vndirect.com.vn; nội dung hướng dẫn dẫn thêm sang YouTube.",
+    "lesson": "Bán lợi ích thao tác cụ thể: giảm chuyển tab, nhìn dữ liệu và đặt lệnh cùng màn hình. Dùng demo theo tác vụ để đối chiếu với ưu đãi tiền mặt.",
+    "risk": "10 ad ID cùng khởi chạy 21–22/10/2026: quan sát một đợt quảng bá sản phẩm, chưa đủ suy ra chiến lược dài hạn.",
+    "examples": [
+      "2161114187810224",
+      "2045638179428008",
+      "1480774600560551"
+    ]
+  },
+  {
+    "brand": "KIS Việt Nam",
+    "tab": 15,
+    "pid": "561500030387546",
+    "angle": "iKIS: thưởng mở mới + referral + cổ phiếu trải nghiệm",
+    "audience": "Suy luận: khách mới, người giới thiệu bạn bè, người chuyển danh mục từ công ty khác.",
+    "finding": "50.000đ khi mở tài khoản hợp lệ; 50.000đ/lượt giới thiệu; 3 cổ phiếu PDR theo điều kiện; đua top giới thiệu; chuyển danh mục nhận thưởng theo NAV. Có thêm nội dung phái sinh và chương trình tích lệnh.",
+    "funnel": "DCO/video → trang Chào bạn mới iKIS → eKYC, mở tiểu khoản, nhập mã giới thiệu; một số mẫu dùng Send message.",
+    "lesson": "Biến khách hiện hữu thành nguồn giới thiệu và dùng cổ phiếu để khuyến khích trải nghiệm sản phẩm. 76/85 ID ghi nhận định dạng DCO; không đồng nghĩa 76 hình ảnh khác nhau.",
+    "risk": "Mở tài khoản, xác nhận thông tin và mở tiểu khoản M có điều kiện riêng; không diễn giải mọi quà là tự động/unconditional. Danh sách ads không công khai tệp tuổi, sở thích hoặc lookalike.",
+    "examples": [
+      "1802172964113103",
+      "1088140613927644",
+      "1427516069481606",
+      "1849457743156705"
+    ],
+    "source": "https://www.kisvn.vn/chao-ban-moi-ikis"
+  },
+  {
+    "brand": "Mirae Asset (Việt Nam)",
+    "tab": 16,
+    "pid": "303619527172219",
+    "angle": "Chưa thấy quảng cáo phù hợp trên fanpage chứng khoán được kiểm tra",
+    "audience": "Chưa đủ dữ liệu ads để xác định.",
+    "finding": "Lấy đúng fanpage chungkhoanmiraeasset.vietnam từ masvn.com. Ad Library không có mẫu phù hợp tại bộ lọc đã chọn. Loại kết quả Tài chính Mirae Asset và quảng cáo vay tiêu dùng khỏi tập chứng khoán.",
+    "funnel": "Chưa xác minh được từ mẫu quảng cáo.",
+    "lesson": "Tách rõ pháp nhân chứng khoán và tài chính tiêu dùng khi research tên Mirae Asset.",
+    "risk": "Ưu đãi margin trên website là bằng chứng về sản phẩm, không chứng minh đang chạy Facebook Ads. Chương trình 8,99% tìm thấy đã ghi hạn kết thúc 31/08/2026, không coi còn hiệu lực.",
+    "examples": [],
+    "source": "https://www.masvn.com/"
+  },
+  {
+    "brand": "VPBankS",
+    "tab": 17,
+    "pid": "107578535212906",
+    "angle": "NEO Invest: Zero Fee + tối ưu tiền chờ đầu tư với eMax",
+    "audience": "Suy luận: người nhạy cảm chi phí giao dịch và người còn tiền chưa sử dụng trong tài khoản.",
+    "finding": "Hai mẫu bắt đầu 27/10/2026: miễn phí giao dịch và eMax với claim tới 5 triệu/tháng có dấu điều kiện.",
+    "funnel": "Apply now → trang onboarding VPBankS; mẫu eMax có link Messenger. Cần kiểm tra bước sau click để xác định chính xác luồng eMax.",
+    "lesson": "Tách hai nhu cầu: chi phí mỗi lệnh và tiền chờ đầu tư. Có thể học cách dùng một lợi ích cho một mẫu.",
+    "risk": "Đợt mới một ngày; chưa đủ đánh giá độ bền hay hiệu quả. Không diễn giải eMax là mức thu nhập bảo đảm cho mọi tài khoản.",
+    "examples": [
+      "1139612535222317",
+      "1696711842039085"
+    ]
+  }
+]

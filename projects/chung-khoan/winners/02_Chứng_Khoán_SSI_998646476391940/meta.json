@@ -1,0 +1,29 @@
+{
+  "rank": 2,
+  "tier": "Win chắc",
+  "page_name": "Chứng Khoán SSI",
+  "page_id": "132771703438783",
+  "days_running": 135,
+  "copies": 3,
+  "latest_copy_start": "2026-06-18",
+  "start_date": "2026-06-15",
+  "format": "Video",
+  "aspect": "1:1 (vuông)",
+  "video_duration": 15.0,
+  "platforms": "FACEBOOK,INSTAGRAM,AUDIENCE_NETWORK,MESSENGER,THREADS",
+  "cta": "Tìm hiểu thêm",
+  "destination": "Website",
+  "link_url": "https://event.ssi.com.vn/investor-type-quiz",
+  "title": "Bạn thuộc tuýp nhà đầu tư nào?",
+  "caption": "8 câu hỏi. 2 phút. Hé lộ con người thật của bạn khi bấm lệnh.\nBạn là HOLDER đá tảng, PANIC trốn chạy, hay YOLO bạo gan? 7 phong cách — chỉ 1 cái là của bạn.\nLàm quiz ngay, mở tài khoản SSI nhận quà đến 100.000đ.",
+  "signals": [
+    "Mở tài khoản / eKYC",
+    "Quà / tiền thưởng",
+    "Miễn / giảm phí"
+  ],
+  "library_links": [
+    "https://www.facebook.com/ads/library/?id=998646476391940",
+    "https://www.facebook.com/ads/library/?id=1993316048242422",
+    "https://www.facebook.com/ads/library/?id=1666810337769393"
+  ]
+}

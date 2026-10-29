@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:02,140
+ VN Index tăng mà tài khoản vẫn đỏ.
+
+2
+00:00:02,600 --> 00:00:03,240
+ Vì sao vậy?
+
+3
+00:00:03,660 --> 00:00:06,040
+ VN Index là chỉ số tính theo bốn hóa.
+
+4
+00:00:06,480 --> 00:00:08,240
+ Nghĩa là vài cổ phiếu lớn như lân hàng,
+
+5
+00:00:08,620 --> 00:00:12,200
+ VIX, VCB, tăng mạnh thì vẫn có thể kéo cả Index đi lên.
+
+6
+00:00:13,840 --> 00:00:17,540
+ Trong khi đó, phần lớn cổ phiếu Midcap và Penny lại đang giảm.
+
+7
+00:00:18,260 --> 00:00:21,320
+ Nên mới có chuyện Index xanh nhưng nhà đầu tư thì không vui.
+
+8
+00:00:22,140 --> 00:00:26,080
+ Đây gọi là hiện tượng xanh vỏ, đỏ lòng trên thị trường chính khoán.
+
+9
+00:00:27,960 --> 00:00:31,300
+ Vì vậy, khi nhìn thị trường, đừng chỉ nhìn mỗi VN Index.
+
+10
+00:00:32,140 --> 00:00:35,920
+ Hãy nhìn thêm độ rộng thị trường, bao nhiêu mã tăng, bao nhiêu mã giảm.
+
+11
+00:00:38,520 --> 00:00:41,820
+ Theo dõi chính khoán HD để hiểu thị trường theo cách dễ hiểu hơn nhé.
+
