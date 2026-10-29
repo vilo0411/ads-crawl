@@ -181,9 +181,18 @@ def load_notes(proj):
     return json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
 
 
+def tk(*items, hand=()):
+    """Khung "Nhận xét" kiểu báo cáo Facebook (viền xanh), nhưng mỗi ý một dòng. Ý viết tay (hand) đứng sau, có nhãn riêng."""
+    items, hand = [x for x in items if x], [x for x in hand if x]
+    if not items and not hand:
+        return ""
+    lis = "".join(f"<li>{x}</li>" for x in items) + "".join(f"<li class='hand{' first' if i == 0 and items else ''}'>{x}</li>" for i, x in enumerate(hand))
+    return f"<div class='tk'><b>Nhận xét</b><ul>{lis}</ul></div>"
+
+
 def comment_box(sec, auto, notes):
     """Một đoạn "Nhận xét:" kiểu báo cáo Facebook (rb.tk): câu tự tính từ số liệu, rồi câu viết tay trong google_notes.json."""
-    return rb.tk(*(auto.get(sec) or []), *(notes.get(str(sec)) or []))
+    return tk(*(auto.get(sec) or []), hand=notes.get(str(sec)) or [])
 
 
 def diff_vs(rows_o, stats_o, rows_m, stats_m, lo, lm):
@@ -407,7 +416,7 @@ def profile_insights(s, cr):
     if not act:
         out.append(f"Hiện <b>không có creative nào đang chạy</b>. Lần hiển thị cuối: <b>{last_seen(s)}</b>.")
     else:
-        pl = Counter(p for r in act for p in r["platforms"].split(",") if p)
+        pl = Counter(p for r in act for p in r["platforms"].split(",") if p in TABLE_PLATS)
         out.append(f"<b>{s['active']}</b> creative đang chạy, chủ yếu trên " + ", ".join(f"<b>{esc(k)}</b> {rb.pct(v, len(act)):.0f}%" for k, v in pl.most_common(3)) + ".")
         camp = Counter(campaign_type(r) for r in act)
         out.append("Loại chiến dịch (suy luận): " + ", ".join(f"<b>{esc(k)}</b> {v}" for k, v in camp.most_common()) + " creative.")
@@ -467,7 +476,7 @@ def profile_section(s, cr, proj, notes):
 <div class="kpi"><b>{s['median_days']:g} ngày</b>một creative thường hiển thị</div>
 <div class="kpi"><b>{s['winners']}</b>creative ≥ 30 ngày hiển thị</div>
 <div class="kpi"><b>{last_seen(s)}</b>hiển thị gần nhất</div></div>
-{rb.tk(*profile_insights(s, cr), *hand)}
+{tk(*profile_insights(s, cr), hand=hand)}
 <div class="grid2"><div><h4>Loại chiến dịch <small class="muted">· suy luận, % {note}</small></h4>{rb.bar_rows(Counter(campaign_type(r) for r in base), len(base))}</div>
 <div><h4>Định dạng</h4>{rb.bar_rows(fm, len(base))}</div></div>
 <h4>Nền tảng Google gắn nhãn <small class="muted">· QC chữ luôn kèm YouTube vì Google hiện QC tìm kiếm cả trong ô tìm kiếm của YouTube</small></h4>{rb.bar_rows(pl, len(base))}
@@ -482,6 +491,10 @@ def profile_section(s, cr, proj, notes):
 # ───────────────────────── Trang ─────────────────────────
 
 CSS = rb.CSS + """
+div.tk>b{display:block;margin-bottom:4px}
+div.tk ul{margin:0;padding-left:20px}div.tk li{margin:4px 0}
+div.tk li.hand{list-style:"✎  "}div.tk li.hand::marker{color:var(--accent-text)}
+div.tk li.first{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
 .box>h3:first-child{margin-top:0}.box h3 small{font-weight:400}
 .card .cb p.muted{font-size:12px;margin-top:6px}
 .card img,.card .noimg{aspect-ratio:4/3;object-fit:contain;background:var(--track)}
@@ -603,7 +616,7 @@ def render(project, proj, rows, stats, notes=None):
 {group_table}
 <h3>Mẫu đáng học nhất đang chạy</h3>
 <p class="muted">Đang chạy, xếp theo số ngày hiển thị và số creative dùng chung. <button class="seeall preset" data-f='{{"g":"{esc(g0)}","a":"Đang chạy"}}'>Xem tất cả trong Thư viện →</button></p>
-{rb.tk(*(ins0.get(5) or []), *(n0.get("5") or []), *(ins0.get(6) or []), *(n0.get("6") or []))}
+{tk(*(ins0.get(5) or []), *(ins0.get(6) or []), hand=(n0.get("5") or []) + (n0.get("6") or []))}
 <div class="cards">{top_cards or "<p class='muted'>Không có.</p>"}</div>
 <h3>Mẫu mới tung ra trong 14 ngày</h3>
 {comment_box(7, ins0, n0)}<div class="cards">{''.join(creative_card(c) for c in fresh0) or "<p class='muted'>Không có mẫu mới.</p>"}</div>
@@ -631,7 +644,7 @@ def render(project, proj, rows, stats, notes=None):
 <div class="box note"><h3>Khác gì nhóm {esc(g0)}? (xu hướng)</h3><ul class="ins">{''.join(f'<li>{x}</li>' for x in xu)}{diffs}</ul></div>
 {compare_section(r1, s1, n1)}
 <h3>Mẫu đáng học nhất đang chạy</h3>
-{rb.tk(*(auto_insights(r1, s1).get(5) or []), *(n1.get("5") or []), *(n1.get("7") or []))}
+{tk(*(auto_insights(r1, s1).get(5) or []), hand=(n1.get("5") or []) + (n1.get("7") or []))}
 <div class="cards">{''.join(creative_card(c) for c in [c for c in c1 if c['active']][:8])}</div>
 </section>"""
 
@@ -671,6 +684,7 @@ def render(project, proj, rows, stats, notes=None):
 <div class="box"><table class="mini gl">
 <tr><td>Creative</td><td>Một mã CR… trên Transparency Center. Một video hay ảnh được đưa vào nhiều chiến dịch / kích thước sẽ thành nhiều creative.</td></tr>
 <tr><td>Mẫu</td><td>Một video YouTube hoặc một ảnh. Các creative dùng chung video / ảnh được gộp làm 1 mẫu. Mẫu dùng trong nhiều creative = đang được đẩy rộng.</td></tr>
+<tr><td>Nhận xét</td><td>Ý gạch đầu dòng thường = tự tính từ số liệu, cập nhật mỗi lần chạy. Ý có dấu ✎ = nhận xét viết tay của người phân tích (google_notes.json).</td></tr>
 <tr><td>Đang chạy</td><td>Có lần hiển thị cuối trong {ACTIVE_DAYS} ngày gần nhất.</td></tr>
 <tr><td>Ngày hiển thị</td><td>Số ngày Google thực sự phân phối creative (không phải từ ngày đầu đến ngày cuối). ≥ 30 ngày gần như chắc là đang hiệu quả.</td></tr>
 <tr><td>Nền tảng</td><td>Search, YouTube, Play, Maps, Shopping lấy từ bộ lọc của Google. "{esc(OTHER)}" = không thuộc bộ lọc nào, chủ yếu mạng hiển thị (GDN). </td></tr>
