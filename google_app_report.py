@@ -1,5 +1,5 @@
 """
-Báo cáo riêng cho App campaign (cài app) trên Google Ads của đối thủ → projects/<project>/report_google_app.html
+Báo cáo riêng cho App campaign (suy luận) trên Google Ads của đối thủ → projects/<project>/report_google_app.html
 
 Chỉ đọc cache của google_ads_intel.py (projects/<project>/google/AR*.json), không gọi Google.
 Creative App = video / ảnh có nhãn Google Play (xem google_report.campaign_type).
@@ -12,6 +12,7 @@ import datetime as dt
 import json
 import statistics
 import time
+import report_quality as rq
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -22,7 +23,7 @@ import google_report as gr
 import report_builder as rb
 
 esc = ci.esc
-APP = "App (cài app)"
+APP = "App (suy luận)"
 MONTHS = 12
 
 
@@ -41,12 +42,12 @@ def load_rows(proj):
         for r in json.loads(cache.read_text(encoding="utf-8")):
             r["competitor"], r["group"] = ci.short_name(e["label"]) or e["pid"], e["group"]
             rows.append(r)
-    gai.enrich(rows, time.time())
+    gai.enrich(rows, rq.now())
     return rows, order
 
 
 def month_starts(n=MONTHS):
-    d = dt.date.today().replace(day=1)
+    d = rq.today().replace(day=1)
     out = []
     for _ in range(n):
         out.append(d)
@@ -77,7 +78,7 @@ def insights(app, all_rows, by_comp):
         out.append(f"<b>{len(running)}</b> đối thủ đang chạy App campaign: "
                    + ", ".join(f"<b>{esc(k)}</b> {len(a)} creative" for k, a in running[:8]) + ".")
     else:
-        out.append("Hiện <b>không đối thủ nào</b> đang chạy App campaign trên Google.")
+        out.append("Chưa thấy creative có dấu hiệu quảng bá app hiển thị gần đây trong danh sách đã kiểm tra.")
     g_act = [r for r in all_rows if r["active"]]
     if g_act:
         out.append(f"App chiếm <b>{rb.pct(len(act), len(g_act)):.0f}%</b> số creative Google đang chạy của cả ngành "
@@ -93,8 +94,8 @@ def insights(app, all_rows, by_comp):
     stopped = sorted(((k, max(r["last_ts"] for r in rs)) for k, rs in by_comp.items() if not any(r["active"] for r in rs)
                       and len(rs) >= 5), key=lambda x: -x[1])
     if stopped:
-        out.append("Từng chạy App nhưng đã dừng: " + ", ".join(f"<b>{esc(k)}</b> (lần cuối {ago(t)})" for k, t in stopped[:5]) + ".")
-    fresh = Counter(r["competitor"] for r in app if time.time() - r["first_ts"] < 30 * 86400)
+        out.append("Từng có dấu hiệu quảng bá app; chưa thấy hiển thị gần đây: " + ", ".join(f"<b>{esc(k)}</b> (lần cuối {ago(t)})" for k, t in stopped[:5]) + ".")
+    fresh = Counter(r["competitor"] for r in app if rq.now() - r["first_ts"] < 30 * 86400)
     if fresh:
         out.append("Tung creative App mới trong 30 ngày: " + ", ".join(f"<b>{esc(k)}</b> {v}" for k, v in fresh.most_common(5)) + ".")
     longest = sorted(app, key=lambda r: -r["days_shown"])[:3]
@@ -125,7 +126,7 @@ def comp_table(by_comp, all_rows, order):
         days = [r["days_shown"] for r in rs]
         return (f"<tr{'' if act else ' class=idle'}><td class='nm'>{esc(k)}</td>{gr.heat(len(act), mx)}<td class='n'>{len(rs)}</td>"
                 f"<td class='n'>{sum(c['active'] for c in cr)}/{len(cr)}</td>"
-                f"<td class='n'>{sum(1 for r in rs if time.time() - r['first_ts'] < 30 * 86400)}</td>"
+                f"<td class='n'>{sum(1 for r in rs if rq.now() - r['first_ts'] < 30 * 86400)}</td>"
                 f"<td class='n'>{statistics.median(days):g}</td><td class='n'>{max(days)}</td>"
                 f"<td class='n'>{f'{rb.pct(len(act), len(ga)):.0f}%' if ga else '–'}</td>"
                 f"<td class='nw'>{ago(min(r['first_ts'] for r in rs))}</td>"
@@ -228,16 +229,17 @@ def render(project, proj, all_rows, order):
     page = f"""<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>App campaign Google · {esc(project)}</title>{dsc.FONT_LINK}<style>{CSS}</style></head><body>{dsc.BRAND_STRIP}<main>
 <h1>App campaign trên Google Ads · {esc(project)}</h1>
-<p class="sub">Google Ads Transparency Center (Việt Nam) · cập nhật {time.strftime('%d/%m/%Y %H:%M')} · {len(app)} creative App ({len(act)} đang chạy),
+<p class="sub">Google Ads Transparency Center (Việt Nam) · ngày tham chiếu {rq.stamp('%d/%m/%Y %H:%M')} · {len(app)} creative App ({len(act)} đang chạy),
 {len(creatives)} mẫu, {len(by_comp)} đối thủ từng chạy · <a href="report_google.html">Báo cáo Google Ads đầy đủ</a></p>
 
 <div class="kpis">{''.join(f"<div class='kpi'><b>{v}</b>{esc(t)}</div>" for v, t in kpi)}</div>
 <div class="box"><h3>Nhận định nhanh</h3><ul class="ins">{''.join(f'<li>{x}</li>' for x in insights(app, all_rows, by_comp))}</ul></div>
 
+{rq.coverage_box(all_rows, 'google')}
 <h3>1. Ai đang chạy App campaign</h3>{comp_table(by_comp, all_rows, order)}
 
-<h3>2. Dòng thời gian <small class="muted">· số creative App có hiển thị trong từng tháng</small></h3>
-<p class="sub">Cho thấy đối thủ chạy App liên tục (always-on) hay theo đợt (mùa mở tài khoản, chiến dịch ưu đãi).</p>
+<h3>2. Dòng thời gian <small class="muted">· số khoảng ngày đầu–cuối giao với tháng; không xác nhận phân phối liên tục</small></h3>
+<p class="sub">Khoảng ngày đầu–cuối có thể chứa thời gian ngừng phân phối. Cần snapshot bổ sung để đánh giá nhịp hoạt động.</p>
 {month_table(by_comp)}
 
 <h3>3. Nhịp tung creative App mới <small class="muted">· {gr.WEEKS} tuần, theo ngày hiển thị đầu tiên</small></h3>
@@ -263,14 +265,14 @@ def render(project, proj, all_rows, order):
 
 <h2>Cách đọc & giới hạn</h2>
 <div class="box"><ul class="ins">
-<li><b>Creative App</b> = video / ảnh có nhãn <b>Google Play</b> trên Transparency Center. Chỉ App campaign mới hiện trên Play, nên đây là dấu hiệu chắc chắn nhất. QC chữ không được tính.</li>
+<li><b>Creative App</b> = video / ảnh có nhãn <b>Google Play</b> trên Transparency Center. Nhãn Play là dấu hiệu để suy luận quảng bá app; chưa xác nhận mục tiêu cài mới, tái tương tác hoặc sự kiện trong app. QC chữ không được tính.</li>
 <li>Có thể <b>sót</b>: ảnh của App campaign chỉ hiện trên mạng hiển thị (không mang nhãn Play) sẽ bị xếp vào Display (GDN) trong báo cáo chính.</li>
 <li><b>Đang chạy</b> = có lần hiển thị cuối trong {gai.ACTIVE_DAYS} ngày gần nhất. <b>Ngày hiển thị</b> = số ngày Google thực sự phân phối, không phải khoảng từ ngày đầu tới ngày cuối.</li>
 <li>Google <b>không công bố</b> ngân sách, lượt cài, CPI hay app cụ thể được quảng bá. Số creative không tỉ lệ với ngân sách: App campaign tự cắt một video thành nhiều creative (nhiều kích thước, nhiều vị trí).</li>
 <li>Số creative phản ánh mức độ active/triển khai trong dữ liệu quan sát được, không phải thị phần hay hiệu quả cài đặt.</li>
 <li>Dòng thời gian tính theo khoảng hiển thị đầu → cuối của từng creative, nên một creative chạy ngắt quãng vẫn được tính ở các tháng giữa.</li>
 </ul></div>
-{dsc.footer('App campaign Google · ' + esc(project), time.strftime('%d/%m/%Y'))}
+{dsc.footer('App campaign Google · ' + esc(project), rq.stamp('%d/%m/%Y'))}
 </main>
 <div id="lb" role="dialog" aria-modal="true" aria-label="Xem lớn"><figure id="lbf"></figure></div>
 <script>{JS}</script></body></html>"""

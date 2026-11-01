@@ -1,6 +1,6 @@
 {
   "rank": 10,
-  "tier": "Win chắc",
+  "tier": "Tín hiệu bền",
   "page_name": "Chứng khoán MB",
   "page_id": "349312325177779",
   "days_running": 35,
@@ -17,11 +17,15 @@
   "title": "Mở tài khoản nhận cổ sinh lời miễn phí ngay!",
   "caption": "KIẾN THỨC DÀNH CHO F0\nBREAKOUT LÀ GÌ? 📈 ĐIỂM BỨT PHÁ HAY TÍN HIỆU CẦN XÁC NHẬN?\n\nMột cổ phiếu vượt qua vùng kháng cự chưa chắc đã là Breakout đáng để bạn xuống tiền. Vậy đâu là những tín hiệu cần quan sát để phân biệt một cú bứt phá thực sự với nhịp tăng giá chưa được xác nhận? 👀\n\n🔎 Từ vùng tích lũy, đường kháng cự đến sự gia tăng của thanh khoản - 3 yếu tố nào sẽ giúp nhà đầu tư nhận diện Breakout đáng chú ý?\n\n👉 Xem video để hiểu rõ hơn về Breakout và những tín hiệu cần lưu ý trước khi đưa ra quyết định đầu tư!\n📌 Đăng ký mở tài khoản MBS để khám phá các chương trình ưu đãi và công cụ hỗ trợ đầu tư.\n\n#MBS #ChungKhoanMBS #DauTuChungKhoan #KienThucDauTu #Breakout\n-----------------------------------------\nCông ty CP Chứng khoán MB\n☎️ Hotline: 1900 9088\n🌎 https://mbs.com.vn/ \n📩 cskh@mbs.com.vn",
   "signals": [
-    "Mở tài khoản / eKYC",
     "Miễn / giảm phí",
     "Kiến thức / webinar",
-    "Tích sản / dài hạn"
+    "Tích sản / dài hạn",
+    "Mở tài khoản / eKYC"
   ],
+  "asset_id": "4242833489194326",
+  "grouping_basis": "visual_asset_and_media",
+  "media_evidence": "video_url_present",
+  "copies_meaning": "Observed ads sharing a design and media type; not necessarily an identical video",
   "library_links": [
     "https://www.facebook.com/ads/library/?id=918472134617026",
     "https://www.facebook.com/ads/library/?id=1646202617217029",
@@ -29,5 +33,7 @@
     "https://www.facebook.com/ads/library/?id=1428009026100248",
     "https://www.facebook.com/ads/library/?id=1817546466332211",
     "https://www.facebook.com/ads/library/?id=2904996223204652"
-  ]
+  ],
+  "reference_at": "29/10/2026 14:29",
+  "related_pack_ranks": []
 }

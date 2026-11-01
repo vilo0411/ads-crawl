@@ -27,6 +27,7 @@ import re
 import statistics
 import subprocess
 import time
+import report_quality as rq
 import urllib.parse
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -386,7 +387,7 @@ def comp_stats(rows, order):
             "label": label, "group": group, "rows": rs, "total": len(rs), "active": len(act),
             "accounts": sorted({r["advertiser_id"] for r in rs}),
             "new_14d": sum(r["new_14d"] for r in rs),
-            "new_30d": sum(1 for r in rs if time.time() - r["first_ts"] < 30 * 86400),
+            "new_30d": sum(1 for r in rs if rq.now() - r["first_ts"] < 30 * 86400),
             "formats": Counter(r["format"] for r in act or rs),
             "platforms": Counter(p for r in act or rs for p in r["platforms"].split(",") if p),
             "median_days": statistics.median(days), "max_days": max(days),
@@ -399,7 +400,7 @@ def comp_stats(rows, order):
 
 
 def weekly_new(rows, weeks=12):
-    now = time.time()
+    now = rq.now()
     out = Counter()
     for r in rows:
         w = int((now - r["first_ts"]) // (7 * 86400))
@@ -422,7 +423,7 @@ def analyze(args):
         rows += scrape_advertiser(e["pid"], ci.short_name(e["label"]) or e["pid"], e["group"], proj, args, region)
     if not rows:
         raise SystemExit("Không lấy được creative nào.")
-    now = time.time()
+    now = rq.now()
     enrich(rows, now)
     stats = comp_stats(rows, order)
 

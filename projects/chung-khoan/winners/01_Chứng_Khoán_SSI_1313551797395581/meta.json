@@ -4,8 +4,8 @@
   "page_name": "Chứng Khoán SSI",
   "page_id": "132771703438783",
   "days_running": 164,
-  "copies": 7,
-  "latest_copy_start": "2026-09-23",
+  "copies": 1,
+  "latest_copy_start": "2026-05-17",
   "start_date": "2026-05-17",
   "format": "Dynamic (DCO)",
   "aspect": "1:1 (vuông)",
@@ -17,13 +17,13 @@
   "title": "{{product.name}}",
   "caption": "{{product.brand}}",
   "signals": [],
+  "asset_id": "623238794159765",
+  "grouping_basis": "visual_asset_and_media",
+  "media_evidence": "unresolved_dynamic_media",
+  "copies_meaning": "Observed ads sharing a design and media type; not necessarily an identical video",
   "library_links": [
-    "https://www.facebook.com/ads/library/?id=1313551797395581",
-    "https://www.facebook.com/ads/library/?id=948384834698056",
-    "https://www.facebook.com/ads/library/?id=36760960070184330",
-    "https://www.facebook.com/ads/library/?id=2546620755809032",
-    "https://www.facebook.com/ads/library/?id=1607555794113230",
-    "https://www.facebook.com/ads/library/?id=1738477383855607",
-    "https://www.facebook.com/ads/library/?id=1111849034529061"
-  ]
+    "https://www.facebook.com/ads/library/?id=1313551797395581"
+  ],
+  "reference_at": "29/10/2026 14:29",
+  "related_pack_ranks": []
 }

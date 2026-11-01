@@ -1,10 +1,10 @@
 {
   "rank": 5,
-  "tier": "Win chắc",
+  "tier": "Tín hiệu bền",
   "page_name": "Chứng khoán KIS",
   "page_id": "561500030387546",
   "days_running": 47,
-  "copies": 10,
+  "copies": 6,
   "latest_copy_start": "2026-10-28",
   "start_date": "2026-09-11",
   "format": "Dynamic (DCO)",
@@ -17,20 +17,22 @@
   "title": "Giới Thiệu Bạn Nhận 50K/Lượt",
   "caption": "THÊM BẠN THÊM ƯU ĐÃI.\nChỉ với vài thao tác giới thiệu bạn nhận 50K/lượt. \n🔥 Càng nhiều bạn, càng nhiều ưu đãi!\n📱 Chỉ cần chạm iKIS tại: https://www.kisvn.vn/chao-ban-moi-ikis\n(*) Chương trình áp dụng theo điều kiện & điều khoản.",
   "signals": [
-    "Quà / tiền thưởng",
     "Giới thiệu bạn bè",
+    "Quà / tiền thưởng",
     "App / nền tảng"
   ],
+  "asset_id": "1745533649849944",
+  "grouping_basis": "visual_asset_and_media",
+  "media_evidence": "unresolved_dynamic_media",
+  "copies_meaning": "Observed ads sharing a design and media type; not necessarily an identical video",
   "library_links": [
     "https://www.facebook.com/ads/library/?id=1802172964113103",
-    "https://www.facebook.com/ads/library/?id=932641392763905",
     "https://www.facebook.com/ads/library/?id=2243988849789796",
-    "https://www.facebook.com/ads/library/?id=1558685092966869",
-    "https://www.facebook.com/ads/library/?id=1574970957263528",
-    "https://www.facebook.com/ads/library/?id=1395352622322065",
     "https://www.facebook.com/ads/library/?id=1455123093221455",
     "https://www.facebook.com/ads/library/?id=2331228870978391",
     "https://www.facebook.com/ads/library/?id=1483147320407012",
     "https://www.facebook.com/ads/library/?id=1603882371750805"
-  ]
+  ],
+  "reference_at": "29/10/2026 14:29",
+  "related_pack_ranks": []
 }

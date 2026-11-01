@@ -18,6 +18,7 @@ import math
 import shutil
 import subprocess
 import time
+import report_quality as rq
 from collections import defaultdict
 from pathlib import Path
 
@@ -31,10 +32,10 @@ def group_videos(rows, recent_days):
     by = defaultdict(list)
     for r in rows:
         if r["youtube_id"]:
-            by[r["youtube_id"]].append(r)
-    now = time.time()
+            by[(r["competitor"], r["youtube_id"])].append(r)
+    now = rq.now()
     out = []
-    for vid, rs in by.items():
+    for (_, vid), rs in by.items():
         rs.sort(key=lambda r: -r["days_shown"])
         last = max(r["last_ts"] for r in rs)
         if recent_days and now - last > recent_days * 86400:
@@ -94,9 +95,9 @@ def meta_of(v, rank, video):
 
 def write_index(win_dir, packs, n_rows, n_videos):
     lines = [
-        "# Creative có tín hiệu thắng · video YouTube trong Google Ads",
+        "# Mẫu đáng khảo sát · video YouTube trong Google Ads",
         "",
-        f"Cập nhật {time.strftime('%d/%m/%Y %H:%M')} · {n_rows} creative Google → {n_videos} video YouTube khác nhau.",
+        f"Cập nhật {rq.stamp('%d/%m/%Y %H:%M')} · {n_rows} creative Google → {n_videos} video YouTube khác nhau.",
         "",
         "Các nhãn chỉ phản ánh tín hiệu quan sát được: **Tín hiệu bền** = hiển thị ≥ 60 ngày, hoặc ≥ 30 ngày và dùng trong ≥ 2 creative · **Triển khai rộng** = 14–59 ngày, "
         "hoặc vừa có creative mới · **Chưa đủ dữ liệu** = < 14 ngày. \"Ngày hiển thị\" là số ngày Google ghi nhận phân phối. Số creative đo mức độ active/triển khai, không đại diện cho ngân sách, impression share hay hiệu quả kinh doanh.",
@@ -139,7 +140,7 @@ def main():
             for r in json.loads(f.read_text(encoding="utf-8")):
                 r["competitor"] = ci.short_name(e["label"]) or e["pid"]
                 rows.append(r)
-    g.enrich(rows, time.time())
+    g.enrich(rows, rq.now())
 
     videos = group_videos(rows, None if args.all_time else args.recent_days)
     chosen = pick(videos, args.top, args.per_page)

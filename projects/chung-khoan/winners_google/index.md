@@ -1,6 +1,6 @@
-# Creative có tín hiệu thắng · video YouTube trong Google Ads
+# Mẫu đáng khảo sát · video YouTube trong Google Ads
 
-Cập nhật 29/10/2026 06:13 · 1646 creative Google → 52 video YouTube khác nhau.
+Cập nhật 29/10/2026 14:29 · 1646 creative Google → 50 video YouTube khác nhau.
 
 Các nhãn chỉ phản ánh tín hiệu quan sát được: **Tín hiệu bền** = hiển thị ≥ 60 ngày, hoặc ≥ 30 ngày và dùng trong ≥ 2 creative · **Triển khai rộng** = 14–59 ngày, hoặc vừa có creative mới · **Chưa đủ dữ liệu** = < 14 ngày. "Ngày hiển thị" là số ngày Google ghi nhận phân phối. Số creative đo mức độ active/triển khai, không đại diện cho ngân sách, impression share hay hiệu quả kinh doanh.
 

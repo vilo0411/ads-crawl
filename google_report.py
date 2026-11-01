@@ -10,6 +10,7 @@ import json
 import re
 import statistics
 import time
+import report_quality as rq
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -27,7 +28,7 @@ TABLE_PLATS = ["Search", "YouTube", "Play", OTHER]  # Maps / Shopping chỉ là 
 #   cả trong kết quả tìm kiếm của YouTube, Google Maps và tab Mua sắm, nên một QC chữ mang nhiều nhãn là bình thường.
 # - Có Play: App campaign (cài app), Google tự phân phối video / ảnh trên Search, YouTube, Play.
 # - Video / ảnh trên Search + YouTube (không Play): Performance Max hoặc Demand Gen.
-CAMPAIGNS = ["Search", "App (cài app)", "PMax / Demand Gen", "Video YouTube", "Display (GDN)", "Khác"]
+CAMPAIGNS = ["Search", "App (suy luận)", "Đa kênh (suy luận)", "Video trên YouTube", "Display / chưa rõ", "Khác"]
 
 
 def campaign_type(r):
@@ -35,13 +36,13 @@ def campaign_type(r):
     if r["format"].startswith("Chữ"):
         return "Search" if "Search" in pl else "Khác"
     if "Play" in pl:
-        return "App (cài app)"
+        return "App (suy luận)"
     if "Search" in pl or "Maps" in pl or "Shopping" in pl:
-        return "PMax / Demand Gen"
+        return "Đa kênh (suy luận)"
     if pl == {"YouTube"}:
-        return "Video YouTube"
+        return "Video trên YouTube"
     if pl == {OTHER}:
-        return "Display (GDN)"
+        return "Display / chưa rõ"
     return "Khác"
 WEEKS = 12
 
@@ -287,7 +288,7 @@ def creatives_of(rows):
     for r in rows:
         key = ("yt", r["youtube_id"]) if r["youtube_id"] else ("img", r["image_url"]) if r["image_url"] else ("cr", r["creative_id"])
         groups[(r["competitor"],) + key].append(r)
-    now = time.time()
+    now = rq.now()
     out = []
     for rs in groups.values():
         rs.sort(key=lambda r: (-r["active"], -r["days_shown"]))
@@ -313,7 +314,7 @@ def creative_card(c, show_brand=True):
     tags = [f"{c['days']} ngày", c["format"], c["camp"]]
     if c["copies"] > 1:
         tags.append(f"{c['copies']} creative")
-    status = f"<span class='px' title='Nền tảng: {esc(', '.join(c['platforms']))}'>Đang chạy</span>" if c["active"] else f"<span>Dừng {time.strftime('%d/%m', time.localtime(c['last_ts']))}</span>"
+    status = f"<span class='px' title='Nền tảng: {esc(', '.join(c['platforms']))}'>Đang chạy</span>" if c["active"] else f"<span>Lần cuối {time.strftime('%d/%m', time.localtime(c['last_ts']))}</span>"
     yt = f" · <a href='https://youtu.be/{r['youtube_id']}' target='_blank' rel='noopener'>YouTube ↗</a>" if r["youtube_id"] else ""
     return (f"<div class='card{' wide' if c['format'].startswith('Chữ') else ''}'>{img}<div class='cb'>"
             + (f"<div class='cp'>{esc(c['competitor'])}</div>" if show_brand else "")
@@ -370,7 +371,7 @@ def compare_section(rows, stats, notes):
     return f"""
 <h3>1. Ai đang chạy nhiều nhất</h3>{cb(1)}
 <div class="box tw"><table><tr><th>Đối thủ</th><th>Đang chạy</th><th>Tổng<small>mọi thời điểm</small></th><th>Mới 14 ngày</th><th>Mới 30 ngày</th>
-<th>≥ 30 ngày<small>hiển thị</small></th><th>Trung vị ngày</th><th>Lâu nhất</th><th>Video YouTube</th><th>Hiển thị gần nhất</th></tr>{sov}</table>
+<th>≥ 30 ngày<small>hiển thị</small></th><th>Trung vị ngày</th><th>Lâu nhất</th><th>Video trên YouTube</th><th>Hiển thị gần nhất</th></tr>{sov}</table>
 <p class='muted'>Dòng in nghiêng: hiện không có creative nào đang chạy. "Không có tài khoản" = không tìm thấy tài khoản Google Ads của đối thủ này.</p></div>
 <h3>2. Nền tảng <small class="muted">· số creative đang chạy</small></h3>{cb(2)}
 <div class="box tw"><table><tr><th>Đối thủ</th>{''.join(f'<th>{esc(p)}</th>' for p in TABLE_PLATS)}</tr>{plat}</table>
@@ -657,9 +658,10 @@ def render(project, proj, rows, stats, notes=None):
     return f"""<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Google Ads đối thủ · {esc(project)}</title>{dsc.FONT_LINK}<style>{CSS}</style></head><body>{dsc.BRAND_STRIP}<main>
 <h1>Google Ads của đối thủ · {esc(project)}</h1>
-<p class="sub">Google Ads Transparency Center (Việt Nam) · cập nhật {time.strftime('%d/%m/%Y %H:%M')} · {len(rows)} creative ({sum(r['active'] for r in rows)} đang chạy),
+<p class="sub">Google Ads Transparency Center (Việt Nam) · ngày tham chiếu {rq.stamp('%d/%m/%Y %H:%M')} · {len(rows)} creative ({sum(r['active'] for r in rows)} đang chạy),
 {len(creatives)} mẫu, {sum(1 for s in stats if s['total'])} đối thủ có QC Google</p>
 <nav class="tabs" aria-label="Các phần của báo cáo">{nav}</nav>
+{rq.coverage_box(rows, 'google')}
 {overview}
 <section data-panel="compare" hidden><h2>So sánh {esc(g0) if multi else 'đối thủ'}</h2>{compare_section(r0, s0, note_of(g0))}</section>
 <section data-panel="profiles" hidden><h2>Hồ sơ từng đối thủ</h2>
@@ -688,7 +690,7 @@ def render(project, proj, rows, stats, notes=None):
 <tr><td>Đang chạy</td><td>Có lần hiển thị cuối trong {ACTIVE_DAYS} ngày gần nhất.</td></tr>
 <tr><td>Ngày hiển thị</td><td>Số ngày Google ghi nhận creative có phân phối (không phải từ ngày đầu đến ngày cuối). Thời gian dài là tín hiệu được duy trì, không phải bằng chứng trực tiếp về hiệu quả.</td></tr>
 <tr><td>Nền tảng</td><td>Search, YouTube, Play, Maps, Shopping lấy từ bộ lọc của Google. "{esc(OTHER)}" = không thuộc bộ lọc nào, chủ yếu mạng hiển thị (GDN). </td></tr>
-<tr><td>Loại chiến dịch</td><td>Suy luận, vì Google không công bố: QC chữ có Search → <b>Search</b> (Google tự hiện cả trên YouTube, Maps, tab Mua sắm) · video / ảnh có Play → <b>App (cài app)</b> · video / ảnh có Search hoặc Maps nhưng không có Play → <b>PMax / Demand Gen</b> · chỉ YouTube → <b>Video YouTube</b> · chỉ "{esc(OTHER)}" → <b>Display (GDN)</b>.</td></tr>
+<tr><td>Loại chiến dịch</td><td>Suy luận, vì Google không công bố: QC chữ có Search → <b>Search</b> (Google tự hiện cả trên YouTube, Maps, tab Mua sắm) · video / ảnh có Play → <b>App (suy luận)</b> · video / ảnh có Search hoặc Maps nhưng không có Play → <b>Đa kênh (suy luận)</b> · chỉ YouTube → <b>Video trên YouTube</b> · chỉ "{esc(OTHER)}" → <b>Display / chưa rõ</b>.</td></tr>
 </table></div>
 <h2>Giới hạn dữ liệu</h2>
 <div class="box"><ul class="ins">
@@ -700,7 +702,7 @@ def render(project, proj, rows, stats, notes=None):
 <li><b>Creative có tín hiệu đáng chú ý</b> được xếp theo ngày hiển thị và số creative dùng chung mẫu. Báo cáo không khẳng định hiệu quả kinh doanh.</li>
 <li>Dữ liệu lấy qua API nội bộ của Transparency Center; Google có thể đổi bất kỳ lúc nào.</li>
 </ul></div></section>
-{dsc.footer('Google Ads đối thủ · ' + esc(project), time.strftime('%d/%m/%Y'))}
+{dsc.footer('Google Ads đối thủ · ' + esc(project), rq.stamp('%d/%m/%Y'))}
 </main>
 <div id="lb" role="dialog" aria-modal="true" aria-label="Xem lớn"><figure id="lbf"></figure></div>
 <script type="application/json" id="gdata">{json.dumps(gdata, ensure_ascii=False).replace("</", "<\\/")}</script>

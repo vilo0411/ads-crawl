@@ -1,6 +1,6 @@
 {
   "rank": 9,
-  "tier": "Đang lên",
+  "tier": "Triển khai rộng",
   "page_name": "Chứng khoán LPS",
   "page_id": "197779796755847",
   "days_running": 24,
@@ -17,12 +17,16 @@
   "title": "🔥 TẢI 1 APP – TẶNG 3 QUÀ KHỦNG! 🔥",
   "caption": "🔥 TẢI 1 APP – TẶNG 3 QUÀ KHỦNG! 🔥\n\nCơ hội có 1-0-2 dành riêng cho nhà đầu tư mới! Không cần thao tác phức tạp, chỉ cần 1 lần tải app LOOP by LPS, bạn sẽ kích hoạt ngay bộ ba đặc quyền \"khó chối từ\":\n\n🎁 QUÀ 1 – TIỀN TƯƠI VÀO VÍ: Tặng ngay 2 Cổ phiếu LPB (Trị giá 100K) làm lộc mở màn lấy vía.\n⚡ QUÀ 2 – GÓI DOUBLE ZERO: Miễn 100% Phí giao dịch + 0% Lãi vay Margin, giúp bạn lướt sóng thả ga, tối ưu lợi nhuận tối đa.\n📚 QUÀ 3 – COMBO HỌC & HÀNH: Tặng kho 100 Video bài giảng từ chuyên gia CFA chuẩn quốc tế + Suất Giả lập thực chiến 1.200.000đ để luyện tay nghề 0đ rủi ro.\n\nMở tài khoản 100% Online trong 1 phút, không hồ sơ rườm rà, nhận quà dùng ngay!\n\n👉 TẢI APP ĐỂ RƯỚC TRỌN COMBO 3 QUÀ NGAY LẬP TỨC:   https://loop.lpbs.com.vn/gioi-thieu-ve-Loop   \n\n---------\n𝐋𝐎𝐎𝐏 𝐛𝐲 𝐋𝐏𝐒\nSản phẩm của Công ty cổ phần Chứng khoán LPS\n- Hotline: 028 7309 8198\n- Email: chungkhoanlpbank@lpbs.com.vn\n#LPS #LoopbyLPS #Loithedautukhochoitu",
   "signals": [
-    "Mở tài khoản / eKYC",
+    "Margin / lãi vay",
     "Quà / tiền thưởng",
     "Miễn / giảm phí",
-    "Margin / lãi vay",
-    "App / nền tảng"
+    "App / nền tảng",
+    "Mở tài khoản / eKYC"
   ],
+  "asset_id": "1352994640015817",
+  "grouping_basis": "visual_asset_and_media",
+  "media_evidence": "video_url_present",
+  "copies_meaning": "Observed ads sharing a design and media type; not necessarily an identical video",
   "library_links": [
     "https://www.facebook.com/ads/library/?id=1831952091296639",
     "https://www.facebook.com/ads/library/?id=1376385467811269",
@@ -56,5 +60,7 @@
     "https://www.facebook.com/ads/library/?id=1091537517024219",
     "https://www.facebook.com/ads/library/?id=1623706302876591",
     "https://www.facebook.com/ads/library/?id=1136411938719410"
-  ]
+  ],
+  "reference_at": "29/10/2026 14:29",
+  "related_pack_ranks": []
 }

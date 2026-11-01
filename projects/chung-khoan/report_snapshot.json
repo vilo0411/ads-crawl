@@ -1,0 +1,15 @@
+{
+  "reference_at": "2026-10-29T14:29:00+07:00",
+  "rebuilt_from": "local cache and CSV visual IDs; no network calls",
+  "meta": {
+    "ads": 844,
+    "assets": 176,
+    "brands": 22
+  },
+  "google": {
+    "videos": 714,
+    "unresolved": 190,
+    "active_videos": 65,
+    "active_unresolved": 30
+  }
+}

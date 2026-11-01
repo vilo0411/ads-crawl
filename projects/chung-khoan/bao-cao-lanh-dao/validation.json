@@ -1,0 +1,13 @@
+{
+  "profiles": 25,
+  "totals": {
+    "fb": 844,
+    "google_app": 195,
+    "google_app_recent": 22,
+    "google_app_missing_id": 116
+  },
+  "pdf_pages": 26,
+  "planned_pages": 26,
+  "pdf_external_links": 74,
+  "checks": "All evidence, identity, scope, PDF pagination and Vietnamese text checks passed"
+}

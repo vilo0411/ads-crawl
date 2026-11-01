@@ -7,8 +7,8 @@
 3. Gõ tên fanpage đối thủ, chọn đúng page trong danh sách gợi ý (không bấm Enter, vì Enter sẽ tìm theo từ khoá).
 4. Bộ lọc: **Loại phương tiện → Video**, **Trạng thái → Đang hoạt động**.
 5. Đọc từng quảng cáo:
-   - **"Bắt đầu chạy vào ngày…"**: chạy càng lâu thì càng có khả năng đang có lãi. Ưu tiên học quảng cáo chạy từ 30 ngày trở lên.
-   - **"N quảng cáo dùng nội dung này"**: đối thủ đang nhân bản để scale, tức là mẫu này đang hiệu quả.
+   - **"Bắt đầu chạy vào ngày…"**: là tín hiệu về tuổi quảng cáo, không xác nhận phân phối liên tục hoặc có lãi. Có thể ưu tiên khảo sát mẫu lâu ngày, sau đó kiểm tra nội dung và điều kiện áp dụng.
+   - **"N quảng cáo dùng nội dung này"**: là số bản liên quan do nền tảng ghi nhận; chưa xác nhận tăng ngân sách, cùng một video hoặc hiệu quả.
    - Nền tảng (FB / IG / Messenger / Audience Network), CTA, landing page.
 6. Tải video: bấm **Xem chi tiết quảng cáo** → chuột phải vào video. Nếu không có nút tải thì mở DevTools (Cmd+Opt+I) → Network → lọc `mp4` → phát video → mở link `.mp4` trong tab mới → Cmd+S.
 
@@ -196,3 +196,14 @@ python3 google_winner_pack.py --project chung-khoan --top 20 --per-page 4 --all-
 - Gộp theo **ID video YouTube**: một video thường được dùng trong nhiều creative. "Số creative" tương ứng với "số bản" bên Facebook.
 - Video được tải bằng `yt-dlp` (720p). Mỗi gói gồm `hook.jpg`, `storyboard.jpg`, `transcript.txt` và `meta.json`, nằm trong `projects/<project>/winners_google/`. File tổng là `index.md`.
 - Nhiều QC Google là motion graphic không lời (chỉ có chữ và nhạc). Khi đó thông điệp nằm trong `storyboard.jpg`, không có trong transcript.
+
+## Dựng lại báo cáo từ cache đã lưu
+
+```bash
+python3 refresh_cached_reports.py --project chung-khoan \
+  --as-of 2026-10-29T14:29:00+07:00 --update-analysis
+```
+
+Lệnh này không gọi mạng, giữ ID gộp hình trong CSV, cập nhật HTML, summary, metadata các gói đã lưu và `report_snapshot.json`. `--as-of` là ngày tham chiếu để tính trạng thái và cửa sổ thời gian; không phải thời điểm crawl. Chỉ dùng mốc phù hợp với snapshot, không dùng để giả định lịch sử chưa quan sát. Nếu ad ID trong cache và CSV khác nhau, cần chạy analyze đồng bộ dữ liệu trước.
+
+`--update-analysis` thay hai file `analysis.md` bằng bảng bằng chứng của project chứng khoán. Ghi chép nội dung từng video giữ ở `observations.md`; video và storyboard không bị thay. Bỏ cờ này khi chỉ muốn dựng HTML và metadata. DCO thiếu video URL được ghi là media chưa xác minh; cần đối chiếu clip với nguồn trước khi kết luận về nội dung ad đại diện.

@@ -27,6 +27,7 @@ import shutil
 import statistics
 import subprocess
 import time
+import report_quality as rq
 import unicodedata
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -411,7 +412,7 @@ def competitor_stats(rows, entries=None):
     for r in rows:
         by[r["page_id"]].append(r)
     entries = entries or [{"pid": pid, "group": DEFAULT_GROUP, "label": ""} for pid in by]
-    now = time.time()
+    now = rq.now()
     stats = []
     for order, e in enumerate(dict((e["pid"], e) for e in entries).values()):
         pid, rs = e["pid"], by.get(e["pid"], [])

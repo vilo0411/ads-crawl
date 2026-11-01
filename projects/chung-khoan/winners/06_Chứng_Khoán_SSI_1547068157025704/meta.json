@@ -1,6 +1,6 @@
 {
   "rank": 6,
-  "tier": "Win chắc",
+  "tier": "Tín hiệu bền",
   "page_name": "Chứng Khoán SSI",
   "page_id": "132771703438783",
   "days_running": 155,
@@ -17,12 +17,18 @@
   "title": "Tặng 2 cổ phiếu PAN khi mở tài khoản tại SSI",
   "caption": "Mở tài khoản chứng khoán SSI hôm nay — nhận ngay 2 cổ phiếu PAN miễn phí. 100% online, xác thực eKYC tích hợp VNeID. Ưu đãi kết thúc 31/05!",
   "signals": [
-    "Mở tài khoản / eKYC",
     "Quà / tiền thưởng",
     "Miễn / giảm phí",
+    "Mở tài khoản / eKYC",
     "Hạn ưu đãi / khẩn cấp"
   ],
+  "asset_id": "1644086563568795",
+  "grouping_basis": "visual_asset_and_media",
+  "media_evidence": "video_url_present",
+  "copies_meaning": "Observed ads sharing a design and media type; not necessarily an identical video",
   "library_links": [
     "https://www.facebook.com/ads/library/?id=1547068157025704"
-  ]
+  ],
+  "reference_at": "29/10/2026 14:29",
+  "related_pack_ranks": []
 }

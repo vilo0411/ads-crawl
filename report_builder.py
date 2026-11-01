@@ -12,6 +12,7 @@ import re
 import statistics
 import subprocess
 import time
+import report_quality as rq
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -411,7 +412,7 @@ def insights(group, stats, rows, others):
     web = [r for r in rows if r.get("landing") and r["landing"]["type"] not in ("App Store", "Google Play", "Trang Facebook")]
     if web:
         out.append(f"Trong {len(web)} QC dẫn về web, <b>{pct(sum(r['landing']['meta_pixel'] for r in web), len(web)):.0f}%</b> trang đích có Meta Pixel "
-                   "(tức là có đo chuyển đổi để tối ưu).")
+                   "(chưa xác minh sự kiện hoặc mục tiêu tối ưu).")
     for g, s_other, r_other in others:
         if r_other:
             big = max(s_other, key=lambda s: s["ads"])
@@ -436,9 +437,9 @@ def diff_vs(rows_a, rows_b, label_a, label_b):
 # ───────────────────────── Nhận xét ngắn cho từng bảng ─────────────────────────
 
 OBJ_MEANING = {
-    "Cài app": "chốt khách ngay trên app (đua lượt cài và eKYC)",
+    "Cài app": "có CTA hoặc điểm đến liên quan app; chưa xác nhận mục tiêu tối ưu",
     "Lead form trên FB": "lấy thông tin khách bằng form ngay trên Facebook",
-    "Lead / chuyển đổi trên web": "đưa khách về landing mở tài khoản có Meta Pixel để tối ưu chuyển đổi",
+    "Lead / chuyển đổi trên web": "có CTA/đích đến liên quan đăng ký trên web; chưa xác nhận mục tiêu tối ưu",
     "Tin nhắn": "kéo khách vào inbox để tư vấn",
     "Traffic → form / webinar ngoài": "dẫn khách đăng ký sự kiện / form bên ngoài",
     "Traffic → landing": "dẫn khách về trang thông tin, chưa thấy dấu hiệu tối ưu chuyển đổi",
@@ -499,7 +500,7 @@ def tk_landing(rows):
     out = f"{pct(app, n):.0f}% QC đưa thẳng về kho ứng dụng."
     if web:
         out += (f" Trong {len(web)} QC dẫn về web, {pct(sum(r['landing']['meta_pixel'] for r in web), len(web)):.0f}% trang có Meta Pixel, "
-                "nghĩa là đối thủ có đo và tối ưu theo hành động trên web, không chỉ mua click.")
+                "chỉ xác nhận phát hiện mã; chưa xác minh sự kiện hoặc mục tiêu tối ưu.")
     return tk(out)
 
 
@@ -513,7 +514,7 @@ def tk_format(rows):
     if dco >= 15 and f1 != "Dynamic (DCO)":
         out += f" {dco:.0f}% là DCO: đối thủ đưa nhiều tiêu đề / ảnh để Meta tự ghép và chọn bản tốt nhất."
     if vid < 30:
-        out += f" Video chỉ chiếm {vid:.0f}%, nên video ngắn vẫn là kênh còn ít cạnh tranh."
+        out += f" Video chỉ chiếm {vid:.0f}%, chưa thể suy ra mức cạnh tranh đấu giá hoặc hiệu quả video."
     return tk(out)
 
 
@@ -663,7 +664,7 @@ def tk_top_creatives(creatives):
         return ""
     c = creatives[0]
     r = c["rep"]
-    out = f"Mẫu mạnh nhất đã chạy {c['days']} ngày với {c['copies']} QC: {esc(r['format'])}, chủ đề {esc(r['theme'])}"
+    out = f"Mẫu có tín hiệu duy trì đáng chú ý nhất đã chạy {c['days']} ngày với {c['copies']} QC: {esc(r['format'])}, chủ đề {esc(r['theme'])}"
     out += f", {c['variants']} biến thể." if c["variants"] > 1 else "."
     vids = sum(1 for x in creatives[:8] if x["rep"]["format"] == "Video")
     if vids:
@@ -1011,8 +1012,8 @@ def render(project, proj, rows, stats, has_landings=False, signal_keys=None):
     global SIGNAL_KEYS
     SIGNAL_KEYS = list(signal_keys or [])
     proj = Path(proj)
-    now = time.time()
-    today = dt.date.today()
+    now = rq.now()
+    today = rq.today()
     short = {s["page_id"]: s["short"] for s in stats}
     for r in rows:
         r["short"] = short.get(r["page_id"], r["page_name"])
@@ -1080,10 +1081,11 @@ def render(project, proj, rows, stats, has_landings=False, signal_keys=None):
     page = f"""<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>QC đối thủ · {esc(project)}</title>{dsc.FONT_LINK}<style>{CSS}</style></head><body>{dsc.BRAND_STRIP}<main>
 <h1>Quảng cáo đối thủ · {esc(project)}</h1>
-<p class="sub">Meta Ad Library (Việt Nam) · chỉ QC <b>đang chạy</b> · cào lúc {time.strftime('%d/%m/%Y %H:%M')} · {len(rows)} QC, {len(creatives)} creative, {sum(1 for s in stats if s['ads'])} đối thủ có QC</p>
+<p class="sub">Meta Ad Library (Việt Nam) · chỉ QC <b>đang chạy</b> · ngày tham chiếu {rq.stamp('%d/%m/%Y %H:%M')} · {len(rows)} QC, {len(creatives)} creative, {sum(1 for s in stats if s['ads'])} đối thủ có QC</p>
 <nav class="tabs" aria-label="Các phần của báo cáo">{nav}</nav>
 
 <section data-panel="overview">
+{rq.coverage_box(rows, 'meta')}
 {land_note}
 <h2>{'Nhóm ' + esc(g0) if multi else 'Toàn cảnh'}</h2>
 <div class="kpis">
@@ -1091,7 +1093,7 @@ def render(project, proj, rows, stats, has_landings=False, signal_keys=None):
 <div class="kpi"><b>{n0}</b>QC đang chạy</div>
 <div class="kpi"><b>{len({r['asset_id'] for r in r0})}</b>mẫu quảng cáo khác nhau</div>
 <div class="kpi"><b>{sum(s['cre_new_14d'] for s in s0 if s['ads'])}</b>mẫu mới trong 14 ngày</div>
-<div class="kpi"><b>{pct(obj0.most_common(1)[0][1], n0) if n0 else 0:.0f}%</b>QC là chiến dịch {esc(obj0.most_common(1)[0][0]) if n0 else ''}</div>
+<div class="kpi"><b>{pct(obj0.most_common(1)[0][1], n0) if n0 else 0:.0f}%</b>QC suy luận hướng đến {esc(obj0.most_common(1)[0][0]) if n0 else ''}</div>
 <div class="kpi"><b>{pct(sum(r['format'] == 'Video' for r in r0), n0):.0f}%</b>QC là video</div>
 </div>
 <div class="box"><h3 style="margin-top:0">Nhận định nhanh</h3><ul class="ins">{ins}</ul></div>
@@ -1155,9 +1157,9 @@ def render(project, proj, rows, stats, has_landings=False, signal_keys=None):
 <li><b>Ưu đãi và chủ đề</b> được trích bằng từ khoá trong caption, có thể sót hoặc nhầm; cần đối chiếu với thể lệ trên trang đích.</li>
 <li><b>Trang đích</b> được mở bằng trình duyệt mobile (iPhone). Deep link mở app được ghi nhận là App Store / Google Play. Meta Pixel được phát hiện qua script connect.facebook.net / fbq.</li>
 </ul></div></section>
-{dsc.footer('Quảng cáo đối thủ · ' + esc(project), time.strftime('%d/%m/%Y'))}
+{dsc.footer('Quảng cáo đối thủ · ' + esc(project), rq.stamp('%d/%m/%Y'))}
 </main>
 <script type="application/json" id="gdata">{json.dumps(gdata, ensure_ascii=False).replace("</", "<\\/")}</script>
 <script type="application/json" id="gcolors">{json.dumps(OBJ_COLORS, ensure_ascii=False)}</script>
 <script>{JS}</script></body></html>"""
-    (proj / "report.html").write_text(page, encoding="utf-8")
+    (proj / "report.html").write_text(re.sub(r"[ \t]+\n", "\n", page), encoding="utf-8")

@@ -1,65 +1,57 @@
-# Phân tích creative có tín hiệu thắng · Chứng khoán
+# Phân tích mẫu đáng khảo sát · Meta
 
-Dữ liệu ngày 28/10/2026 lấy từ Meta Ad Library (VN) và chỉ gồm QC đang chạy. Có 843 QC của 21 CTCK, gộp bản trùng còn 169 creative. Chọn ra 12 video có tín hiệu đáng chú ý, mỗi CTCK tối đa 3 video để giữ độ đa dạng giữa các thương hiệu. Danh sách ảnh nằm trong [index.md](index.md).
+Ngày tham chiếu 29/10/2026 14:29 · 844 QC · 176 nhóm thiết kế · 22 fanpage có dữ liệu.
 
-> Cách đọc: "Ngày chạy" và "số bản" phản ánh mức độ duy trì/triển khai, không chứng minh hiệu quả kinh doanh. Ad Library không công bố chi tiêu, lượt hiển thị, tương tác trên bài quảng cáo, đối tượng nhắm chọn hay kết quả chuyển đổi. `page_like_count` chỉ phản ánh quy mô fanpage và không được dùng để xếp hạng creative. Số QC đo mức độ active, không đại diện cho ngân sách hay thị phần. Ngành này **khác hẳn tấm lợp ở chỗ QC rất ngắn hạn**: 91% QC mới chạy dưới 30 ngày, thường gắn với chương trình ưu đãi có hạn. Vì vậy, "tín hiệu thắng" ở đây chỉ có nghĩa là creative được duy trì lâu, triển khai thành nhiều bản hoặc tái sử dụng.
+[Báo cáo](../report.html) · [Manifest](../report_snapshot.json) · [Gói tư liệu](index.md) · [Ghi chép nội dung đã xem](observations.md)
 
-**Bức tranh chung (từ [report.html](../report.html)):**
-- **LPS chiếm 51% số QC đang quan sát được** (427/843): 293 creative và 203 QC mới trong 14 ngày. Hai creative ảnh của LPS có 166–168 bản liên quan. Đây là mức độ active lớn trong snapshot, không phải thị phần ngân sách. Các tỉ lệ toàn ngành bị LPS kéo lệch nên cần đọc thêm theo từng công ty.
-- MBS có 148 QC (88 QC mới trong 14 ngày) và KIS có 85 QC. Ba CTCK này cộng lại chiếm 78% số QC.
-- **TCBS, Vietcap, HSC, Mirae Asset hiện không có QC** trên fanpage chính. Bước discover theo từ khoá cũng không tìm thấy fanpage nào khác của họ đang chạy QC.
-- Định dạng: ảnh đơn 69%, DCO 15%, video chỉ 13%. Video chủ yếu ở khung 9:16; khung 1:1 vẫn phổ biến ở SSI và LPS.
-- Đích sau CTA: 94% dẫn ra Website hoặc App Store. CTA "Cài đặt ngay" chiếm 53%, nên loại hình được suy luận chủ yếu là **cài app**, không phải lead form hay Messenger như ngành tấm lợp.
+## Phạm vi và cách đọc
 
----
+Số liệu lấy từ cache và CSV hiện có; lần dựng này không crawl lại. Chỉ gồm quảng cáo trong danh sách fanpage được chọn. Không thấy dữ liệu không chứng minh một công ty không chạy quảng cáo.
 
-## Tóm tắt từng video
+12 gói video đã lưu thuộc 12 nhóm thiết kế. Giữ nguyên video và thứ tự gói để truy vết tư liệu đã xem; đây không phải xếp hạng hiệu quả. Số QC cùng nhóm đếm ad ID quan sát được có cùng thiết kế và cùng trạng thái media; không xác nhận mọi bản dùng cùng một video. Các gói trùng nhóm không được cộng dồn.
 
-| # | CTCK | Ngày chạy · số bản · độ dài | Hook 0–3 giây | Nội dung / ưu đãi | Phong cách |
-|---|---|---|---|---|---|
-| 1 | SSI | **164 ngày · ×7** · 15s · 1:1 | Thẻ ProfitX (SSI × VietinBank Visa) nằm trên điện thoại, chữ "Tặng ngay **Gemini** Google AI plus" | Mở tài khoản và sở hữu thẻ ProfitX thì nhận Gemini, 2 cổ phiếu CTG và khoá học 2 triệu | Motion graphic, không âm thanh, DCO (caption `{{product.brand}}`). **Quà là sản phẩm công nghệ**, không phải tiền |
-| 2 | SSI | 135 ngày · ×3 · 15s · 1:1 | "Hé lộ CON NGƯỜI THẬT khi đặt lệnh: Bạn đầu tư style nào?" cùng các huy hiệu HOLDER / FOMO / YOLO / PANIC | Quiz 8 câu trong 2 phút, chia 7 phong cách đầu tư; mở tài khoản nhận quà đến 100.000đ | Motion graphic tĩnh, nút "LÀM TEST NGAY". **Dùng tò mò về bản thân làm mồi**, ưu đãi đặt ở sau |
-| 3 | HD Securities | 119 ngày · ×2 · 53s · 9:16 | "Cần bao nhiêu tiền để mua cổ phiếu? 10, 50 hay 100 triệu?" | Phá hiểu lầm: 100 cổ × 20k = 2 triệu là đủ bắt đầu. Kết bằng "Theo dõi chứng khoán HD" | Hoạt hình sticker + voice AI, CTA Thích Trang. **Gỡ rào cản tâm lý của F0** |
-| 4 | HD Securities | 119 ngày · ×2 · 43s · 9:16 | "VN-Index tăng mà tài khoản vẫn đỏ. Vì sao vậy?" | Giải thích hiện tượng "xanh vỏ đỏ lòng": chỉ số tính theo vốn hoá, nên cần xem độ rộng thị trường | Cùng template với #3. **Hook bằng nỗi đau đúng lúc thị trường đang diễn ra** |
-| 5 | KIS | 47 ngày · **×10** · 10s · 9:16 | Hộp quà bay, chữ "MỜI CÀNG NHIỀU – Quà CÀNG MÊ" | Nhận ngay 50K mỗi lượt giới thiệu qua app iKIS | Motion graphic 10 giây, có người mẫu cầm 2 điện thoại. DCO, nhân nhiều bản |
-| 6 | SSI | 155 ngày · ×1 · 15s · 9:16 | "MỞ TÀI KHOẢN SSI – Nhận ngay 2 cổ phiếu PAN" chữ vàng trên nền đồng xanh | Co-brand với The PAN Group, eKYC VNeID. Copy ghi "kết thúc 31/05" nhưng QC vẫn chạy | Motion graphic, nút "MỞ TÀI KHOẢN". **Quà là cổ phiếu của đối tác** |
-| 7 | KIS | 47 ngày · ×5 · 11s · 9:16 | Cùng template với #5 | Ưu đãi kép: người giới thiệu nhận 50K + 100K khi bạn giao dịch; người mới nhận 100K | Biến thể của #5, chỉ đổi caption |
-| 8 | KIS | 27 ngày · **×20** · 10s · 9:16 | Cùng template với #5 | Mở tài khoản nhận 50K + 50K mỗi lượt giới thiệu + 3 cổ phiếu | **Một video mang nhiều caption, mỗi caption nhân 5–20 bản.** Đây là cách KIS scale |
-| 9 | LPS | 24 ngày · **×32** · 15s · 1:1 | Tay cầm điện thoại, chữ "Tải 1 app TẶNG 3 QUÀ" | 0 phí, 0 lãi margin trọn đời + 2 cổ phiếu LPB (100K) + khoá học miễn phí | Ảnh động gần như tĩnh + voice đọc 5 câu. **Xếp ưu đãi chồng lên nhau ("stack")** |
-| 10 | MBS | 35 ngày · ×6 · 67s · 9:16 | Chuyên viên trẻ nói thẳng vào camera: "Một cổ phiếu đi ngang lâu rồi bất ngờ tăng mạnh…" | Dạy breakout qua 3 dấu hiệu; đến giây 49 mới chèn banner "Mở tài khoản đón cổ phiếu" | **Quay điện thoại kiểu talking head**, phụ đề trắng. Dạy kiến thức trước, chào ưu đãi sau |
-| 11 | VPS | 44 ngày · ×1 · 98s · 9:16 | Nền tím, chữ "DIRECT INDEXING mang lại ưu điểm gì?" | Lợi ích của Direct Indexing và 3 điều cần lưu ý; series "Tích sản dài hạn 101" | Kinetic text + voice, không CTA. Định vị chuyên gia, sản phẩm VPS Smart Indexing |
-| 12 | VPS | 43 ngày · ×1 · 80s · 9:16 | "Direct Indexing là gì?" | Giải thích từng chữ Direct / Indexing với ví dụ rổ VN30 | Cùng series với #11, CTA "Tìm hiểu thêm" |
+## Các gói đã lưu
 
-*#4, #7, #8, #12 được đánh giá dựa trên lời thoại, caption và template trùng với video cùng hãng; chưa xem storyboard riêng của từng video.*
+DCO thiếu video URL chưa xác minh được quan hệ giữa clip đã lưu và ad đại diện. Các gói này giữ lại để truy vết, cần đối chiếu nguồn trước khi phân tích nội dung.
 
----
+| Gói | Fanpage | Tuổi QC lâu nhất trong nhóm | QC cùng nhóm | Gói liên quan |
+|---|---|---|---|---|
+| [1](01_Chứng_Khoán_SSI_1313551797395581/) | Chứng Khoán SSI | 164 ngày | 1 | – |
+| [2](02_Chứng_Khoán_SSI_998646476391940/) | Chứng Khoán SSI | 135 ngày | 2 | – |
+| [3](03_HD_Securities_2483355245465502/) | HD Securities | 119 ngày | 2 | – |
+| [4](04_HD_Securities_1031598772708170/) | HD Securities | 119 ngày | 2 | – |
+| [5](05_Chứng_khoán_KIS_1802172964113103/) | Chứng khoán KIS | 47 ngày | 6 | – |
+| [6](06_Chứng_Khoán_SSI_1547068157025704/) | Chứng Khoán SSI | 155 ngày | 1 | – |
+| [7](07_Chứng_khoán_KIS_1981944455846753/) | Chứng khoán KIS | 47 ngày | 6 | – |
+| [8](08_Chứng_khoán_KIS_1263191700221285/) | Chứng khoán KIS | 27 ngày | 11 | – |
+| [9](09_Chứng_khoán_LPS_1831952091296639/) | Chứng khoán LPS | 24 ngày | 32 | – |
+| [10](10_Chứng_khoán_MB_918472134617026/) | Chứng khoán MB | 35 ngày | 6 | – |
+| [11](11_Công_ty_Cổ_phần_Chứng_khoán_VP_2142765359964424/) | Công ty Cổ phần Chứng khoán VPS - VPS Securities | 44 ngày | 1 | – |
+| [12](12_Công_ty_Cổ_phần_Chứng_khoán_VP_38790086283938700/) | Công ty Cổ phần Chứng khoán VPS - VPS Securities | 43 ngày | 1 | – |
 
-## Điểm chung của nhóm có tín hiệu thắng
+## Quy mô triển khai và độ đa dạng
 
-1. **Có 2 trường phái tách biệt rõ:**
-   - **Ưu đãi trực diện** (SSI #1 #6, KIS #5 #7 #8, LPS #9): motion graphic 10–15 giây, **không lời thoại**, thông điệp gói trong 1 dòng chữ to: "Tặng X khi mở tài khoản". Nhóm này chạy theo kiểu thay quà theo đợt nhưng giữ nguyên khung creative.
-   - **Kiến thức dẫn dắt** (HDS #3 #4, MBS #10, VPS #11 #12): 43–98 giây, có voice, mở đầu bằng một câu hỏi hoặc hiểu lầm của F0. Nhóm này đạt **thời gian chạy dài nhất ngoài SSI** (HDS 119 ngày), vì nội dung không hết hạn như ưu đãi.
-2. **Quà là cổ phiếu chứ không còn là tiền mặt:** PAN, CTG (SSI), LPB (LPS), 3 cổ phiếu (KIS), VIB/POW (MBS). Cổ phiếu tạo cảm giác "đã là nhà đầu tư" ngay từ bước đầu. SSI còn đi xa hơn với **Gemini AI**, một món quà ngoài ngành.
-3. **Triển khai nhiều bản và thay caption trên cùng khung creative.** KIS dùng 1 video 10 giây cho 3 caption với tổng 35 bản; LPS ×32; SSI ×7. Dữ liệu cho thấy mức độ triển khai/tái sử dụng, nhưng không cho biết ngân sách hoặc cách Meta phân phối từng bản.
-4. **Video ngắn, không lời thoại xuất hiện nhiều trong nhóm ưu đãi được duy trì/triển khai rộng.** 6/12 video không có lời thoại, độ dài 10–15 giây. Chưa có dữ liệu tương tác hay chuyển đổi để kết luận mức độ hiệu quả.
-5. **Video kiến thức gắn ưu đãi ở cuối, không ở đầu.** MBS #10 dạy breakout đến giây 49 mới chèn banner mở tài khoản. HDS chỉ kêu gọi follow page. Nhóm này là **phễu nuôi dưỡng (nurture)**, không phải phễu chốt.
-6. **Gần như không ai dùng người thật nói chuyện.** Chỉ MBS #10 có talking head. Nhân vật còn lại là người mẫu stock (KIS) hoặc hoạt hình (HDS).
-7. **Các video được chọn đều dẫn về app/website, không dùng Messenger hay Zalo làm CTA.** Dữ liệu chỉ quan sát được điểm đến sau cú nhấp; không xác nhận người dùng đã cài app, eKYC, nạp tiền hay giao dịch.
+| Fanpage | QC | Nhóm thiết kế | Tỷ trọng QC | Tỷ trọng nhóm thiết kế |
+|---|---|---|---|---|
+| Chứng khoán LPS | 427 | 6 | 50.6% | 3.4% |
+| Chứng khoán MB | 148 | 31 | 17.5% | 17.6% |
+| Chứng khoán KIS | 85 | 24 | 10.1% | 13.6% |
+| Chứng Khoán Shinhan Việt Nam - SSV | 34 | 12 | 4.0% | 6.8% |
+| Chứng khoán Nhất Việt - VFS | 30 | 6 | 3.6% | 3.4% |
 
-## Khoảng trống chưa ai khai thác
+## Diễn giải và hành động
 
-| Khoảng trống | Hiện trạng | Vì sao đáng làm |
+- Quan sát: mức triển khai và số mẫu có thể khác nhau rất lớn. Diễn giải: nhiều QC không đồng nghĩa nhiều ý tưởng. Hành động: đọc hai chỉ số cạnh nhau và kiểm tra thủ công các nhóm hình ảnh lớn.
+- Quan sát: bộ tư liệu có video ưu đãi ngắn, kiến thức và người thật nói chuyện. Chưa có dữ liệu để kết luận nhóm nào rẻ hơn hoặc chuyển đổi tốt hơn. Hành động: so các phương án trong cùng mục tiêu và cohort.
+- DCO có thể dùng caption placeholder; không dùng caption đó để xác nhận trùng video. Các nhóm hiện dựa trên hình ảnh và loại media, vẫn có thể gồm nhiều biến thể.
+- Tuổi QC là thời gian từ ngày bắt đầu tới mốc quan sát lưu trong cache, không xác nhận phân phối liên tục. Một snapshot không xác nhận tái sử dụng hoặc tăng ngân sách.
+
+## Giả thuyết nên thử
+
+| Giả thuyết | Bản thử | Chỉ số quyết định |
 |---|---|---|
-| **Demo màn hình thật: mở tài khoản trong 3 phút** | Mọi QC chỉ *nói* "100% online, eKYC", không ai quay màn hình thao tác | F0 sợ phức tạp. Quay màn hình thật là bằng chứng, giống vai trò của "đập búa" ở ngành tấm lợp |
-| **Người thật kể "lần đầu đầu tư"** (UGC / testimonial) | 0/12 video | Ưu đãi giữa các hãng gần như giống nhau, nên câu chuyện thật mới tạo ra khác biệt |
-| **Minh bạch điều kiện nhận quà** | Gần như tất cả QC gắn "(*) áp dụng điều kiện"; SSI #6 vẫn chạy dù copy ghi đã hết hạn 31/05 | Nói rõ "cần làm gì để nhận" giúp tăng niềm tin và giảm số tài khoản rỗng |
-| **Quy đổi ưu đãi thành số tiền tiết kiệm được** | Chỉ MBS làm ở dạng ảnh ("Tiết kiệm 18 triệu/năm"), chưa ai làm video | "0 phí" là khái niệm trừu tượng; "Giao dịch 50 triệu/tháng thì tiết kiệm X đồng/năm" cụ thể hơn |
-| **Series kiến thức ngắn, có ưu đãi đi kèm** | HDS làm kiến thức nhưng không chốt; MBS chốt nhưng chỉ có 1 video | Kết hợp nội dung sống lâu (119 ngày) với một CTA mềm |
-| **Phái sinh / trader chủ động** | Gần như mọi QC nhắm F0 | Ngách ít cạnh tranh, giá trị khách cao hơn |
-| **Video dài cho nhóm khách tích sản** | Chỉ VPS có | Khách có tài sản lớn cần lý do tin tưởng, không cần quà 50K |
+| Demo giúp giảm lo ngại thủ tục | Thao tác thật so với motion chữ, cùng lợi ích | Chi phí eKYC và tỷ lệ nạp tiền |
+| Điều kiện rõ giúp tăng chất lượng tài khoản | Giải thích điều kiện so với thông điệp ngắn | Chi phí tài khoản có nạp tiền/giao dịch |
+| Tính năng tạo động lực ngoài săn quà | Một tình huống sử dụng so với ưu đãi | Chi phí tài khoản có giao dịch |
 
----
-
-## Lưu ý tuân thủ
-
-QC chứng khoán phải tuân theo quy định của UBCKNN: **không hứa hẹn lợi nhuận** và có disclaimer "không phải khuyến nghị đầu tư" (như VPS #11–12 đã làm). Câu chữ dạng "Chưa đầu tư đã có lãi" (LPS) có rủi ro, ta không nên bắt chước.
+Đây là đề xuất thử nghiệm, chưa phải khoảng trống toàn thị trường. Nội dung ưu đãi phải đối chiếu thể lệ còn hiệu lực. Xem [brief](../brief.md).

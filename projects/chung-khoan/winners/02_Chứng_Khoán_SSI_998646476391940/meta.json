@@ -4,8 +4,8 @@
   "page_name": "Chứng Khoán SSI",
   "page_id": "132771703438783",
   "days_running": 135,
-  "copies": 3,
-  "latest_copy_start": "2026-06-18",
+  "copies": 2,
+  "latest_copy_start": "2026-10-06",
   "start_date": "2026-06-15",
   "format": "Video",
   "aspect": "1:1 (vuông)",
@@ -17,13 +17,18 @@
   "title": "Bạn thuộc tuýp nhà đầu tư nào?",
   "caption": "8 câu hỏi. 2 phút. Hé lộ con người thật của bạn khi bấm lệnh.\nBạn là HOLDER đá tảng, PANIC trốn chạy, hay YOLO bạo gan? 7 phong cách — chỉ 1 cái là của bạn.\nLàm quiz ngay, mở tài khoản SSI nhận quà đến 100.000đ.",
   "signals": [
-    "Mở tài khoản / eKYC",
     "Quà / tiền thưởng",
-    "Miễn / giảm phí"
+    "Miễn / giảm phí",
+    "Mở tài khoản / eKYC"
   ],
+  "asset_id": "4652840784947534",
+  "grouping_basis": "visual_asset_and_media",
+  "media_evidence": "video_url_present",
+  "copies_meaning": "Observed ads sharing a design and media type; not necessarily an identical video",
   "library_links": [
     "https://www.facebook.com/ads/library/?id=998646476391940",
-    "https://www.facebook.com/ads/library/?id=1993316048242422",
-    "https://www.facebook.com/ads/library/?id=1666810337769393"
-  ]
+    "https://www.facebook.com/ads/library/?id=1636393071423974"
+  ],
+  "reference_at": "29/10/2026 14:29",
+  "related_pack_ranks": []
 }

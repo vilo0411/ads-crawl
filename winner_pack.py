@@ -21,6 +21,7 @@ import shutil
 import subprocess
 import tempfile
 import time
+import report_quality as rq
 import unicodedata
 from collections import defaultdict
 from pathlib import Path
@@ -47,10 +48,13 @@ TIERS = ["Tín hiệu bền", "Triển khai rộng", "Chưa đủ dữ liệu"]
 # ───────────────────────── Chọn video thắng ─────────────────────────
 
 def creative_key(r):
-    # NFKC đổi chữ "in đậm" kiểu 𝐆𝐨̃ về chữ thường để các bản trùng khớp nhau
-    text = unicodedata.normalize("NFKC", r["body"] or r["title"] or "")
-    text = re.sub(r"[^a-z0-9]+", " ", ci.norm(text)).strip()[:120]
-    return f"{r['page_id']}|{text or r['collation_id']}"
+    # Share the report's visual grouping, but keep video-bearing rows separate
+    # from still/carousel rows. Never group DCO placeholders by caption.
+    asset = r.get("asset_id") or r["collation_id"]
+    media = ("video" if r.get("video_urls") or r.get("format") == "Video"
+             else "dynamic_unknown" if r.get("display_format") == "DCO" or r.get("format") == "Dynamic (DCO)"
+             else "image")
+    return f"{r['page_id']}|{asset}|{media}"
 
 
 def tier_of(days, copies, new_copy_14d):
@@ -65,7 +69,7 @@ def group_creatives(rows):
     groups = defaultdict(list)
     for r in rows:
         groups[creative_key(r)].append(r)
-    now = time.time()
+    now = rq.now()
     creatives = []
     for key, ads in groups.items():
         ads.sort(key=lambda r: -(r["days_running"] or 0))
@@ -73,7 +77,7 @@ def group_creatives(rows):
         starts = [r["start_ts"] for r in ads if r["start_ts"]]
         latest = max(starts) if starts else None
         new_copy = len(ads) > 1 and latest and now - latest < 14 * 86400
-        copies = max(len(ads), max(r["collation_count"] or 1 for r in ads))
+        copies = len({r["ad_archive_id"] for r in ads})
         creatives.append({
             "key": key,
             "ads": ads,
@@ -86,7 +90,8 @@ def group_creatives(rows):
             "new_copy_14d": bool(new_copy),
             "tier": tier_of(days, copies, new_copy),
             "score": days * (1 + math.log(copies)),
-            "is_video": any(r["video_urls"] for r in ads),
+            "is_video": key.endswith("|video"),
+            "is_image": key.endswith("|image"),
         })
     return sorted(creatives, key=lambda c: -c["score"])
 
@@ -94,7 +99,7 @@ def group_creatives(rows):
 def pick(creatives, top, per_page, videos):
     out, per = [], defaultdict(int)
     for c in creatives:
-        if c["is_video"] != videos or per[c["page_id"]] >= per_page:
+        if not c["is_video" if videos else "is_image"] or per[c["page_id"]] >= per_page:
             continue
         per[c["page_id"]] += 1
         out.append(c)
@@ -258,6 +263,10 @@ def meta_of(c, rank, dur):
         "video_duration": round(dur, 1) if dur else r.get("video_duration"),
         "platforms": r["platforms"], "cta": r["cta"], "destination": r["dest"], "link_url": r["link_url"],
         "title": r["title"], "caption": r["body"], "signals": r["signals"],
+        "asset_id": r.get("asset_id") or r["collation_id"],
+        "grouping_basis": "visual_asset_and_media",
+        "media_evidence": ("video_url_present" if r.get("video_urls") else "unresolved_dynamic_media"),
+        "copies_meaning": "Observed ads sharing a design and media type; not necessarily an identical video",
         "library_links": [a["library_link"] for a in c["ads"]],
     }
 
@@ -283,6 +292,9 @@ def main():
     rows = [r for f in cache for r in json.loads(f.read_text(encoding="utf-8"))]
     comp = proj / "competitors.txt"
     entries = ci.read_competitors(comp) if comp.exists() else []
+    if entries:
+        selected = {e["pid"] for e in entries}
+        rows = [r for r in rows if str(r["page_id"]) in selected]
     group = args.group or (entries[0]["group"] if entries else "all")
     if group != "all" and len({e["group"] for e in entries}) > 1:
         keep = {e["pid"] for e in entries if e["group"] == group}
@@ -291,6 +303,8 @@ def main():
     ci.load_project_signals(proj)
     ci.enrich(rows, ci.load_landings(proj))
 
+    import report_builder
+    report_builder.assign_assets(rows, proj)
     creatives = group_creatives(rows)
     videos = pick(creatives, args.top, args.per_page, videos=True)
     images = pick(creatives, args.top, args.per_page, videos=False) if args.include_images else []
@@ -335,20 +349,22 @@ def main():
 
 def write_index(win_dir, packs, images, n_ads, n_creatives):
     lines = [
-        "# Creative có tín hiệu thắng · video đối thủ",
+        "# Mẫu đáng khảo sát · video đối thủ",
         "",
-        f"Cập nhật {time.strftime('%d/%m/%Y %H:%M')} · {n_ads} QC → {n_creatives} creative khác nhau sau khi gộp bản trùng.",
+        f"Cập nhật {rq.stamp('%d/%m/%Y %H:%M')} · {n_ads} QC → {n_creatives} nhóm thiết kế × loại media sau khi gộp bản trùng.",
         "",
-        "Các nhãn chỉ phản ánh tín hiệu quan sát được: **Tín hiệu bền** = chạy ≥ 60 ngày, hoặc ≥ 30 ngày và có ≥ 2 bản · **Triển khai rộng** = 14–59 ngày, hoặc vừa có bản mới · **Chưa đủ dữ liệu** = < 14 ngày. Số QC đo mức độ active, không đại diện cho ngân sách hay thị phần. Dữ liệu không có tương tác trên bài quảng cáo; `page_like_count` chỉ là quy mô fanpage và không được dùng để xếp hạng creative.",
+        "Các nhãn chỉ phản ánh tín hiệu quan sát được: **Tín hiệu bền** = chạy ≥ 60 ngày, hoặc ≥ 30 ngày và có ≥ 2 bản · **Triển khai rộng** = 14–59 ngày, hoặc vừa có bản mới · **Chưa đủ dữ liệu** = < 14 ngày. Số bản = số ad ID quan sát được trong cùng nhóm thiết kế và loại media; không xác nhận cùng một video. Số QC đo mức độ active, không đại diện cho ngân sách hay thị phần. Dữ liệu không có tương tác trên bài quảng cáo; `page_like_count` chỉ là quy mô fanpage và không được dùng để xếp hạng creative.",
         "",
-        "| # | Hạng | Fanpage | Ngày chạy | Số bản | Độ dài | Khung | Đích sau CTA | Gói |",
+        "| # | Hạng | Fanpage | Ngày chạy | QC cùng nhóm | Độ dài | Khung | Đích sau CTA | Gói |",
         "|---|---|---|---|---|---|---|---|---|",
     ]
+    lines.insert(5, "")
+    lines.insert(6, "Gói giữ nguyên video đã xem để truy vết; các gói có cùng asset_id và loại media thuộc cùng nhóm, không cộng dồn số QC. Một nhóm có thể có nhiều video biến thể. DCO không có video URL được ghi là media chưa xác minh, không tự coi là ảnh hoặc video. Video đã lưu trong gói DCO cần đối chiếu lại nguồn trước khi dùng làm bằng chứng cho ad đại diện. Thứ tự gói là thứ tự khảo sát đã lưu, không phải xếp hạng hiệu quả.")
     for out, m in packs:
         lines.append(f"| {m['rank']} | {m['tier']} | {m['page_name']} | {m['days_running']} | {m['copies']} | "
                      f"{m['video_duration'] or '?'}s | {m['aspect'] or '?'} | {m['destination']} | [{out.name}]({out.name}/) |")
     if images:
-        lines += ["", "## QC ảnh có tín hiệu đáng chú ý (chỉ liệt kê)", "", "| Hạng | Fanpage | Ngày chạy | Số bản | Caption | Link |",
+        lines += ["", "## QC ảnh có tín hiệu đáng chú ý (chỉ liệt kê)", "", "| Hạng | Fanpage | Ngày chạy | QC cùng nhóm | Caption | Link |",
                   "|---|---|---|---|---|---|"]
         for c in images:
             cap = (c["rep"]["body"] or "").replace("\n", " ").replace("|", "/")[:90]
