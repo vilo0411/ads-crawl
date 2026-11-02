@@ -15,7 +15,7 @@ import re
 import shutil
 import subprocess
 import zipfile
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -166,11 +166,30 @@ GLOSSARY=[
    'Google Ads Transparency Center: ảnh chụp mẫu, định dạng, nơi hiển thị, ngày hiển thị đầu/cuối.',
    'Không có link đích, từ khóa, ngân sách, chuyển đổi.'),
 ]
+# Why ad counts differ between the two libraries; shown on the "Cách đọc" pages.
+COUNT_DIFF=[
+  ('1 quảng cáo là gì','1 quảng cáo trong 1 nhóm. Cùng một thiết kế chạy 10 nhóm (tệp khách, vị trí) = 10 quảng cáo.',
+   '1 creative. Copy cùng nội dung sang nhiều nhóm/chiến dịch = nhiều quảng cáo; 1 quảng cáo Search tự ghép nhiều tiêu đề.'),
+  ('Gom theo ý tưởng','Có sẵn: Meta gắn mã chung cho quảng cáo cùng nội dung → “mẫu thiết kế”.',
+   'Không có. Báo cáo tự gom: video theo YouTube ID, Search theo thông điệp + trang đích, banner theo thông điệp + con số ưu đãi.'),
+  ('Khoảng thời gian','Chỉ quảng cáo đang chạy ngày 29/10.',
+   'Cộng dồn cả quảng cáo đã dừng. Khi so hai kênh, báo cáo chỉ dùng quảng cáo Google còn chạy gần 29/10.'),
+  ('Link đích','Có: nút CTA và link thật, mở được trang đích.',
+   'Không công bố. Báo cáo dùng bộ lọc website của Google để biết quảng cáo có dẫn về web công ty hay không.'),
+]
 STAGES=['Nhận biết','Cân nhắc','Chuyển đổi']
 STAGE_INFO={
   'Nhận biết':('Đầu phễu','Cho người chưa biết thương hiệu biết và nhớ tới mình.','Nút Thích trang, xem video; nội dung kiến thức, giải thưởng, câu chuyện.'),
   'Cân nhắc':('Giữa phễu','Người đã quan tâm tìm hiểu sản phẩm, so sánh với bên khác.','Nút Xem chi tiết/Tìm hiểu thêm dẫn về trang sản phẩm, bài viết, webinar.'),
   'Chuyển đổi':('Đáy phễu','Kéo người dùng hành động ngay: cài app, mở tài khoản, để lại thông tin.','Nút Cài đặt ngay/Đăng ký ngay/Nhắn tin; link về App Store, Google Play, form.'),
+}
+STAGE_RULES={
+  'Nhận biết':('Nút Thích trang; không có link ra ngoài, nút Xem thêm/Xem trang; link về fanpage/sự kiện Facebook.',
+               'Chữ trên quảng cáo nói về kiến thức, tin tức, phân tích, uy tín/thương hiệu.'),
+  'Cân nhắc':('Link về web sản phẩm, bài viết/PR, form hoặc webinar bên ngoài (trang không gắn Meta Pixel).',
+              'Chữ nói về sản phẩm, tính năng: bảng giá, app, phái sinh, quỹ, tích sản.'),
+  'Chuyển đổi':('Nút Cài đặt/Dùng app, link App Store/Google Play; Nhắn tin (Messenger/Zalo); Lead form trên Facebook; landing có form + Meta Pixel.',
+                'Có nhãn Google Play (kéo cài app). Hoặc chữ nói về quà/tiền thưởng, mở tài khoản, phí/margin, giới thiệu bạn bè.'),
 }
 def stage_counts(rows):
     """Funnel stage per design (asset group), majority vote of its ads — so 427 copies of one design count once."""
@@ -199,12 +218,95 @@ def funnel_summary(data):
              max(range(3),key=lambda i:stage_counts(b['fb'])[i])==STAGES.index(st)] for st in STAGES})
 
 
+# Destination buckets from base.dest(), worded for readers who never saw the raw data.
+DEST_LABEL={'Facebook / sự kiện':'Ở lại Facebook (fanpage / sự kiện FB)'}
+DEST_HELP=('“Ở lại Facebook” = nút CTA dẫn về fanpage hoặc trang sự kiện trên Facebook (vd HSC mời hội thảo IDC), '
+           'người xem không rời Facebook, không sang web hay kho ứng dụng.')
+def dest_label(d):return DEST_LABEL.get(d,d)
+
+
+def chart_notes(data):
+    """Short, data-derived takeaways for the overview chart slides (numbers, not prose)."""
+    bs=data['profiles'];top=[b for b in bs if b['group']=='Top 10'];rest=[b for b in bs if b['group']!='Top 10']
+    fbt=[b for b in top if b['fb']];fbr=[b for b in rest if b['fb']]
+    names=lambda seq:', '.join(rname(b) for b in seq) or 'không có'
+    def best(keys,fn,grp):   # (label, count) with the highest company count in a group
+        c=[(k,sum(fn(b,k) for b in grp)) for k in keys];return max(c,key=lambda x:x[1])
+    def pct(rows,grp):return ', '.join(f'{k} {v}/{len(grp)}' for k,v in rows)
+    fmts={'ảnh đơn':lambda r:r['format']=='Ảnh đơn','video':lambda r:r['format']=='Video',
+          'carousel':lambda r:r['format'] in ['Carousel','Nhiều ảnh'],'DCO':lambda r:r['format']=='Dynamic (DCO)'}
+    has_fmt=lambda b,k:any(fmts[k](r) for r in b['fb'])
+    rank_fmt=lambda grp:sorted(((k,sum(has_fmt(b,k) for b in grp)) for k in fmts),key=lambda x:-x[1])
+    themes=['Ưu đãi / chi phí','Tính năng / sản phẩm','Kiến thức / phân tích','Uy tín / cộng đồng','Tò mò / cá nhân hóa']
+    rank_th=lambda grp:sorted(((k,sum(k in b['themes'] for b in grp)) for k in themes),key=lambda x:-x[1])
+    dests=['Kho ứng dụng / mở app','Web nội dung / sản phẩm / sự kiện','Web có form (chưa xác nhận mục đích)','Facebook / sự kiện','Messenger']
+    rank_de=lambda grp:sorted(((dest_label(k).split(' (')[0],sum(any(base.dest(r)==k for r in b['fb']) for b in grp)) for k in dests),key=lambda x:-x[1])
+    shown=[b for b in bs if b.get('show')]
+    ratio=sorted([b for b in shown if b['fb']],key=lambda b:-len(b['fb'])/max(b['designs'],1))[:3]
+    gact=sorted(shown,key=lambda b:-len(g_active(b)))[:3]
+    return {
+      '01_channels':[f"Facebook Ads: Top 10 {len(fbt)}/10, ngoài Top 10 {len(fbr)}/15.",
+        f"Google Ads còn chạy gần 29/10: Top 10 {sum(bool(g_active(b)) for b in top)}/10, ngoài {sum(bool(g_active(b)) for b in rest)}/15.",
+        f"Video app còn chạy: Top 10 chỉ {names([b for b in top if b['recent']])}."],
+      '02_top10':[f"Có cả hai kênh: {names([b for b in top if b['fb'] and b['google']])}; Google còn chạy chỉ {names([b for b in top if b['fb'] and g_active(b)])}.",
+        f"Chỉ thấy Google Ads: {names([b for b in top if b['google'] and not b['fb']])}. Chỉ thấy Facebook Ads: {names([b for b in top if b['fb'] and not b['google']])}.",
+        f"Chưa thấy kênh nào: {names([b for b in top if not b['fb'] and not b['google']])}."],
+      '03_formats':[f"Top 10 ({len(fbt)} công ty có FB): {pct(rank_fmt(fbt)[:2],fbt)}.",
+        f"Ngoài Top 10: {pct(rank_fmt(rest)[:2],rest)}.",
+        f"Video: Top 10 {sum(has_fmt(b,'video') for b in fbt)}/{len(fbt)}, ngoài {sum(has_fmt(b,'video') for b in rest)}/15."],
+      '04_content':[f"Top 10: {pct(rank_th(fbt)[:2],fbt)}.",f"Ngoài Top 10: {pct(rank_th(rest)[:2],rest)}.",
+        'Đếm số công ty có nội dung, không phải tỷ trọng quảng cáo.'],
+      '05_destinations':[f"Top 10: {pct(rank_de(fbt)[:2],fbt)}.",f"Ngoài Top 10: {pct(rank_de(rest)[:2],rest)}.",DEST_HELP],
+      '06_volume_design':['Cùng thước đo cho hai kênh: quảng cáo còn chạy gần 29/10. Số trong ngoặc = Google cộng dồn cả mẫu đã dừng.',
+        'Facebook, QC/mẫu cao nhất: '+', '.join(f"{rname(b)} {len(b['fb'])}/{b['designs']}" for b in ratio)+'.',
+        'Google còn chạy nhiều nhất: '+', '.join(f"{rname(b)} {len(g_active(b))} QC ≈ {g_ideas(g_active(b))} ý tưởng" for b in gact)+'.'],
+    }
+
+
+def google_funnel_summary(data):
+    bs=data['profiles'];t10=[b for b in bs if b['group']=='Top 10'];rest=[b for b in bs if b['group']!='Top 10']
+    lead=sorted([b for b in rest if b['app']],key=lambda b:-len(b['app']))[:3]
+    return dict(top_app_cos=sum(bool(b['app']) for b in t10),top_app=sum(len(b['app']) for b in t10),
+        top_app_recent=sum(len(b['recent']) for b in t10),
+        top_recent_names=', '.join(b['name'] for b in t10 if b['recent']) or 'không có',
+        rest_app=sum(len(b['app']) for b in rest),
+        rest_leaders=', '.join(f"{b['name']} ({len(b['app'])})" for b in lead),
+        read=sum(g_read(b['google']) for b in bs),total=sum(len(b['google']) for b in bs))
+
+
 G_FORMAT={'Chữ (Search)':'Search (chữ)','Ảnh':'Ảnh hiển thị','Video':'Video YouTube'}
 G_KINDS=['Search (chữ)','Ảnh hiển thị','Video YouTube','Video kéo cài app']
 G_ROLE={'Search (chữ)':'bắt người đang tìm kiếm (giữa → đáy phễu)','Ảnh hiển thị':'nhắc nhớ trên web/app (đầu → giữa phễu)',
         'Video YouTube':'nhận biết qua video (đầu phễu)','Video kéo cài app':'kéo cài app (đáy phễu)'}
 GNOTES=json.loads((PROJ/'google_notes.json').read_text()).get('Hồ sơ',{})
 def gkind(r):return 'Video kéo cài app' if base.app_row(r) else G_FORMAT.get(r['format'],r['format'])
+# Google publishes no CTA or landing URL. Each creative is classified from text read on the ad itself
+# (OCR of the preview, YouTube title) by google_messages.py; the Play label always means app install, and
+# the destination comes from the Transparency website filter (google_dest_check.py).
+GMSG={}
+def load_gmsg():
+    import google_messages
+    GMSG.clear();GMSG.update(google_messages.build(PROJ.name)[1])
+def gmsg(r):return GMSG[r['creative_id']]
+def g_stage(r):return gmsg(r)['stage']
+def g_stage_counts(rows):
+    c=Counter(g_stage(r) for r in rows);return [c.get(st,0) for st in STAGES]
+def g_ideas(rows):return len({gmsg(r)['idea'] for r in rows})
+def g_read(rows):return sum(gmsg(r)['theme']!=UNREAD for r in rows)
+UNREAD='Chưa đọc được nội dung'
+def g_theme_lines(rows,n=5):
+    by=defaultdict(list)
+    for r in rows:by[gmsg(r)['theme']].append(r)
+    top=sorted(((k,v) for k,v in by.items() if k!=UNREAD),key=lambda kv:-len(kv[1]))[:n]
+    lines=[f"{k}: {len(v)} · {g_ideas(v)}" for k,v in top]
+    if by.get(UNREAD):lines.append(f"Chưa đọc được chữ: {len(by[UNREAD])}")
+    return '\n'.join(lines) or 'Chưa đọc được chữ trên quảng cáo.'
+def g_dest_line(rows):
+    web=sum(gmsg(r)['target']=='Web công ty' for r in rows)
+    paths=Counter(re.sub(r'^[^/]*','',gmsg(r)['display_path']).rstrip('/') for r in rows if gmsg(r)['display_path'])
+    paths=[p for p,_ in paths.most_common() if p][:2]
+    return f"{web}/{len(rows)} QC dẫn về web công ty."+(f" Trang: {', '.join(paths)}." if paths else '')
+GSTAGE_NOTE='Google Ads: Google không công bố nút CTA hay link đích, nên giai đoạn xếp theo chữ đọc được trên quảng cáo (OCR ảnh xem trước, tiêu đề video); không đọc được chữ thì theo định dạng (Search → Cân nhắc, ảnh/video → Nhận biết).'
 def g_mix(rows):
     c=Counter(gkind(r) for r in rows);return ' · '.join(f'{k} {c[k]}' for k in G_KINDS if c[k])
 def g_active(b):return [r for r in b['google'] if r['active']=='True']
@@ -215,13 +317,30 @@ def g_image(r):
     name=re.sub(r'\D','',url.rsplit('/',1)[-1])[:24] or hashlib.md5(url.encode()).hexdigest()[:16]
     path=PROJ/'google/img'/f'{name}.png';return path if path.exists() else None
 PLACE={'Display/khác':'mạng hiển thị','Play':'Google Play'}
+YT_THUMBS=PROJ/'google/yt'
+def yt_thumb(r,fetch=True):
+    """App videos rarely have a Transparency render; fall back to the cached YouTube thumbnail."""
+    vid=r['youtube_id'].rsplit('/',1)[-1]
+    if not vid:return None
+    path=YT_THUMBS/f'{vid}.jpg'
+    if not path.exists() and fetch:
+        import urllib.request
+        YT_THUMBS.mkdir(parents=True,exist_ok=True)
+        for size in ('maxresdefault','hqdefault'):
+            try:
+                with urllib.request.urlopen(f'https://i.ytimg.com/vi/{vid}/{size}.jpg',timeout=20) as resp:
+                    path.write_bytes(resp.read());break
+            except Exception:continue
+    return path if path.exists() else None
+def g_visual(r,fetch=True):return g_image(r) or (yt_thumb(r,fetch) if base.app_row(r) else None)
 def g_places(r):return ', '.join(PLACE.get(x,x) for x in r['platforms'].split(',') if x) or 'chưa rõ'
 def g_text(r):
     kind=gkind(r);state='còn chạy gần 29/10' if r['active']=='True' else 'đã dừng'
     title=f"Tiêu đề video: “{r['video_title']}”. " if r['video_title'] and not r['video_title'].endswith('.mp4') else ''
     cap=f"{title}Hiển thị trên {g_places(r)}; {r['days_shown']} ngày có hiển thị, {state}."
-    return (f"{GG} · Mẫu {r['n']} · {kind}",cap,
-        f"{vn_date(r['first_shown'])} → {vn_date(r['last_shown'])}  ·  Vai trò ước tính: {G_ROLE.get(kind,'')}",
+    m=gmsg(r)
+    return (f"{GG} · Mẫu {r['n']} · {kind} · {g_stage(r)}",cap,
+        f"{vn_date(r['first_shown'])} → {vn_date(r['last_shown'])}  ·  Thông điệp: {m['theme']}  ·  Phễu: {m['stage']} ({m['stage_source'].lower()})  ·  Đích: {m['target']}",
         'Xem trên Google Ads Transparency →')
 # Media-report overrides of editorial notes: Google now has its own section in each profile.
 MEDIA_NOTES={'Vietcap':('Chỉ chạy Google Ads, một lời mời mở tài khoản trên ba định dạng',
@@ -233,6 +352,7 @@ def drop_google(text):
     return ' '.join(x for x in parts if 'Google' not in x) or text
 
 
+def rname(b):return f"#{b['rank']} {b['name']}" if b.get('rank') else b['name']
 def group_label(b):return 'Top 10' if b['group']=='Top 10' else 'Ngoài Top 10 · Tham khảo'
 def is_running(b):return bool(b['fb']) or bool(g_active(b))
 def is_shown(b):return is_running(b) and (b['group']=='Top 10' or b['name'] in TREND_PICKS)
@@ -358,7 +478,7 @@ def card_strip(paths,target,height=1080,gap=24):
 
 
 def prepare_data(fetch=True):
-    data=base.build_data()
+    data=base.build_data();load_gmsg()
     raw={}
     for _,pid,_ in base.BRANDS:
         for r in json.loads((PROJ/'pages'/f'{pid}.json').read_text()):
@@ -367,6 +487,7 @@ def prepare_data(fetch=True):
     videos=[];inventory=[]
     for b in data['profiles']:
         b['running']=is_running(b);b['show']=is_shown(b);b['why']=TREND_PICKS.get(b['name'],'')
+        b['rank']=data['profiles'].index(b)+1 if b['group']=='Top 10' else None
         if b['name'] in MEDIA_NOTES:b['title'],b['analysis']=MEDIA_NOTES[b['name']]
         else:b['analysis']=drop_google(b['analysis'])
         eligible=[];seen_assets=set();seen_text=set()
@@ -422,28 +543,38 @@ def prepare_data(fetch=True):
     for b in data['profiles']:
         chosen=b['gallery']
         # Google Ads samples: Transparency Center renders, one per format first, running ads first.
-        b['g_gallery']=[]
+        # Web formats (Search / display / YouTube) and app-install videos get separate galleries, so a
+        # company with Play-labelled videos shows its app assets instead of only its web ads.
+        b['g_gallery']=[];b['app_gallery']=[]
         if b['google'] and b['show']:
-            rows=sorted(b['google'],key=lambda r:r['last_shown'],reverse=True)
-            rows=sorted(rows,key=lambda r:r['active']!='True')
-            rows=[r for r in rows if g_image(r)]
+            def order(rows):
+                rows=sorted(rows,key=lambda r:r['last_shown'],reverse=True)
+                return sorted(rows,key=lambda r:r['active']!='True')
+            web=order([r for r in b['google'] if not base.app_row(r) and g_image(r)])
             picked=[];kinds=set()
-            for r in rows:
+            for r in web:
                 if gkind(r) not in kinds:picked.append(r);kinds.add(gkind(r))
             seen={g_image(r) for r in picked}
-            for r in rows:
+            for r in web:
                 if len(picked)>=3:break
                 if r not in picked and g_image(r) not in seen:picked.append(r);seen.add(g_image(r))
             picked=sorted(picked[:3],key=lambda r:G_KINDS.index(gkind(r)) if gkind(r) in G_KINDS else 9)
-            for i,r in enumerate(picked):
-                source=g_image(r);local=ASSETS/f"google_{slug(b['name'])}_{r['creative_id']}.jpg"
-                im=Image.open(source);im.load()
-                if im.mode in ('RGBA','LA','P'):
-                    im=im.convert('RGBA');bg=Image.new('RGB',im.size,'white');bg.paste(im,mask=im.split()[-1]);im=bg
-                im=im.convert('RGB');im.thumbnail((1600,1600));im.save(local,quality=90)
-                item=dict(r,channel='google',n=i+1,image=rel(local),url=r['link'],kind=gkind(r))
-                item['text']=g_text(item);b['g_gallery'].append(item)
-                inventory.append(dict(type='Google Ads sample',brand=b['name'],source=rel(source),local=rel(local),url=r['link']))
+            apps=[];seen=set()
+            for r in order(b['app']):   # distinct videos: one creative per YouTube ID / render
+                key=r['youtube_id'] or r['image_url'] or r['creative_id']
+                if key in seen or not g_visual(r,fetch):continue
+                apps.append(r);seen.add(key)
+                if len(apps)>=3:break
+            for gallery,rows in [(b['g_gallery'],picked),(b['app_gallery'],apps)]:
+                for i,r in enumerate(rows):
+                    source=g_visual(r,fetch);local=ASSETS/f"google_{slug(b['name'])}_{r['creative_id']}.jpg"
+                    im=Image.open(source);im.load()
+                    if im.mode in ('RGBA','LA','P'):
+                        im=im.convert('RGBA');bg=Image.new('RGB',im.size,'white');bg.paste(im,mask=im.split()[-1]);im=bg
+                    im=im.convert('RGB');im.thumbnail((1600,1600));im.save(local,quality=90)
+                    item=dict(r,channel='google',n=i+1,image=rel(local),url=r['link'],kind=gkind(r),stage=g_stage(r))
+                    item['text']=g_text(item);gallery.append(item)
+                    inventory.append(dict(type='Google Ads sample',brand=b['name'],source=rel(source),local=rel(local),url=r['link']))
         b['landing_preview']=None
         for r in chosen:
             item=landings.get(r['link_url'])
@@ -541,7 +672,7 @@ def charts(data):
         ax.set_yticks(y,labels);ax.invert_yaxis();ax.set_xlim(0,116)
         ax.set_xticks([0,25,50,75,100],['0%','25%','50%','75%','100%'])
         ax.set_xlabel('Tỷ lệ công ty có bằng chứng trong từng nhóm');ax.grid(axis='x',color=LINE,linewidth=.8);ax.set_axisbelow(True)
-        ax.legend(loc='lower right',frameon=False,handlelength=1,handleheight=1);fig.tight_layout();out[name]=save_chart(fig,name)
+        ax.legend(loc='lower center',bbox_to_anchor=(.45,1.0),ncol=2,frameon=False,handlelength=1,handleheight=1);fig.tight_layout();out[name]=save_chart(fig,name)
     keys=[lambda b:b['fb'],lambda b:b['google'],g_active,lambda b:b['app']]
     grouped([FB_ADS,GG+': có chạy',GG+': còn chạy gần 29/10',GG_ADS],
         [sum(bool(k(b)) for b in top) for k in keys],[sum(bool(k(b)) for b in trend) for k in keys],'01_channels')
@@ -576,26 +707,35 @@ def charts(data):
         [sum(t in b['themes'] for b in trend) for t in themes],'04_content',7,15)
     dests=['Kho ứng dụng / mở app','Web có form (chưa xác nhận mục đích)',
         'Web nội dung / sản phẩm / sự kiện','Facebook / sự kiện','Messenger']
-    grouped(['Kho ứng dụng / mở app','Web có form','Web nội dung / sản phẩm','Facebook / sự kiện','Messenger'],
+    grouped(['Kho ứng dụng / mở app','Web có form','Web nội dung / sản phẩm',dest_label('Facebook / sự kiện'),'Messenger'],
         [sum(any(base.dest(r)==d for r in b['fb']) for b in top) for d in dests],
         [sum(any(base.dest(r)==d for r in b['fb']) for b in trend) for d in dests],'05_destinations',7,15)
     picks=[b for b in trend if b['show']]
     order=top+[None]+picks
     labels=[f'{i+1}. {b["name"]}' for i,b in enumerate(top)]+['NGOÀI TOP 10 · THAM KHẢO']+[b['name'] for b in picks]
-    fig,axes=plt.subplots(1,3,figsize=(12,7),sharey=True)
-    panels=[(f'{FB_ADS}: số quảng cáo',lambda b:len(b['fb']),SERIES_A),(f'{FB_ADS}: số mẫu thiết kế',lambda b:b['designs'] if b['fb'] else 0,SERIES_B),
-            (f'{GG}: số quảng cáo',lambda b:len(b['google']),MUTED)]
-    for ax,(label,fn,color) in zip(axes,panels):
+    # Same yardsticks for both channels: ads live around 29/10, and ideas (FB design groups vs Google
+    # distinct videos / Search messages+landing / banner messages) among those live ads.
+    fig,axes=plt.subplots(1,4,figsize=(13,7),sharey=True)
+    ga=lambda b:[r for r in b['google'] if r['active']=='True']
+    panels=[(f'{FB_ADS}\nquảng cáo đang chạy',lambda b:len(b['fb']),SERIES_A,None),
+            (f'{GG}\nquảng cáo còn chạy (cộng dồn)',lambda b:len(ga(b)),SERIES_B,lambda b:len(b['google'])),
+            (f'{FB_ADS}\nsố mẫu thiết kế',lambda b:b['designs'] if b['fb'] else 0,SERIES_A,None),
+            (f'{GG}\nsố ý tưởng còn chạy (cộng dồn)',lambda b:g_ideas(ga(b)),SERIES_B,lambda b:g_ideas(b['google']))]
+    for ax,(label,fn,color,total) in zip(axes,panels):
         vals=[fn(b) if b else None for b in order];mx=max(v for v in vals if v is not None) or 1
-        for i,v in enumerate(vals):
+        for i,(b,v) in enumerate(zip(order,vals)):
             if v is None:continue
             if v:ax.barh(i,v,color=color,height=.66)
-            ax.text((v or 0)+mx*.02,i,str(v) if v else '–',va='center',fontsize=10,color=INK if v else MUTED)
-        ax.set_title(label,fontsize=12,loc='left',color=INK);ax.set_xlim(0,mx*1.25);ax.set_xticks([])
+            t=total(b) if total else None
+            lab=(str(v) if v else '–')+(f' ({t})' if t else '')
+            ax.text((v or 0)+mx*.02,i,lab,va='center',fontsize=10,color=INK if v else MUTED)
+        ax.set_title(label,fontsize=12,loc='left',color=INK);ax.set_xlim(0,mx*(1.8 if total else 1.25));ax.set_xticks([])
         ax.spines['bottom'].set_visible(False)
         ax.axhline(len(top),color=LINE,linewidth=1);ax.tick_params(axis='y',length=0)
     axes[0].set_yticks(range(len(order)),labels);axes[0].invert_yaxis();axes[0].tick_params(axis='y',length=0)
     lab=axes[0].get_yticklabels()[len(top)];lab.set_color(MUTED);lab.set_fontsize(9);lab.set_fontweight(700)
+    fig.text(.2,1.0,'ĐANG CHẠY GẦN 29/10',fontsize=11,color=ACCENT,fontweight=700)
+    fig.text(.6,1.0,'SỐ Ý TƯỞNG',fontsize=11,color=ACCENT,fontweight=700)
     fig.tight_layout();out['06_volume_design']=save_chart(fig,'06_volume_design')
     # Funnel: share of designs per stage, analysed companies + group totals.
     fs=funnel_summary(data)
@@ -626,6 +766,34 @@ def charts(data):
         loc='upper center',bbox_to_anchor=(.45,1.08),ncol=3,frameon=False,handlelength=1,handleheight=1)
     ax.set_xlabel(f'Tỷ lệ mẫu thiết kế {FB_ADS} theo giai đoạn phễu (số trong ô = số mẫu)')
     fig.tight_layout();out['07_funnel']=save_chart(fig,'07_funnel')
+    # Google Ads funnel: per company, web ads by estimated stage plus app-install videos as their own
+    # bottom-of-funnel segment, so the app share is visible next to the web formats.
+    picks=[b for b in trend if b['show'] and b['google']]
+    rows=[(f'{i+1}. {b["name"]}',b) for i,b in enumerate(top)]+[None,('NGOÀI TOP 10 · THAM KHẢO','header')]+[(b['name'],b) for b in picks]
+    seg_colors=[MINT,EMERALD,PINE,LIME];seg_ink=[INK,INK,'#FFFFFF',INK]
+    seg_names=['Nhận biết (web)','Cân nhắc (web)','Chuyển đổi (web)','Chuyển đổi: video kéo cài app']
+    fig,ax=plt.subplots(figsize=(11,8.2))
+    for i,row in enumerate(rows):
+        if row is None or row[1]=='header':continue
+        name,b=row;web=[r for r in b['google'] if not base.app_row(r)]
+        n=g_stage_counts(web)+[len(b['app'])];tot=sum(n);left=0
+        if not tot:
+            ax.text(1,i,'Chưa thấy Google Ads',va='center',fontsize=10,color=MUTED);continue
+        for j,v in enumerate(n):
+            w=100*v/tot
+            if v:ax.barh(i,w,left=left,color=seg_colors[j],height=.68,edgecolor='white',linewidth=1.2,hatch='//' if j==3 else None)
+            if w>=7:ax.text(left+w/2,i,str(v),ha='center',va='center',color=seg_ink[j],fontsize=11,fontweight=600)
+            left+=w
+        ax.text(101.5,i,f"{tot} QC · {len(g_active(b))} còn chạy",va='center',fontsize=10,color=MUTED)
+    ax.set_yticks([i for i,r in enumerate(rows) if r],[r[0] for r in rows if r])
+    for t in ax.get_yticklabels():
+        if t.get_text().startswith('NGOÀI'):t.set_color(MUTED);t.set_fontsize(9);t.set_fontweight(700)
+    ax.invert_yaxis();ax.set_xlim(0,122);ax.set_xticks([0,25,50,75,100],['0%','25%','50%','75%','100%'])
+    ax.tick_params(axis='y',length=0)
+    ax.legend([Patch(facecolor=c,hatch='//' if j==3 else None,edgecolor='white') for j,c in enumerate(seg_colors)],seg_names,
+        loc='upper center',bbox_to_anchor=(.45,1.09),ncol=4,frameon=False,handlelength=1.4,handleheight=1,fontsize=11)
+    ax.set_xlabel(f'Tỷ lệ quảng cáo {GG} theo giai đoạn phễu, xếp theo chữ đọc được trên quảng cáo (số trong ô = số quảng cáo, gồm cả mẫu đã dừng)')
+    fig.tight_layout();out['08_google_funnel']=save_chart(fig,'08_google_funnel')
     return out
 
 
@@ -687,7 +855,7 @@ def section_intros(data):
 
 def profile_blocks(b):
     fr=b['fb'];ar=b['app'];gr=b['google'];ga=g_active(b)
-    blocks=[*H(b['title'],f"{group_label(b)} · {b['name']}",f"{b['name']} — {b['title']}")]
+    blocks=[*H(f"{rname(b)} | {b['title']}" if b.get('rank') else b['title'],f"{group_label(b)} · {rname(b)}",f"{rname(b)} — {b['title']}")]
     if b['why']:blocks.append(('why',b['why']))
     blocks += [P(b['analysis']),
         ('stats',[(str(len(fr)),f'{FB_ADS}: quảng cáo'),(str(b['designs'] if fr else 0),f'{FB_ADS}: mẫu thiết kế'),
@@ -700,11 +868,19 @@ def profile_blocks(b):
     else:blocks.append(P(f'Không chạy {FB_ADS} trong kỳ.'))
     blocks.append(('label',GG))
     if gr:
+        web=[r for r in gr if not base.app_row(r)]
         blocks.append(LEAD('Định dạng:',g_mix(gr)+f'. {len(ga)} mẫu còn chạy gần 29/10.'))
-        if ar:blocks.append(LEAD('Phễu:',f'{len(ar)} video kéo cài app (đáy phễu). Các dạng khác chưa có link đích; vai trò ghi dưới mỗi mẫu là ước tính theo định dạng.'))
-        else:blocks.append(LEAD('Phễu:','không có video kéo cài app. Vai trò ghi dưới mỗi mẫu là ước tính theo định dạng.'))
+        blocks.append(LEAD('Phễu web (ước tính):',' · '.join(f'{st} {v}' for st,v in zip(STAGES,g_stage_counts(web)))+'. Theo thông điệp; thiếu thông điệp thì theo định dạng.'))
         for note in GNOTES.get(b['name'],[]):blocks.append(META('Nhận xét: '+note))
         for r in b['g_gallery']:blocks.append(('sample',r))
+        if ar:
+            blocks.append(('label',GG_ADS))
+            sig=Counter(s.strip() for r in ar for s in r['signals'].split(';') if s.strip())
+            blocks.append(LEAD('Phễu:',f"cả {len(ar)} video mang nhãn Google Play = chuyển đổi (kéo cài app); {len(b['recent'])} còn chạy gần 29/10."))
+            if sig:blocks.append(LEAD('Video app nói gì:',' · '.join(f'{k} {v}' for k,v in sig.most_common(5))+'.'))
+            for r in b['app_gallery']:blocks.append(('sample',r))
+            if not b['app_gallery']:blocks.append(META('Chưa có ảnh xem trước cho video app (thiếu YouTube ID); xem trên Google Ads Transparency.'))
+        else:blocks.append(META(f'Không có video {GG_ADS}.'))
     else:blocks.append(P(f'Chưa thấy quảng cáo {GG} trong dữ liệu thu thập.'))
     if b['videos']:
         blocks.append(META('Video phân tích ở phần Thư viện video: '+', '.join(v['title'].split('|')[-1].strip() for v in b['videos'])+'.'))
@@ -723,18 +899,33 @@ def funnel_pages(data,chart):
     app_cos=[b['name'] for b in data['profiles'] if b['app']]
     topn={b['name']:b for b in top}
     light=[f"{n} ({sum(stage_counts(topn[n]['fb']))} mẫu)" for n in L['Cân nhắc']+L['Nhận biết'] if n in topn]
+    gf=google_funnel_summary(data);rank={b['name']:i+1 for i,b in enumerate(data['profiles'][:10])}
+    def split(names):
+        t=[f'#{rank[n]} {n}' for n in names if n in rank];o=[n for n in names if n not in rank]
+        return f"Top 10: {', '.join(t) or '—'}\nNgoài Top 10: {', '.join(o) or '—'}"
     return [
       [('section',f'Phần 2 · {SECTIONS[1]}',section_intros(data)[1]),
-       *H('Phễu | Đối thủ dồn ngân sách vào đáy phễu',toc='Phễu: ai đánh vào giai đoạn nào?'),
+       *H('Phễu | Tiêu chí xếp quảng cáo vào từng giai đoạn',toc='Phễu: tiêu chí phân loại'),
+       ('table',['Giai đoạn',f'{FB_ADS} (nút CTA + link + trang đích thật)',f'{GG} (theo chữ đọc được trên quảng cáo)'],
+        [[f'{st} ({STAGE_INFO[st][0].lower()})',*STAGE_RULES[st]] for st in STAGES],[30,72,68]),
+       META('Nội dung không quyết định giai đoạn ở Facebook Ads: video kiến thức nhưng nút dẫn về cài app vẫn tính Chuyển đổi. Facebook Ads đếm theo mẫu thiết kế (đa số các quảng cáo cùng mẫu).'),
+       META(GSTAGE_NOTE)],
+      [*H('Phễu | Đối thủ dồn ngân sách vào đáy phễu',toc='Phễu: ai đánh vào giai đoạn nào?'),
        IMG(chart['07_funnel'],f'Top 10 xếp theo thứ hạng; ngoài Top 10 để tham khảo. Đếm theo mẫu thiết kế để 427 bản sao của cùng một mẫu (LPS) chỉ tính 1 lần. Theo số quảng cáo: {fs["ads_conv"]}/{fs["ads_total"]} quảng cáo Facebook Ads là chuyển đổi.',170,150),
        LEAD('Top 10:',f'{t[2]}/{sum(t)} mẫu ({fs["top_pct"]}%) là chuyển đổi, {t[1]} cân nhắc, {t[0]} nhận biết. Ngoài Top 10 cân bằng hơn: {fs["rest_pct"]}% chuyển đổi.'),
-       LEAD(f'{GG_ADS}:',f'cả {data["totals"]["google_app"]} video kéo cài app của {len(app_cos)} công ty nằm ở đáy phễu ({j(app_cos)}). Các dạng Google Ads khác chưa có link đích nên chỉ ước tính vai trò trong từng hồ sơ.')],
+       LEAD(f'{GG_ADS}:',f'cả {data["totals"]["google_app"]} video kéo cài app của {len(app_cos)} công ty nằm ở đáy phễu ({j(app_cos)}). Phễu Google Ads ở trang sau.')],
+      [*H('Phễu | Google Ads: app nằm ở đáy phễu, web trải ba tầng',toc='Phễu Google Ads và Google Ads (app)'),
+       IMG(chart['08_google_funnel'],'Mỗi thanh = toàn bộ quảng cáo Google Ads của một công ty (gồm cả mẫu đã dừng). Phần gạch chéo = video kéo cài app (nhãn Google Play).',170,150),
+       LEAD('Top 10:',f"{gf['top_app_cos']}/10 công ty có video kéo cài app ({gf['top_app']} video); {gf['top_app_recent']} còn chạy gần 29/10: {gf['top_recent_names']}."),
+       LEAD('Ngoài Top 10:',f"{gf['rest_app']} video kéo cài app, nhiều nhất {gf['rest_leaders']}."),
+       LEAD('Cách gán giai đoạn:','video có nhãn Google Play = chuyển đổi (kéo cài app). Quảng cáo web ước tính theo thông điệp: ưu đãi/mở tài khoản → chuyển đổi; tính năng/app/tích sản → cân nhắc; kiến thức/uy tín → nhận biết. Không có thông điệp thì theo định dạng: Search → cân nhắc, ảnh và video YouTube → nhận biết.')],
       [*H('Phễu | Mỗi giai đoạn: ai làm, làm thế nào',toc='Phễu: cách làm theo từng giai đoạn'),
        ('table',['Giai đoạn','Đối thủ tập trung','Cách làm điển hình'],[
-         ['Chuyển đổi (đáy phễu)',j(L['Chuyển đổi']),'Quà cổ phiếu, miễn phí, margin ưu đãi + nút Cài đặt ngay/Đăng ký ngay, link thẳng App Store, Google Play. MBS mở đầu bằng kiến thức (breakout) nhưng vẫn kéo về cài app. Google Ads (app) cũng nằm ở đây.'],
-         ['Cân nhắc (giữa phễu)',j(L['Cân nhắc']),'Giới thiệu tính năng cụ thể (DTRADE, API/MCP, VinaStalk, công cụ lọc), nút Xem chi tiết về trang sản phẩm. Không tặng quà mà chứng minh app tốt hơn.'],
-         ['Nhận biết (đầu phễu)',j(L['Nhận biết']),'Video kiến thức cho người mới, giải thưởng, sự kiện; tối ưu lượt xem video và thích trang. Chủ yếu công ty ngoài Top 10.'],
+         ['Chuyển đổi (đáy phễu)',split(L['Chuyển đổi']),'Quà cổ phiếu, miễn phí, margin ưu đãi + nút Cài đặt ngay/Đăng ký ngay, link thẳng App Store, Google Play. MBS mở đầu bằng kiến thức (breakout) nhưng vẫn kéo về cài app. Google Ads (app) cũng nằm ở đây.'],
+         ['Cân nhắc (giữa phễu)',split(L['Cân nhắc']),'Giới thiệu tính năng cụ thể (DTRADE, API/MCP, VinaStalk, công cụ lọc), nút Xem chi tiết về trang sản phẩm. Không tặng quà mà chứng minh app tốt hơn.'],
+         ['Nhận biết (đầu phễu)',split(L['Nhận biết']),'Video kiến thức cho người mới, giải thưởng, sự kiện; tối ưu lượt xem video và thích trang. Chủ yếu công ty ngoài Top 10.'],
        ],[34,40,96]),
+       META('Cột “Đối thủ tập trung”: Top 10 ghi kèm thứ hạng (#); công ty ngoài Top 10 ghi ở dòng “Ngoài Top 10”.'),
        ('label','Hàm ý'),
        LEAD('Đáy phễu đông nhất:','gần như mọi công ty lớn cùng tặng quà để kéo cài app. Muốn thắng ở đây phải hơn về mức ưu đãi hoặc nói điều kiện rõ hơn.'),
        LEAD('Giữa và đầu phễu còn trống:',f'ở Top 10 chỉ {j(light)} chủ yếu chạy hai tầng này, và quy mô nhỏ. Nội dung kiến thức và demo tính năng ít đối thủ hơn, giúp có người dùng biết thương hiệu trước khi họ so ưu đãi.'),
@@ -763,11 +954,12 @@ def report_pages(data,chart):
        IMG(chart['05_destinations'],'Chỉ Facebook Ads: điểm đến theo link và nút CTA. Các nhóm có thể chồng lấp ở cấp công ty.',170,115),
        LEAD('Ưu đãi →','app: LPS, MBS; web chương trình/onboarding: KIS, SSI, VPBankS.'),
        LEAD('Tính năng →','web sản phẩm: VNDirect, DNSE, AAS. Kiến thức → theo dõi/sự kiện: VPS, HSC, HD Securities.'),
+       LEAD('Ở lại Facebook:',DEST_HELP.split(' = ',1)[1]),
        LEAD('Lưu ý:','web có form chưa chắc là mở tài khoản — cần đọc mục đích trang. Google Ads không công bố link đích; QR hay logo App Store trong clip chỉ là bằng chứng nội dung.')],
-      [*H('Quy mô | Nhiều quảng cáo chưa chắc nhiều ý tưởng',toc='Quy mô: số quảng cáo hai kênh'),
-       IMG(chart['06_volume_design'],'Top 10 theo thứ hạng, rồi các công ty ngoài Top 10 được phân tích. Ba thang đo riêng; không phải lượt hiển thị hay ngân sách.',170,135),
-       LEAD('Số liệu:','trong Top 10, MBS chạy 148 quảng cáo Facebook Ads với 31 mẫu; KIS và SSI có nhiều Google Ads nhất (268 và 262). Ngoài Top 10, LPS có 427 quảng cáo nhưng chỉ 6 mẫu.'),
-       LEAD('Lưu ý:','Facebook Ads là quảng cáo đang chạy ở thời điểm chốt; Google Ads gồm cả mẫu đã dừng, nên không so trực tiếp hai cột này.'),
+      [*H('Quy mô | Số quảng cáo nhiều chưa chắc nhiều ý tưởng',toc='Quy mô: số quảng cáo hai kênh'),
+       IMG(chart['06_volume_design'],'Hai cột trái: quảng cáo còn chạy gần 29/10. Hai cột phải: số ý tưởng trong các quảng cáo đó. Số trong ngoặc = Google cộng dồn cả mẫu đã dừng. Không phải lượt hiển thị hay ngân sách.',170,135),
+       LEAD('Cách đọc:','Facebook: 1 mẫu thiết kế = 1 ý tưởng (Meta gắn sẵn mã). Google: 1 ý tưởng = 1 video (YouTube ID), 1 thông điệp Search + trang đích, hoặc 1 thông điệp banner + con số ưu đãi (báo cáo tự gom, ước tính).'),
+       *[P('• '+t) for t in chart_notes(data)['06_volume_design']],
        LEAD('Quy luật:','lời hứa nội dung đi cùng bước tiếp theo — ưu đãi gắn hành động cụ thể, tính năng cần minh họa sử dụng, kiến thức mở đầu quan hệ.'),
        LEAD('Gợi ý thử nghiệm:','cùng lợi ích và điểm đến, so demo thao tác với thông điệp ưu đãi ngắn. Chưa có CPA hay chuyển đổi để kết luận phương án nào tốt hơn.')],
     ]
@@ -782,6 +974,9 @@ def report_pages(data,chart):
       [sec(0),*H('Cách đọc | Hai kênh quảng cáo trong báo cáo',toc='Cách đọc: Facebook Ads và Google Ads'),
        P('Mọi số liệu, biểu đồ và mẫu đều ghi rõ kênh. Biểu đồ định dạng, nội dung, điểm đến và quy mô chỉ dùng dữ liệu Facebook Ads, vì Google không công bố đủ chi tiết.'),
        ('table',['Kênh','Là gì','Thấy được gì','Không thấy'],[list(g) for g in GLOSSARY],[28,52,52,38]),
+       ('label','Facebook và Google đếm “quảng cáo” khác nhau'),
+       ('table',['',FB_ADS,GG],[list(r) for r in COUNT_DIFF],[28,66,76]),
+       META('Vì vậy khi so hai kênh, báo cáo dùng quảng cáo đang chạy và số ý tưởng, không dùng tổng số quảng cáo.'),
        ('label','Phễu quảng cáo: ba giai đoạn'),
        ('table',['Giai đoạn','Mục tiêu','Nhận biết qua'],[[f'{st} ({STAGE_INFO[st][0].lower()})',STAGE_INFO[st][1],STAGE_INFO[st][2]] for st in STAGES],[34,66,70]),
        META('Thư viện quảng cáo không công bố mục tiêu chiến dịch. Giai đoạn được suy ra từ nút CTA và trang đích thật của từng quảng cáo.')],
@@ -1127,16 +1322,25 @@ class Deck:
     def video(self,v,x,y,w,h):self.current.append(dict(type='video',v=v,path=v['poster'],x=x,y=y,w=w,h=h))
 
 
+STAGE_COLOR={'Nhận biết':(MINT,INK),'Cân nhắc':(EMERALD,INK),'Chuyển đổi':(PINE,'#FFFFFF')}
+def _stage_chip(deck,stage,x,y):
+    if stage not in STAGE_COLOR:return
+    bg,fg=STAGE_COLOR[stage];deck.rect(x,y,1.3,.3,bg);deck.text(stage.upper(),x+.08,y+.05,1.18,.22,9,fg,'b')
+
+
 def _cards(deck,items):
     for i,r in enumerate(items):
         x=M+i*2.8;cw=2.6
         deck.rect(x,1.98,cw,4.77,SURFACE_ALT)
         deck.image(r['image'],x+.1,2.08,cw-.2,2.35,r['url'])
+        _stage_chip(deck,r.get('stage'),x+.1,2.08)
         if r.get('channel')=='google':
             deck.text(f"Mẫu {i+1} · {r['kind']}",x+.15,4.55,cw-.3,.3,10,ACCENT,'s')
-            deck.text(short(r['text'][1],110),x+.15,4.9,cw-.3,.8,11)
-            deck.text(f"{vn_date(r['first_shown'])} → {vn_date(r['last_shown'])}",x+.15,5.75,cw-.3,.28,9,MUTED)
-            deck.text('Phễu: '+G_ROLE[r['kind']].split('(')[-1].rstrip(')'),x+.15,6.0,cw-.3,.3,9,MUTED)
+            body=r['video_title'] if base.app_row(r) and r['video_title'] and not r['video_title'].endswith('.mp4') else r['text'][1]
+            deck.text(short(body,110),x+.15,4.9,cw-.3,.8,11)
+            state='còn chạy' if r['active']=='True' else 'đã dừng'
+            deck.text(f"{vn_date(r['first_shown'])} → {vn_date(r['last_shown'])} · {state}",x+.15,5.75,cw-.3,.28,9,MUTED)
+            deck.text(f"Phễu: {r['stage']}"+(' · có nhắc tải app' if gmsg(r)['app_hint'] else ''),x+.15,6.0,cw-.3,.3,9,MUTED)
             deck.text('Xem trên Google →',x+.15,6.38,cw-.3,.25,10,ACCENT,'s',url=r['url'])
         else:
             cards=f" · {r['cards']} card" if r.get('cards',1)>1 else ''
@@ -1157,30 +1361,57 @@ def _side(deck,b,y=2.05):
 
 def profile_slide(deck,b):
     """Each analysed company gets a Facebook Ads slide and a Google Ads slide (when it has either)."""
-    kick=group_label(b)+' · '+b['name']
+    kick=group_label(b)+' · '+b['name'];nm=rname(b)
     first=None
     if b['gallery']:
-        first=deck.slide(b['name']+' | '+b['title'],kick+' · '+FB_ADS)
+        first=deck.slide(nm+' | '+b['title'],kick+' · '+FB_ADS)
         deck.text(f"{FB_ADS}: {len(b['fb'])} quảng cáo · {b['designs']} mẫu thiết kế · định dạng: {base.counts(b['fb'],'format')}",M,1.5,12.3,.32,12,ACCENT,'s')
         _cards(deck,b['gallery']);x=_side(deck,b)
         deck.rect(x,5.55,3.83,.012,LINE)
         deck.label('Phễu Facebook Ads (số mẫu)',x,5.7,3.83)
-        dests=Counter(base.dest(r) for r in b['fb'])
+        dests=Counter(dest_label(base.dest(r)) for r in b['fb'])
         deck.text(' · '.join(f'{st} {v}' for st,v in zip(STAGES,stage_counts(b['fb'])))+'. Điểm đến chính: '+(lambda t:t[0].lower()+t[1:])(dests.most_common(1)[0][0])+'.',x,6.0,3.83,.75,12,MUTED)
-    if b['g_gallery'] or (b['google'] and not first):
-        idx=deck.slide(b['name']+' | '+(GG if first is not None else b['title']),kick+' · '+GG)
+    web=[r for r in b['google'] if not base.app_row(r)]
+    if b['g_gallery'] or (web and not first and not b['app']):
+        idx=deck.slide(nm+' | '+(GG+' (web: Search, ảnh, YouTube)' if first is not None else b['title']),kick+' · '+GG+' (web)')
         first=idx if first is None else first
-        ga=g_active(b)
-        deck.text(f"{GG}: {len(b['google'])} quảng cáo · {len(ga)} còn chạy · {g_mix(b['google'])}",M,1.5,12.3,.32,12,ACCENT,'s')
+        wa=[r for r in web if r['active']=='True']
+        deck.text(f"{GG} (web): {len(web)} quảng cáo ≈ {g_ideas(web)} ý tưởng · {len(wa)} còn chạy · {g_mix(web)}"+(f" · Video app: xem slide sau" if b['app'] else ''),M,1.5,12.3,.32,12,ACCENT,'s')
         _cards(deck,b['g_gallery']);x=9.0
         if first==idx:x=_side(deck,b);y0=5.55
         else:
-            deck.label('Google Ads làm gì',x,2.05,3.83)
-            note=' '.join(GNOTES.get(b['name'],[])) or ('Có '+str(len(b['app']))+' video kéo cài app.' if b['app'] else 'Không có video kéo cài app; dùng Search, ảnh hiển thị hoặc YouTube.')
-            deck.text(note,x,2.4,3.83,2.9,13);y0=5.4
+            deck.label('Thông điệp (số QC · số ý tưởng)',x,2.05,3.83)
+            deck.text(g_theme_lines(web),x,2.38,3.83,2.1,12)
+            deck.label('Đích và trang đích hay dùng',x,4.5,3.83)
+            deck.text(g_dest_line(web),x,4.8,3.83,.6,11,MUTED);y0=5.4
         deck.rect(x,y0,3.83,.012,LINE)
-        deck.label('Phễu (ước tính theo định dạng)',x,y0+.15,3.83)
-        deck.text(f"{len(b['app'])} video kéo cài app = đáy phễu. Search: giữa → đáy. Ảnh: đầu → giữa. YouTube: đầu phễu.",x,y0+.45,3.83,.9,11,MUTED)
+        deck.label('Phễu Google Ads web (số QC)',x,y0+.15,3.83)
+        deck.text(' · '.join(f'{st} {v}' for st,v in zip(STAGES,g_stage_counts(web)))+f'. Xếp theo chữ đọc được ({g_read(web)}/{len(web)} QC).',x,y0+.45,3.83,.9,11,MUTED)
+    if b['app']:
+        idx=deck.slide(nm+' | '+GG_ADS+': video kéo cài app',kick+' · '+GG_ADS)
+        first=idx if first is None else first
+        ar=b['app'];places=Counter(p for r in ar for p in r['platforms'].split(',') if p)
+        span=f"{vn_date(min(r['first_shown'] for r in ar))} → {vn_date(max(r['last_shown'] for r in ar))}"
+        deck.text(f"{GG_ADS}: {len(ar)} video mang nhãn Google Play · {len(b['recent'])} còn chạy gần 29/10 · {span}",M,1.5,12.3,.32,12,ACCENT,'s')
+        if b['app_gallery']:_cards(deck,b['app_gallery'])
+        else:
+            deck.rect(M,1.98,8.2,4.77,SURFACE_ALT)
+            deck.text('Google không lưu ảnh xem trước và bản ghi thiếu YouTube ID nên chưa hiển thị được video. Mở Google Ads Transparency để xem.',M+.3,3.9,7.6,1.0,14,MUTED)
+        x=9.0
+        if first==idx:x=_side(deck,b);y0=5.55
+        else:
+            sig=Counter(s.strip() for r in ar for s in r['signals'].split(';') if s.strip())
+            deck.label('Video app nói gì (số video)',x,2.05,3.83)
+            deck.text(' · '.join(f'{k} {v}' for k,v in sig.most_common(4)) or 'Bản ghi chưa có tiêu đề/thông điệp để phân loại.',x,2.4,3.83,1.3,13)
+            deck.label('Hiển thị trên',x,3.85,3.83)
+            deck.text(' · '.join(f'{PLACE.get(k,k)} {v}' for k,v in places.most_common()),x,4.15,3.83,.6,13)
+            if any(v['channel']=='Google App' for v in b['videos']):
+                deck.text('Video app có phân tích chi tiết ở phần Thư viện video.',x,4.75,3.83,.55,11,MUTED)
+            y0=5.4
+        deck.rect(x,y0,3.83,.012,LINE)
+        deck.label('Phễu Google Ads (app)',x,y0+.15,3.83)
+        noweb=sum(gmsg(r)['target']=='App (nhãn Google Play)' for r in ar)
+        deck.text(f"Cả {len(ar)} video = Chuyển đổi (nhãn Google Play = kéo cài app). {noweb}/{len(ar)} không dẫn về web công ty theo bộ lọc website của Google.",x,y0+.45,3.83,.9,11,MUTED)
     return first
 
 
@@ -1210,46 +1441,80 @@ def build_deck(data,chart):
         deck.label('Thấy được',x+.3,3.85,5.4);deck.text(see,x+.3,4.15,5.4,1.0,13)
         deck.label('Không thấy',x+.3,5.3,5.4);deck.text(miss,x+.3,5.6,5.4,.9,13,MUTED)
     deck.text('Biểu đồ định dạng, nội dung, điểm đến và quy mô chỉ dùng Facebook Ads.',M,6.72,12.3,.2,11,MUTED)
+    deck.slide('Facebook và Google đếm “quảng cáo” khác nhau','Cách đọc · Không so trực tiếp số quảng cáo')
+    for x,w,hd in [(M,2.3,''),(2.9,4.7,FB_ADS),(7.8,5.03,GG)]:deck.text(hd,x,1.6,w,.3,13,INK,'b')
+    deck.rect(M,1.98,SW-2*M,.012,INK)
+    for i,(k,fb,gg) in enumerate(COUNT_DIFF):
+        y=2.12+i*1.05
+        deck.text(k,M,y,2.3,.8,15,INK,'b');deck.text(fb,2.9,y,4.7,.9,13);deck.text(gg,7.8,y,5.03,.9,13)
+        deck.rect(M,y+.95,SW-2*M,.008,LINE)
+    deck.text('Hệ quả: so hai kênh bằng quảng cáo đang chạy và số ý tưởng, không bằng tổng số quảng cáo.',M,6.4,12.3,.4,14,ACCENT,'s')
+    notes=chart_notes(data)
     charts_intro=[
-      ('Ai đang chạy Facebook Ads, ai chạy Google Ads?','01_channels','Hai kênh',
-       'Top 10: {fb_top}/10 chạy Facebook Ads, {g_top}/10 có Google Ads ({g_top_active} còn chạy). Video kéo cài app trên Google: chỉ SSI và Vietcap còn chạy.'),
-      ('Top 10 theo thứ hạng: từng công ty trên hai kênh','02_top10','Hai kênh',
-       'Xanh đậm = còn chạy gần 29/10. MBS và Mirae Asset chưa có tài khoản Google trong nguồn.'),
-      ('Ảnh, video và nội dung động cùng xuất hiện','03_formats','Facebook Ads · Định dạng',
-       'Chỉ Facebook Ads. DCO tách riêng vì chưa xác nhận ảnh hay video. Mẫu số: 7 công ty Top 10 và 15 ngoài Top 10.'),
-      ('Ba góc nội dung: ưu đãi, tính năng, kiến thức','04_content','Facebook Ads · Nội dung',
-       'Đếm công ty có nội dung đại diện đã đối chiếu: mức hiện diện tối thiểu, không phải tỷ trọng hay hiệu quả.'),
-      ('Điểm đến: app, web sản phẩm và các bước trung gian','05_destinations','Facebook Ads · Điểm đến',
-       'Đọc trọn chuỗi nội dung → nút CTA → điểm đến. Google Ads không công bố link đích.'),
-      ('Nhiều quảng cáo chưa chắc nhiều mẫu thiết kế','06_volume_design','Quy mô · hai kênh',
-       'Top 10 theo thứ hạng. MBS: 148 QC / 31 mẫu. KIS, SSI nhiều Google Ads nhất (gồm cả mẫu đã dừng). Ngoài Top 10, LPS: 427 QC chỉ 6 mẫu.'),
+      ('Ai đang chạy Facebook Ads, ai chạy Google Ads?','01_channels','Hai kênh'),
+      ('Top 10 theo thứ hạng: từng công ty trên hai kênh','02_top10','Hai kênh'),
+      ('Facebook Ads: ảnh, video và nội dung động','03_formats','Facebook Ads · Định dạng'),
+      ('Facebook Ads: ba góc nội dung ưu đãi, tính năng, kiến thức','04_content','Facebook Ads · Nội dung'),
+      ('Facebook Ads: điểm đến sau cú bấm','05_destinations','Facebook Ads · Điểm đến'),
+      ('Số quảng cáo nhiều chưa chắc nhiều ý tưởng','06_volume_design','Quy mô · Hai kênh cùng thước đo'),
     ]
-    for title,key,kick,note in charts_intro:
+    for title,key,kick in charts_intro:
         deck.slide(title,kick)
         deck.image(chart[key],M,1.7,8.95,5.0)
         deck.rect(9.75,1.7,3.08,5.0,SURFACE_ALT)
         deck.label('Điểm chính',10.0,1.95,2.6)
-        deck.text(note.format(**funnel_summary(data)),10.0,2.4,2.6,4.1,17)
+        deck.text('\n\n'.join('• '+t for t in notes[key]),10.0,2.4,2.6,4.1,14)
     fs=funnel_summary(data);L=fs['leaders'];j=lambda xs:', '.join(xs) or '—'
     targets['s1']=deck.section(2,SECTIONS[1],intro[1])
+    deck.slide('Tiêu chí xếp quảng cáo vào từng giai đoạn','Phễu · Cách phân loại')
+    cols=[(M,2.3,'Giai đoạn'),(2.9,5.1,FB_ADS+' · theo nút CTA + link + trang đích thật'),(8.2,4.63,GG+' · theo chữ đọc được trên quảng cáo')]
+    for x,w,hd in cols:deck.text(hd,x,1.6,w,.3,11,MUTED,'s')
+    deck.rect(M,1.95,SW-2*M,.012,INK)
+    for i,st in enumerate(STAGES):
+        y=2.1+i*1.3
+        deck.rect(M,y,.12,1.1,[MINT,EMERALD,PINE][i])
+        deck.text(st,M+.3,y,2.0,.45,20,INK,'b');deck.text(STAGE_INFO[st][0],M+.3,y+.5,2.0,.3,12,MUTED)
+        deck.text(STAGE_RULES[st][0],2.9,y,5.1,1.15,13);deck.text(STAGE_RULES[st][1],8.2,y,4.63,1.15,13)
+        deck.rect(M,y+1.2,SW-2*M,.008,LINE)
+    deck.text('Nội dung không quyết định giai đoạn ở Facebook Ads: video kiến thức nhưng nút dẫn về cài app vẫn tính Chuyển đổi. '
+        'Facebook Ads đếm theo mẫu thiết kế. '+GSTAGE_NOTE,M,5.98,12.3,.85,11,MUTED)
     deck.slide('Đối thủ dồn vào đáy phễu: cài app, mở tài khoản','Phễu · Facebook Ads theo mẫu thiết kế')
     deck.image(chart['07_funnel'],M,1.5,8.4,5.35)
     deck.rect(9.2,1.6,3.63,5.15,SURFACE_ALT)
     deck.label('Điểm chính',9.45,1.85,3.15)
-    deck.text(f"Top 10: {fs['top_pct']}% mẫu Facebook Ads nhắm chuyển đổi. Ngoài Top 10: {fs['rest_pct']}%.",9.45,2.2,3.15,1.3,16,INK,'b')
-    deck.text(f"{GG_ADS}: cả {data['totals']['google_app']} video đều kéo cài app, tức đáy phễu.",9.45,3.6,3.15,1.0,14)
-    deck.text('Giai đoạn suy ra từ nút CTA và trang đích thật; thư viện quảng cáo không công bố mục tiêu chiến dịch.',9.45,4.8,3.15,1.6,12,MUTED)
+    t,r=fs['top'],fs['rest']
+    deck.text('\n\n'.join(['• '+x for x in [
+        f"Top 10: {t[2]}/{sum(t)} mẫu ({fs['top_pct']}%) là Chuyển đổi; Nhận biết chỉ {t[0]}.",
+        f"Ngoài Top 10: {r[2]}/{sum(r)} mẫu ({fs['rest_pct']}%) Chuyển đổi, ba tầng gần đều.",
+        f"Theo số quảng cáo: {fs['ads_conv']}/{fs['ads_total']} là Chuyển đổi."]]),9.45,2.2,3.15,4.3,14)
+    gf=google_funnel_summary(data)
+    deck.slide('Google Ads: app nằm ở đáy phễu, web trải ba tầng','Phễu · Google Ads và Google Ads (app)')
+    deck.image(chart['08_google_funnel'],M,1.5,8.4,5.35)
+    deck.rect(9.2,1.6,3.63,5.15,SURFACE_ALT)
+    deck.label('Điểm chính',9.45,1.85,3.15)
+    deck.text('\n\n'.join(['• '+x for x in [
+        f"Top 10: {gf['top_app_cos']}/10 có video app ({gf['top_app']} video); còn chạy: {gf['top_recent_names']}.",
+        f"Ngoài Top 10: {gf['rest_app']} video app; nhiều nhất {gf['rest_leaders']}.",
+        f"Đọc được chữ {gf['read']}/{gf['total']} quảng cáo Google ({round(100*gf['read']/gf['total'])}%); phần còn lại xếp theo định dạng."]]),9.45,2.2,3.15,4.3,14)
+    rank={b['name']:i+1 for i,b in enumerate(data['profiles'][:10])}
+    def names_split(names):
+        t=[f'#{rank[n]} {n}' for n in names if n in rank];o=[n for n in names if n not in rank]
+        return ', '.join(t) or '—',', '.join(o) or '—'
     deck.slide('Mỗi giai đoạn: ai làm, làm thế nào','Phễu · Cách làm')
     stage_rows=[('Nhận biết','Đầu phễu',L['Nhận biết'],'Video kiến thức cho người mới, giải thưởng, sự kiện. Đo bằng lượt xem, lượt thích trang.'),
         ('Cân nhắc','Giữa phễu',L['Cân nhắc'],'Demo tính năng cụ thể (DTRADE, API/MCP, VinaStalk), dẫn về trang sản phẩm. Chứng minh app tốt hơn thay vì tặng quà.'),
         ('Chuyển đổi','Đáy phễu',L['Chuyển đổi'],'Quà cổ phiếu, miễn phí, margin + nút Cài đặt ngay, link App Store/Google Play. Google Ads (app) cũng ở đây.')]
-    deck.text('Giai đoạn',M,1.6,2.6,.3,11,MUTED,'s');deck.text('Đối thủ tập trung',3.3,1.6,3.4,.3,11,MUTED,'s');deck.text('Cách làm điển hình',6.9,1.6,5.9,.3,11,MUTED,'s')
+    deck.text('Giai đoạn',M,1.6,2.6,.3,11,MUTED,'s');deck.text('Đối thủ tập trung (Top 10 ghi kèm thứ hạng #)',3.3,1.6,3.5,.3,11,MUTED,'s');deck.text('Cách làm điển hình',6.9,1.6,5.9,.3,11,MUTED,'s')
     deck.rect(M,1.95,SW-2*M,.012,INK)
     for i,(st,pos,names,how) in enumerate(stage_rows):
-        y=2.1+i*1.25
+        y=2.1+i*1.25;t10,rest=names_split(names)
         deck.rect(M,y,.12,1.0,[MINT,EMERALD,PINE][i])
         deck.text(st,M+.3,y,2.4,.45,20,INK,'b');deck.text(pos,M+.3,y+.5,2.4,.3,12,MUTED)
-        deck.text(j(names),3.3,y,3.4,1.05,14,INK,'s');deck.text(how,6.9,y,5.9,1.05,14)
+        deck.rect(3.3,y+.04,.62,.26,PINE);deck.text('TOP 10',3.35,y+.07,.6,.22,9,'#FFFFFF','b')
+        deck.text(t10,4.0,y,2.75,.5,13,INK,'b')
+        deck.rect(3.3,y+.6,.62,.26,LINE);deck.text('NGOÀI',3.36,y+.63,.6,.22,9,MUTED,'b')
+        deck.text(rest,4.0,y+.56,2.75,.5,12,MUTED)
+        deck.text(how,6.9,y,5.9,1.05,14)
         deck.rect(M,y+1.13,SW-2*M,.008,LINE)
     deck.label('Hàm ý',M,5.95,12.3)
     deck.text('Đáy phễu đông nhất: phải hơn về mức ưu đãi hoặc độ rõ ràng. Đầu và giữa phễu ít đối thủ Top 10 đầu tư: cơ hội để người dùng biết thương hiệu trước khi họ so ưu đãi.',M,6.25,12.3,.65,14)
@@ -1296,8 +1561,8 @@ def build_deck(data,chart):
     targets['src']=deck.slide('Nguồn, phạm vi và giới hạn','Phụ lục')
     rows=[('Phạm vi',f"25 công ty · {data['totals']['fb']} quảng cáo Facebook Ads · {data['totals']['google_app']} quảng cáo Google Ads (app). Phân tích sâu: Top 10 có quảng cáo và 6 công ty ngoài Top 10."),
        ('Mốc tham chiếu','29/10/2026 14:29, giờ Việt Nam. “Còn chạy”: lần hiển thị cuối cách mốc dưới 3 ngày.'),
-       ('Google Ads',f"{sum(len(b['google']) for b in data['profiles'])} quảng cáo mọi định dạng (Google Ads Transparency Center); {data['totals']['google_app']} video có nhãn Google Play = Google Ads (app)."),
-       ('Phễu','Suy ra từ nút CTA và trang đích của từng quảng cáo Facebook Ads, đếm theo mẫu thiết kế.'),
+       ('Google Ads',f"{sum(len(b['google']) for b in data['profiles'])} quảng cáo mọi định dạng (Transparency Center); {data['totals']['google_app']} video nhãn Google Play = Google Ads (app). Chữ đọc bằng OCR; đích kiểm tra bằng bộ lọc website của Google."),
+       ('Phễu','Facebook: theo nút CTA và trang đích thật, đếm theo mẫu thiết kế. Google: theo chữ đọc được trên quảng cáo; nhãn Google Play = kéo cài app.'),
        ('Loại trừ','4 gói Meta DCO chưa xác minh nguồn. Không có ngân sách, impressions, CPA hoặc chuyển đổi.'),
        ('Hình ảnh','Creative gốc tải lại từ Meta Ad Library; video lấy khung hình ở 30% thời lượng. PowerPoint chứa video nhúng.')]
     for i,(k,t) in enumerate(rows):
@@ -1317,7 +1582,7 @@ def build_deck(data,chart):
     for col,(title,items) in enumerate([('Hồ sơ Top 10',top),('Ngoài Top 10 — tham khảo',picks)]):
         x=4.9+col*4.05;deck.label(title,x,1.6,3.8)
         for i,b in enumerate(items):
-            y=2.0+i*.47;entry(x,y,3.8,b['name'],b['name'],13)
+            y=2.0+i*.47;entry(x,y,3.8,rname(b),b['name'],13)
             deck.rect(x,y+.38,3.8,.008,LINE)
         if col==1 and others:
             y=2.0+len(items)*.47;entry(x,y,3.8,f'Bảng {len(others)} công ty còn lại','others',13,'r',MUTED)
@@ -1430,8 +1695,9 @@ def validate_and_package(data,pages,deck,pdf,pptx,slides_pdf):
         facebook_originals=sum(r['original'] for b in data['profiles'] for r in b['gallery']),
         companies_analysed=sum(b['show'] for b in data['profiles']),
         google_samples=sum(len(b['g_gallery']) for b in data['profiles']),
+        google_app_samples=sum(len(b['app_gallery']) for b in data['profiles']),
         landing_screenshots=sum(bool(b['landing_preview']) for b in data['profiles']),
-        charts=6,checks='Reference totals, media attribution, video duration, PPTX embeds, PDF pagination and text bounds passed')
+        charts=8,checks='Reference totals, media attribution, video duration, PPTX embeds, PDF pagination and text bounds passed')
     (OUT/'validation_media.json').write_text(json.dumps(stats,ensure_ascii=False,indent=2)+'\n')
     (OUT/'evidence_media.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
     # Full, unabridged captions are easy to review outside the report excerpts.
