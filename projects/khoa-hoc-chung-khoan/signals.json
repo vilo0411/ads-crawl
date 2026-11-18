@@ -1,0 +1,14 @@
+{
+  "_note": "Thứ tự = độ ưu tiên khi chọn 'chủ đề chính' của 1 QC (tín hiệu khớp đầu tiên).",
+  "Webinar / sự kiện / hội thảo": "webinar|hoi thao|summit|workshop|masterclass|master class|livestream|qua zoom|chuyen de truc tuyen|su kien",
+  "Miễn phí / quà tặng": "mien phi|\\bfree\\b|qua tang|hoc thu|tang (ngay |kem |ban |mien phi )?(ebook|tai lieu|bo chi bao|chi bao|khoa hoc|lop hoc|buoi hoc)|nhan (ngay )?(tai lieu|ebook)",
+  "Giá / học phí / ưu đãi": "hoc phi|\\b\\d{2,3}\\s?k\\b|giam (gia|ngay|toi|den|\\d)|uu dai|early ?bird|tra gop|hoc bong|\\d+ ?% hoc phi",
+  "Nỗi đau thua lỗ": "thua lo|chay tai khoan|tai khoan (do|am|chay)|cat lo|gong lo|mua dinh|mat tien|lo nang|\\bthua\\b|chim trong sac do|vang so",
+  "Hứa hẹn lợi nhuận / thu nhập": "loi nhuan|hai ra tien|kiem tien|tu do tai chinh|sinh loi|nhan ban tien|thu nhap thu dong|x\\d+ tai khoan|hieu suat",
+  "Người mới / F0": "nguoi moi|\\bf0\\b|chua biet gi|tu con so 0|tu so 0|moi bat dau|chua co nen tang|nha dau tu moi",
+  "Phương pháp / công cụ": "phuong phap|he thong (giao dich|dau tu)|wyckoff|price action|quant|dinh luong|\\bbot\\b|chi bao|phan tich ky thuat|phan tich co ban|dinh gia doanh nghiep|doc bao cao tai chinh|\\bai\\b trading|tri tue nhan tao",
+  "Chứng chỉ / sự nghiệp": "\\bcfa\\b|\\bacca\\b|\\bcma\\b|\\bifrs\\b|chung chi (?!quy)|big ?4|thang tien|muc luong|tang luong|nha tuyen dung",
+  "Uy tín chuyên gia / học viên": "chuyen gia|\\d+\\+? nam kinh nghiem|charterholder|\\bvtv\\b|cam nhan hoc vien|feedback|hoc vien (da|dat|pass)|giang vien la",
+  "Cộng đồng / nhóm Zalo": "cong dong|nhom (zalo|kin|vip)|\\bzalo\\b|telegram|viber",
+  "Khẩn cấp / giới hạn suất": "chi con|so luong co han|han chot|cuoi cung|(chi|con) \\d+ suat|gioi han|khai giang (ngay|\\d)"
+}

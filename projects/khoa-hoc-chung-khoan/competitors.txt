@@ -1,0 +1,50 @@
+# Danh sách lọc 17/11/2026 từ 3 lượt discover (gộp 3.595 QC, 1.578 fanpage).
+# Quy tắc: chỉ giữ fanpage có ÍT NHẤT 1 QC nói về khoá học / đào tạo / lớp / webinar / hội thảo đầu tư–tài chính.
+# Số trong ngoặc = QC khoá học / tổng QC tìm thấy qua từ khoá (chưa phải toàn bộ QC của page).
+# Nguồn: _discover_v3_ads.json, _discover_v3_pages.csv. Bản trước: _competitors_v2_backup.txt
+
+#@ Đào tạo chứng khoán (học viện / KOL)
+239482392585943   # Da Vinci Academy - Viện thực hành Đầu tư tài chính (2/2)
+104853195980568   # Sói già đầu tư - Da Vinci Academy (1/1)
+150389878953916   # Da Vinci Hồ Chí Minh - Học đầu tư chuyên nghiệp (1/1)
+103560292523362   # Đặng Trọng Khang (29/33)
+1416800418458998  # Nguyễn Hữu Trí (6/7, 1,5M like)
+478376278905693   # Nguyễn Ngọc Nghĩa - AI Trading, CK phái sinh (6/6)
+1194560673739428  # Cole Quant VN (4/4)
+104407095873070   # Bí Mật Đầu Tư Chứng Khoán (3/3)
+314491455070404   # Trần Hữu Chung (1/1)
+
+#@ CTCK dùng đào tạo / sự kiện kéo khách
+197779796755847   # Chứng khoán LPS (198/198 — chuỗi "Học - Hành thành tài")
+2033102266712313  # DNSE (5/5 — Future Tech Summit)
+
+#@ Khoá học tài chính / chứng chỉ (CFA, ACCA, BCTC)
+110594185188150   # CFA - SAPP Academy (31/31)
+107868168455339   # CFA Online - SAPP Academy (4/4)
+457356237963570   # ACCA - SAPP Academy (2/2)
+100587722956457   # CMA - SAPP Academy (2/2)
+100253538401872   # SAPP Academy - IFRS (2/2)
+1668824786488099  # FTMS Hồ Chí Minh (15/15)
+171448986212518   # FTMS Hà Nội (12/13)
+107915428488465   # UniTutor - UniCFA (2/2)
+600060600345511   # Taca - khoá BCTC & thuế (3/3)
+103260535477721   # Audit Care Vietnam - IFRS/ACCA (3/3)
+188962875025436   # Trường doanh nhân HBR - tài chính cho lãnh đạo (3/5)
+215893571789640   # Học viện Quản lý PACE - tài chính cho lãnh đạo (2/4)
+980711205116219   # Khoá Fintech - ĐH Bách khoa HN (2/4)
+
+#@ Tham chiếu: đào tạo trading Forex / vàng
+172085610077373   # Kolia Phan (3/4)
+156675635201090   # ATFX Vietnam (3/5)
+952751184579336   # ROVA Academy (3/3)
+110415658701387   # ZEU$ Capital Group (1/1)
+705806329282760   # Giraffe Markets (1/1)
+654016611904007   # Bee Investing Academy (1/1)
+
+#@ Cảnh giác: nhóm "chuyên gia" có dấu hiệu lừa đảo
+252387400000877   # "Chuyên gia chứng khoán: NCB" (2/2)
+
+# ĐÃ BỎ vì không có QC nào về khoá học: AKVSA, Giàu Chậm Mà Chắc, Tản mạn CK qua PTKT, FireAnt (2 page), Anfin,
+#   Giao dịch hàng hoá 3D, HCT, La Nhàn, Đanfolish, Minh Hiếu Trading, Yuanta (YSSaving là tiết kiệm học phí, không phải khoá học)
+# ĐÃ BỎ vì lạc đề / bán lại khoá học: kho khoá học share giá rẻ, khoá kế toán thuần (Cô Huệ, VisioEdu, Gitiho...),
+#   IELTS/TOEIC, Phòng khám DaVinci, DaVinci Resolve...

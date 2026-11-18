@@ -1,0 +1,46 @@
+# Mỗi dòng 1 mã nhà quảng cáo Google (AR…) + '# Tên ngắn'. Các mã cùng tên ngắn được gộp làm 1 đối thủ.
+# Dòng "#@ Tên nhóm" mở nhóm mới. Danh sách lọc 29/10/2026, bản đầy đủ: google_competitors_discover_raw.txt
+
+#@ Top 10
+AR12142491484939091969  # VPS
+AR13393289624864948225  # SSI
+AR05758350554547879937  # TCBS
+AR14167218061312000001  # Vietcap
+AR12127964694363242497  # Vietcap
+AR07861138496533037057  # HSC
+AR16500709956853432321  # VNDirect
+AR15276798483999227905  # VNDirect
+AR13452918528441057281  # VNDirect
+AR08981733809527455745  # KIS
+AR03722868564022001665  # VPBankS
+-                       # MBS
+-                       # Mirae Asset
+
+#@ Xu hướng
+AR03460427293229318145  # LPS
+AR06838959790736015361  # LPS
+AR07111099363971039233  # Nhất Việt - VFS
+AR15658962526513659905  # Shinhan - SSV
+AR14554936681951133697  # An Bình - ABS
+AR17302106358425845761  # Yuanta
+AR12284713365531525121  # DNSE
+AR01077892806812368897  # DNSE
+AR11201700364996837377  # Smart Invest - AAS
+AR10552534964652474369  # KB Securities
+AR05767005025318469633  # KB Securities
+AR10860530264904302593  # ACBS
+AR01212989302300999681  # Rồng Việt
+AR07802390224461365249  # VCBS
+
+#@ Chỉ thấy trên Google
+AR09900671440082960385  # DSC
+AR10666546615281516545  # Thiên Việt - TVS
+AR16874031761217028097  # ASEAN
+AR11804440690744623105  # Pinetree
+AR14647767443661914113  # SHS
+AR16527439273503227905  # Kiến Thiết - CSI
+
+# Dòng "-" = đối thủ không có tài khoản Google Ads (vẫn hiện trong báo cáo). Đã tìm ngày 29/10/2026 theo tên + domain.
+# Không tìm thấy tài khoản Google Ads: MBS, Mirae Asset (giữ trong Top 10 bằng dòng "-"), TPS, Kirin, Tân Việt (TVSI), HD Securities.
+# Đã loại: VCBF (quỹ, không phải CTCK); agency chạy hộ (WPP → tcbs, Cacafly → acbs: tài khoản lẫn khách khác);
+# cá nhân/môi giới trỏ về vps.com.vn, tcbs.com.vn, ssi.com.vn; doanh nghiệp trùng tên (Bình An, Tiên Phong, Rồng Việt…)

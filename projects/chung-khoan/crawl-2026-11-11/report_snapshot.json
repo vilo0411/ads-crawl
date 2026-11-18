@@ -1,0 +1,25 @@
+{
+  "reference_at": "2026-11-11T06:49:48+07:00",
+  "baseline": "../report_snapshot.json",
+  "rebuilt_from": "Meta Ad Library and Google Ads Transparency Center, Vietnam",
+  "meta": {
+    "ads": 868,
+    "assets": 160,
+    "brands": 24,
+    "monitored_pages": 25,
+    "new_ids": 473
+  },
+  "google": {
+    "creatives": 1646,
+    "active": 188,
+    "monitored_accounts": 31,
+    "new_ids": 32,
+    "app_creatives": 204,
+    "active_app_creatives": 23,
+    "new_creatives_platform_checked": 41,
+    "videos": 719,
+    "unresolved": 197,
+    "active_videos": 63,
+    "active_unresolved": 32
+  }
+}

@@ -1,0 +1,43 @@
+# Danh sách lọc tay 17/11/2026 từ 2 lượt discover (v1: _discover_v1/, v2: competitors.csv — tổng 55 fanpage).
+# Mỗi dòng 1 Page ID. Dòng "#@ Tên nhóm" mở nhóm mới; nhóm đầu là nhóm chính.
+
+#@ Đào tạo chứng khoán (KOL / đơn vị độc lập)
+103560292523362   # Đặng Trọng Khang (25 QC — nhiều nhất nhóm)
+1416800418458998  # Nguyễn Hữu Trí (1,5M like)
+478376278905693   # Nguyễn Ngọc Nghĩa (AI Trading, CK phái sinh)
+104407095873070   # Bí Mật Đầu Tư Chứng Khoán
+1194560673739428  # Cole Quant VN (Quant trading)
+314491455070404   # Trần Hữu Chung (F0 có 100tr)
+114791097058490   # AKVSA (Wyckoff)
+1388281827708281  # Giàu Chậm Mà Chắc (tài chính cá nhân — biên)
+1170529723048251  # Tản mạn CK qua PTKT (khuyến nghị mã — biên)
+
+#@ CTCK / nền tảng dùng đào tạo kéo khách
+197779796755847   # Chứng khoán LPS (46 QC "Học - Hành thành tài")
+1118232044712355  # FireAnt - Sản phẩm & Đối tác
+894533687085632   # FireAnt Invest
+110621767931776   # Anfin
+365637159961307   # Giao Dịch Hàng Hoá 3D (sự kiện cho NĐT chứng khoán)
+603518642835518   # HCT - Giao dịch hàng hoá HCM
+
+#@ Nhóm tín hiệu / cộng đồng (cần cảnh giác)
+252387400000877   # "Chuyên gia chứng khoán: NCB" (mạo danh?)
+110260318081921   # La Nhàn (Viber, tặng danh sách mã)
+101383852255056   # Đanfolish Sài Gòn
+
+#@ Tham chiếu: đào tạo trading Forex / vàng
+172085610077373   # Kolia Phan
+156675635201090   # ATFX Vietnam (đào tạo PTKT miễn phí)
+110415658701387   # ZEU$ Capital Group (masterclass PTCB)
+705806329282760   # Giraffe Markets
+654016611904007   # Bee Investing Academy
+1425341923989746  # Minh Hiếu Trading
+
+# Gợi ý thêm (bỏ # nếu muốn): các CTCK lớn hay chạy webinar/khoá học — lấy từ projects/chung-khoan
+# 108015722146379   # VPS
+# 132771703438783   # SSI
+# 123434971018658   # VNDirect
+# 2033102266712313  # DNSE
+
+# Đã loại: kho khoá học share giá rẻ (Kho Khóa Học Trading Pro, Khóa Học Hay, Học Bá, Siêu Thị Khóa Học, Chim Sẻ...),
+# bot/EA Forex, prop firm, tuyển dụng môi giới (MBS HN08, Phụng Sự Đầu Tư), nail/makeup/golf/xe tải/sách lạc đề.
