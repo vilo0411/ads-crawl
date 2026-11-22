@@ -17,7 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 PROJ = ROOT / "projects/khoa-hoc-chung-khoan"
-SNAPSHOT_DATE = "17/11/2026"
+SNAPSHOT_DATE = "22/11/2026"
 
 # ── Phân khúc & brand. Ánh xạ page_id → brand viết tay, không đoán theo tên. ──
 SEGMENTS = [
@@ -30,15 +30,25 @@ SEGMENTS = [
 BRANDS = [  # (brand, segment, [(page_id, vai trò ngắn)])
     ("Da Vinci Academy", "dt", [("239482392585943", "Page chính · video mạn đàm CEO"),
                                 ("104853195980568", "Sói già đầu tư · tặng lớp online"),
-                                ("150389878953916", "Chi nhánh HCM · chuỗi chuyên đề")]),
-    ("Đặng Trọng Khang", "dt", [("103560292523362", "KOL · tích sản cổ phiếu")]),
+                                ("150389878953916", "Chi nhánh HCM · chuỗi chuyên đề"),
+                                ("140790359120072", "Viện đào tạo thực hành · landing Hà Nội")]),
+    ("Đặng Trọng Khang", "dt", [("103560292523362", "KOL · tích sản cổ phiếu"),
+                                ("1476708278856572", "Học đầu tư bài bản · 5 buổi online")]),
     ("AYP · Nguyễn Hữu Trí", "dt", [("1416800418458998", "KOL · Intelligent Investor / Money")]),
     ("Nguyễn Ngọc Nghĩa", "dt", [("478376278905693", "KOL · AI Trading offline")]),
     ("Cole.vn · Quant", "dt", [("1194560673739428", "Chuyên đề Quant trading")]),
     ("FlowCap · Trần Hữu Chung", "dt", [("314491455070404", "CEO Fialda · khoá FlowCap")]),
     ("Bí Mật Đầu Tư CK", "dt", [("104407095873070", "Khoá 5 ngày · QC từ 2023")]),
+    ("Quang Dũng DBD", "dt", [("101395798576919", "KOL · Đọc vị dòng tiền qua mẫu hình")]),
+    ("Phạm Thành Biên", "dt", [("1681252095439210", "KOL · webinar dòng tiền, tích sản")]),
+    ("LITADO · Money Master", "dt", [("108975761847038", "Lớp offline Money Master K100")]),
+    ("ProX Community", "dt", [("1146772301846357", "Cộng đồng học đầu tư · trải nghiệm 2 tuần")]),
+    ("AFA Research & Education", "dt", [("329039727208609", "Khoá vĩ mô ứng dụng trong đầu tư")]),
     ("LPS", "ctck", [("197779796755847", "App LOOP · Học - Hành thành tài")]),
     ("DNSE", "ctck", [("2033102266712313", "Future Tech Summit · DNSE MCP")]),
+    ("FireAnt", "ctck", [("114212403303209", "FireAnt Education · học CK miễn phí"),
+                         ("894533687085632", "FireAnt Invest · khoá hàng hoá phái sinh")]),
+    ("HDSecurities", "ctck", [("1291556907378925", "Học viện HDS · HD Academy")]),
     ("SAPP Academy", "cc", [("110594185188150", "CFA"), ("107868168455339", "CFA Online"),
                             ("457356237963570", "ACCA"), ("100587722956457", "CMA · FP&A"),
                             ("100253538401872", "IFRS")]),
@@ -46,9 +56,15 @@ BRANDS = [  # (brand, segment, [(page_id, vai trò ngắn)])
     ("AuditCare (ACV)", "cc", [("103260535477721", "IFRS / ACCA tiếng Việt")]),
     ("Taca Tax Academy", "cc", [("600060600345511", "BCTC & thuế")]),
     ("Fintech · ĐH Bách khoa HN", "cc", [("980711205116219", "Khoá Fintech 76 giờ")]),
+    ("amiCoach", "cc", [("100148559966", "CFA")]),
+    ("FIDT", "cc", [("1806449472924151", "CFP · hoạch định tài chính")]),
     ("Kolia Phan", "fx", [("172085610077373", "Vàng, crypto · cộng đồng Telegram")]),
     ("ATFX", "fx", [("156675635201090", "Sàn Forex · webinar miễn phí")]),
     ("ROVA Academy", "fx", [("952751184579336", "Trading · landing bán khoá")]),
+    ("AutoTrade Forex", "fx", [("1131806326691978", "Bot giao dịch tự động")]),
+    ("SFVN", "fx", [("103400059161055", "Đầu tư hàng hoá cùng chuyên gia")]),
+    ("Gia Cát Lợi", "fx", [("1002982026504005", "Thực chiến đầu tư hàng hoá")]),
+    ("Mr SL Trade", "fx", [("119967891196558", "Vàng · tặng khoá Price Action")]),
     ("Giraffe Markets", "fx", [("705806329282760", "Sàn Forex"), ("110415658701387", "ZEU$ · đối tác giới thiệu")]),
     ("“Chuyên gia chứng khoán: NCB”", "warn", [("252387400000877", "Mời ‘đầu tư nước ngoài’, hứa lãi 58%/tuần")]),
 ]
@@ -56,7 +72,7 @@ EXCLUDED = [  # page đã cào nhưng không đưa vào phân tích, ghi rõ lý
     ("Học viện Quản lý PACE", "93 QC, gần như toàn bộ là khoá quản trị (OKR, văn hoá, lãnh đạo), không phải tài chính"),
     ("Trường doanh nhân HBR", "13 QC về kế hoạch kinh doanh, marketing cho chủ doanh nghiệp"),
     ("UniTutor (UniCFA), Bee Investing Academy", "Không có QC đang chạy tại ngày cào"),
-    ("FireAnt, Anfin, AKVSA, HCT, Giao dịch hàng hoá 3D…", "Có QC tài chính nhưng không QC nào nói về khoá học"),
+    ("Anfin, AKVSA, HCT, Giao dịch hàng hoá 3D…", "Có QC tài chính nhưng không QC nào nói về khoá học"),
     ("Kho khoá học share giá rẻ, khoá kế toán thuần, IELTS…", "Lạc đề hoặc bán lại khoá học"),
 ]
 
@@ -170,6 +186,22 @@ def thumb_of(ad_id: str) -> str:
     return f if (PROJ / f).exists() else ""
 
 
+# Brand đào tạo chứng khoán đôi khi chạy QC cho khoá KHÁC ngành (AYP: hướng nghiệp, kỹ năng mềm; LITADO: AI cho chủ doanh nghiệp).
+# Mẫu thuộc nhóm "dt" chỉ được tính khi nói về đầu tư / tài chính; mẫu lạc đề bị loại và ghi vào phụ lục.
+OFFTOPIC_URL = r"career[-_]navigation|underground-leader|awaken-your-power"
+OFFTOPIC_TEXT = r"cuoc choi ai|chu cua hang, chu doanh nghiep"  # LITADO: khoá AI cho chủ doanh nghiệp
+FIN_RX = (r"chung khoan|co phieu|dau tu|tai chinh|tich san|trading|trade|phai sinh|danh muc|vn.?index|loi nhuan|"
+          r"quan ly tien|tien bac|intelligent (money|investor)|dong tien|vang|forex|crypto|quant|backtest")
+
+
+def off_topic(d) -> bool:
+    if d["seg"] != "dt":
+        return False
+    t = norm((d.get("body") or "") + " " + (d.get("title") or ""))
+    return (bool(re.search(OFFTOPIC_URL, (d.get("final_url") or "") + " " + (d.get("link_url") or "")))
+            or bool(re.search(OFFTOPIC_TEXT, t)) or not re.search(FIN_RX, t))
+
+
 def designs(rows):
     """Gộp QC theo mẫu thiết kế, giữ bản chạy lâu nhất làm đại diện; gộp nhãn của mọi bản trong mẫu."""
     by = defaultdict(list)
@@ -180,6 +212,7 @@ def designs(rows):
         rep = max(rr, key=lambda x: (x["days"], bool(thumb_of(x["ad_archive_id"])))).copy()
         rep["thumb"] = next((t for t in [thumb_of(x["ad_archive_id"]) for x in sorted(rr, key=lambda x: -x["days"])] if t), "")
         rep["n_ads"] = len(rr)
+        rep["ad_ids"] = [x["ad_archive_id"] for x in rr]
         # cách chốt / tầng phễu của mẫu = loại chiến dịch phổ biến nhất trong các bản của mẫu
         rep["objective"] = Counter(x["objective"] for x in rr).most_common(1)[0][0]
         rep["stage"] = Counter(x["stage"] for x in rr).most_common(1)[0][0]
@@ -208,7 +241,10 @@ STAGES = ["Nhận biết", "Cân nhắc", "Chuyển đổi"]
 
 def build():
     rows, name_by_pid, landings = load()
-    ds = designs(rows)
+    ds_all = designs(rows)
+    ds = [d for d in ds_all if not off_topic(d)]
+    dropped = Counter(d["brand"] for d in ds_all if off_topic(d))
+    rows = [r for r in rows if r["ad_archive_id"] not in {x for d in ds_all if off_topic(d) for x in d.get("ad_ids", [d["ad_archive_id"]])}]
     seg_name = {k: n for k, n, _ in SEGMENTS}
     brands = []
     for b, seg, pages in BRANDS:
@@ -251,6 +287,13 @@ def build():
                 "offers": d["offer_tags"], "hooks": d["hook_tags"][:3], "link": d["library_link"],
             } for d in samples],
         })
+    # Brand không còn QC nào đang chạy tại ngày cào: bỏ khỏi số liệu, ghi vào phụ lục
+    stopped = [b["brand"] for b in brands if not b["designs"]]
+    brands = [b for b in brands if b["designs"]]
+    excluded = ([(", ".join(stopped), "Có QC khoá học ở lượt cào trước nhưng đã dừng toàn bộ QC tại ngày cào")]
+                if stopped else []) + ([("Mẫu lạc đề: " + ", ".join(f"{b} ({n} mẫu)" for b, n in dropped.most_common()),
+                                         "QC cho khoá không phải đầu tư, tài chính (hướng nghiệp, kỹ năng mềm, AI cho chủ doanh nghiệp), không tính vào số liệu")]
+                                       if dropped else []) + EXCLUDED
     segs = []
     for k, n, desc in SEGMENTS:
         bb = [b for b in brands if b["seg"] == k]
@@ -270,7 +313,7 @@ def build():
     return {
         "snapshot": SNAPSHOT_DATE, "segments": segs, "brands": brands,
         "offers_order": [k for k, _ in OFFERS], "hooks_order": [k for k, _ in HOOKS],
-        "channels_order": CHANNEL_ORDER, "stages_order": STAGES, "excluded": EXCLUDED,
+        "channels_order": CHANNEL_ORDER, "stages_order": STAGES, "excluded": excluded,
         "totals": {"brands": len(brands), "pages": sum(len(b["pages"]) for b in brands),
                    "ads": sum(b["ads"] for b in brands), "designs": len(ds),
                    "edu_designs": sum(1 for d in ds if d["edu"])},

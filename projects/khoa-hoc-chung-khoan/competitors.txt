@@ -1,9 +1,16 @@
-# Danh sách lọc 17/11/2026 từ 3 lượt discover (gộp 3.595 QC, 1.578 fanpage).
+# Bổ sung 22/11/2026 từ discover v4 (52 từ khoá mới). Danh sách lọc 17/11/2026 từ 3 lượt discover (gộp 3.595 QC, 1.578 fanpage).
 # Quy tắc: chỉ giữ fanpage có ÍT NHẤT 1 QC nói về khoá học / đào tạo / lớp / webinar / hội thảo đầu tư–tài chính.
 # Số trong ngoặc = QC khoá học / tổng QC tìm thấy qua từ khoá (chưa phải toàn bộ QC của page).
-# Nguồn: _discover_v3_ads.json, _discover_v3_pages.csv. Bản trước: _competitors_v2_backup.txt
+# File discover thô đã xoá 22/11 (bản v3 còn trong git history, commit 7b6eabe).
 
 #@ Đào tạo chứng khoán (học viện / KOL)
+1476708278856572  # Đặng Trọng Khang Học đầu tư bài bản (page 2, thêm 22/11)
+140790359120072   # Da Vinci Academy - Viện đào tạo thực hành (page 4, thêm 22/11)
+101395798576919   # Quang Dũng DBD - Đọc vị dòng tiền (thêm 22/11)
+1681252095439210  # Phạm Thành Biên - webinar dòng tiền, tích sản (thêm 22/11)
+108975761847038   # LITADO - Money Master K100 (thêm 22/11)
+1146772301846357  # Cộng đồng ProX (thêm 22/11)
+329039727208609   # AFA Research & Education - vĩ mô ứng dụng (thêm 22/11)
 239482392585943   # Da Vinci Academy - Viện thực hành Đầu tư tài chính (2/2)
 104853195980568   # Sói già đầu tư - Da Vinci Academy (1/1)
 150389878953916   # Da Vinci Hồ Chí Minh - Học đầu tư chuyên nghiệp (1/1)
@@ -15,10 +22,15 @@
 314491455070404   # Trần Hữu Chung (1/1)
 
 #@ CTCK dùng đào tạo / sự kiện kéo khách
+114212403303209   # FireAnt Education - học CK miễn phí (thêm 22/11)
+894533687085632   # FireAnt Invest - khoá hàng hoá phái sinh (thêm 22/11)
+1291556907378925  # Học viện HDSecurities - HD Academy (thêm 22/11)
 197779796755847   # Chứng khoán LPS (198/198 — chuỗi "Học - Hành thành tài")
 2033102266712313  # DNSE (5/5 — Future Tech Summit)
 
 #@ Khoá học tài chính / chứng chỉ (CFA, ACCA, BCTC)
+100148559966      # Học viện amiCoach - CFA (thêm 22/11)
+1806449472924151  # FIDT - CFP (thêm 22/11)
 110594185188150   # CFA - SAPP Academy (31/31)
 107868168455339   # CFA Online - SAPP Academy (4/4)
 457356237963570   # ACCA - SAPP Academy (2/2)
@@ -34,6 +46,10 @@
 980711205116219   # Khoá Fintech - ĐH Bách khoa HN (2/4)
 
 #@ Tham chiếu: đào tạo trading Forex / vàng
+1131806326691978  # AutoTrade Forex Việt Nam - bot giao dịch (thêm 22/11)
+103400059161055   # SFVN - đầu tư hàng hoá (thêm 22/11)
+1002982026504005  # Gia Cát Lợi - thực chiến hàng hoá (thêm 22/11)
+119967891196558   # Mr SL Trade Cậu Vàng - tặng khoá Price Action (thêm 22/11)
 172085610077373   # Kolia Phan (3/4)
 156675635201090   # ATFX Vietnam (3/5)
 952751184579336   # ROVA Academy (3/3)

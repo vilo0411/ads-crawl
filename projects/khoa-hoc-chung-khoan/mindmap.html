@@ -1,0 +1,223 @@
+<title>Mindmap khoá học chứng khoán</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: cây mindmap 2 phía, gốc ở giữa; bấm nút để mở/thu nhánh. Mỗi nhận định nằm ngay sau số liệu chứng minh nó. DSC tokens. */
+:root{--gunmetal:#272d2b;--pine-teal:#1d4130;--lime-green:#2ad03d;--emerald:#1bbe72;--frosted-mint:#8cffcc;
+--surface:#fff;--surface-alt:#f3f4f4;--ink:#272d2b;--ink-muted:#5b6260;--hairline:#272d2b;--line:rgba(39,45,43,.16);--link:rgba(39,45,43,.28);
+--chip:#eceeed;--accent-text:#1d4130;--insight-bg:#e3f9e6;--risk:#c26a00;--risk-bg:#fff1e0;
+--font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#1c1f1e;--surface-alt:#242827;--ink:#fff;--ink-muted:#b3b9b7;--hairline:#5a615f;
+--line:rgba(255,255,255,.14);--link:rgba(255,255,255,.25);--chip:#323736;--accent-text:#2ad03d;--insight-bg:#183524;--risk:#ffae4d;--risk-bg:#3a2a14;color-scheme:dark}}
+:root[data-theme="dark"]{--surface:#1c1f1e;--surface-alt:#242827;--ink:#fff;--ink-muted:#b3b9b7;--hairline:#5a615f;
+--line:rgba(255,255,255,.14);--link:rgba(255,255,255,.25);--chip:#323736;--accent-text:#2ad03d;--insight-bg:#183524;--risk:#ffae4d;--risk-bg:#3a2a14;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);font:400 14px/1.45 var(--font);-webkit-font-smoothing:antialiased}
+.strip{display:flex;height:8px}.strip i{display:block}
+.wrap{max-width:1600px;margin:0 auto;padding-block:20px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 24px}
+h1{font-size:22px;line-height:1.25;margin:0;text-wrap:balance}
+header p{margin:4px 0 0;color:var(--ink-muted);font-size:13px;max-width:75ch}
+.tools{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--ink-muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:14px;height:10px;border:1px solid var(--line)}
+.sw.f{background:var(--surface)}.sw.i{background:var(--insight-bg);border-color:var(--emerald)}
+.sw.s{background:var(--surface);border:1.5px dashed var(--emerald)}.sw.r{background:var(--risk-bg);border-color:var(--risk)}
+button{font:600 13px var(--font);color:var(--ink);background:var(--chip);border:1px solid var(--line);padding:6px 12px;cursor:pointer;border-radius:4px}
+button:hover{border-color:var(--ink-muted)}button:focus-visible{outline:2px solid var(--accent-text);outline-offset:2px}
+.stage{margin-top:16px;overflow:auto;border-top:1px solid var(--line);border-bottom:1px solid var(--line);max-height:calc(100vh - 150px);min-height:420px}
+svg{display:block;font-family:var(--font)}
+.lk{fill:none;stroke:var(--link);stroke-width:1.4}
+.nd rect{stroke-width:1}
+.nd text{font-size:13px;fill:var(--ink)}
+.nd.b rect{fill:var(--gunmetal);stroke:var(--gunmetal)}.nd.b text{fill:#fff;font-weight:700;font-size:14px}
+.nd.root rect{fill:var(--gunmetal);stroke:var(--gunmetal)}.nd.root text{fill:#fff;font-weight:700;font-size:15px}
+.nd.root text.sub{fill:#cfd4d2;font-weight:400;font-size:12px}
+.nd.f rect{fill:var(--surface);stroke:var(--line)}
+.nd.f.hasc rect{fill:var(--surface-alt)}
+.nd.i rect{fill:var(--insight-bg);stroke:var(--emerald)}.nd.i text{font-weight:600}
+.nd.s rect{fill:var(--surface);stroke:var(--emerald);stroke-dasharray:4 3;stroke-width:1.5}.nd.s text{font-weight:600;fill:var(--accent-text)}
+.nd.r rect{fill:var(--risk-bg);stroke:var(--risk)}
+.nd.tog{cursor:pointer}
+.nd .pm{font-size:12px;font-weight:700;fill:var(--ink-muted)}
+.nd.b .pm{fill:var(--frosted-mint)}
+.note{margin-top:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 24px;font-size:12px;color:var(--ink-muted)}
+</style>
+
+<div class="strip" aria-hidden="true"><i style="flex:3;background:var(--gunmetal)"></i><i style="flex:2;background:var(--pine-teal)"></i><i style="flex:4.5;background:var(--lime-green)"></i><i style="flex:2.5;background:var(--emerald)"></i><i style="flex:2.5;background:var(--frosted-mint)"></i></div>
+<div class="wrap">
+<header>
+ <div>
+  <h1>Facebook Ads khoá học chứng khoán: đối thủ đang làm gì</h1>
+  <p>11 brand đào tạo chứng khoán, 56 mẫu QC đang chạy ngày 22/11/2026 (Meta Ad Library). Bấm vào ô có dấu + để mở chi tiết: brand nào, làm gì, rồi mới đến nhận định.</p>
+ </div>
+ <div class="tools">
+  <div class="legend"><span><i class="sw f"></i>Số liệu</span><span><i class="sw i"></i>Nhận định từ số liệu</span><span><i class="sw s"></i>Nên thử (chưa kiểm chứng)</span><span><i class="sw r"></i>Rủi ro</span></div>
+  <button id="openAll" type="button">Mở tất cả</button><button id="closeAll" type="button">Thu gọn</button>
+ </div>
+</header>
+<div class="stage" id="stage"><svg id="svg" role="img" aria-label="Mindmap Facebook Ads khoá học chứng khoán"></svg></div>
+<div class="note"><span>Số liệu tính theo mẫu thiết kế (1 mẫu có thể nhân thành nhiều QC). Đã loại 17 mẫu lạc đề của AYP, LITADO (hướng nghiệp, kỹ năng mềm).</span><span>Chi tiết: báo cáo “Quảng cáo khoá học chứng khoán &amp; tài chính trên Facebook Ads”</span></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+// k: b = nhánh, f = số liệu, i = nhận định (rút ra trực tiếp từ các ô anh em phía trên), s = nên thử, r = rủi ro
+const DATA = {t:"FB Ads khoá học chứng khoán", sub:"56 mẫu · 11 brand · 22/11/2026", c:[
+ {t:"Quy mô & độ mới", k:"b", side:"l", c:[
+  {t:"11 brand · 56 mẫu đang chạy", k:"f", c:[
+   {t:"Nhóm CFA, ACCA: 194 mẫu (gấp 3,5)", k:"f"},
+   {t:"CTCK dùng khoá học: FireAnt, HDS, LPS, DNSE", k:"f"}]},
+  {t:"75% mẫu mới trong 14 ngày", k:"f"},
+  {t:"Chỉ 8 mẫu chạy ≥ 30 ngày", k:"f", c:[
+   {t:"Nguyễn Ngọc Nghĩa 4 · Cole.vn 3", k:"f"},
+   {t:"Bí Mật Đầu Tư CK: 1 mẫu từ 2023", k:"f"}]},
+  {t:"Chưa có mẫu “chạy bền” để học theo", k:"i"}]},
+ {t:"Cách chốt khách", k:"b", side:"l", c:[
+  {t:"Landing có form · 24 mẫu", k:"f", c:[
+   {t:"AYP 11: form 9 trường, giấu giá, tư vấn gọi", k:"f"},
+   {t:"Nguyễn Ngọc Nghĩa 7: vé 68–100K học offline", k:"f"},
+   {t:"ĐTK, Da Vinci, Phạm Thành Biên: học miễn phí", k:"f"},
+   {t:"Quang Dũng DBD: bán thẳng 7,9–9,9 triệu", k:"f"},
+   {t:"Landing dùng cho cả mồi free lẫn bán thẳng", k:"i"}]},
+  {t:"Messenger · 19 mẫu", k:"f", c:[
+   {t:"Cole.vn 12: 7 mẫu mời “tư vấn lộ trình”", k:"f"},
+   {t:"Da Vinci 6: video series rồi mời nhắn tin", k:"f"},
+   {t:"LITADO 1: lớp offline, Early Bird −24%", k:"f"}]},
+  {t:"Form ngay trên Facebook · 6 mẫu", k:"f", c:[
+   {t:"Chỉ Đặng Trọng Khang dùng", k:"f"},
+   {t:"Vé Zoom miễn phí, “tài trợ 100% học phí”", k:"f"}]},
+  {t:"Video, bài viết (chưa thu lead) · 7", k:"f"},
+  {t:"Số đếm theo kênh = thói quen của 1–2 brand", k:"i"},
+  {t:"Chưa biết kênh nào ra học viên tốt hơn", k:"r"},
+  {t:"Cùng 1 mồi, A/B 3 kênh, đo CPL & tỉ lệ chốt", k:"s"}]},
+ {t:"Phễu", k:"b", side:"l", c:[
+  {t:"Chuyển đổi: 47/56 mẫu (84%)", k:"f"},
+  {t:"Nhận biết 6 · Cân nhắc 3", k:"f"},
+  {t:"Nhóm CFA: 43% mẫu ở tầng trên", k:"f", c:[
+   {t:"39 nhận biết · 44 cân nhắc / 194", k:"f"}]},
+  {t:"Chứng khoán gần như bỏ qua tầng nuôi", k:"i"}]},
+ {t:"Mồi trong QC", k:"b", side:"l", c:[
+  {t:"Giới hạn suất · 10", k:"f", c:[{t:"ĐTK 5 · Cole.vn 3", k:"f"}]},
+  {t:"Học thử miễn phí · 10", k:"f", c:[{t:"Đặng Trọng Khang 7", k:"f"}]},
+  {t:"Tư vấn miễn phí · 8", k:"f", c:[{t:"Cole.vn 7", k:"f"}]},
+  {t:"Ưu đãi học phí · 7", k:"f", c:[{t:"ĐTK 6 (“tài trợ 100%”)", k:"f"}]},
+  {t:"Tài liệu, ebook · 5 · Ghi học phí · 0", k:"f"},
+  {t:"Mồi dồn vào 2 brand: ĐTK, Cole.vn", k:"i"},
+  {t:"Lead magnet cụ thể (ebook, học thử)", k:"s"}]},
+ {t:"Landing page", k:"b", side:"r", c:[
+  {t:"Học miễn phí, bán sau · 4 brand", k:"f", c:[
+   {t:"ĐTK: 5 buổi free, FAQ nói sẽ mời khoá sâu", k:"f"},
+   {t:"Da Vinci: tặng khoá “trị giá 5 triệu”", k:"f"},
+   {t:"Phạm Thành Biên: 4 buổi webinar", k:"f"},
+   {t:"Nguyễn Ngọc Nghĩa: vé 68–100K", k:"f"}]},
+  {t:"Ghi giá, bán thẳng · 2 brand", k:"f", c:[
+   {t:"DBD: 13,7tr → 7,9–9,9tr, hoàn tiền 100%", k:"f"},
+   {t:"AFA: 9,8tr, −5% đóng sớm, ưu đãi nhóm", k:"f"}]},
+  {t:"Giấu giá, form dài · AYP", k:"f", c:[
+   {t:"9 trường, tư vấn viên gọi lại", k:"f"}]},
+  {t:"Chiêu dùng chung", k:"f", c:[
+   {t:"Neo “trị giá 5 triệu”: 3 brand", k:"f"},
+   {t:"Đếm ngược, “vé miễn phí còn…”", k:"f"},
+   {t:"Sau đăng ký: nhóm Zalo, SMS, email", k:"f"}]},
+  {t:"Mô hình phổ biến: free → nuôi Zalo → bán", k:"i"}]},
+ {t:"Thông điệp", k:"b", side:"r", c:[
+  {t:"Phương pháp đầu tư · 36", k:"f", c:[{t:"Cole.vn 11 · NNN 8 · ĐTK 7", k:"f"}]},
+  {t:"Người mới · 26 · Uy tín giảng viên · 26", k:"f"},
+  {t:"AI & công nghệ · 21", k:"f", c:[{t:"Cole.vn 12 · NNN 8", k:"f"}, {t:"Góc AI gần như chỉ 2 brand dùng", k:"i"}]},
+  {t:"Sợ thua lỗ · 17", k:"f"},
+  {t:"Thoát “phím hàng” · 5", k:"f", c:[{t:"Da Vinci 2 · AYP 2 · LITADO 1", k:"f"}, {t:"Ít người dùng, chưa rõ hiệu quả", k:"s"}]}]},
+ {t:"Creative", k:"b", side:"r", c:[
+  {t:"Video · 29% số mẫu", k:"f", c:[
+   {t:"Da Vinci 138s · ĐTK 110s · AYP 105s", k:"f"},
+   {t:"Cắt từ buổi giảng, chia sẻ của KOL", k:"f"}]},
+  {t:"Chỉ dùng ảnh: Cole.vn, LITADO", k:"f"},
+  {t:"Nhân bản mẫu", k:"f", c:[
+   {t:"ĐTK: 9 mẫu → 36 QC", k:"f"},
+   {t:"Nguyễn Ngọc Nghĩa: 8 mẫu → 24 QC", k:"f"}]}]},
+ {t:"Đối thủ cần theo dõi", k:"b", side:"r", c:[
+  {t:"Đang đẩy mạnh (mẫu mới 14 ngày)", k:"f", c:[
+   {t:"AYP 11/11 · ĐTK 9/9 · Cole.vn 9/12", k:"f"}]},
+  {t:"Giữ mẫu lâu", k:"f", c:[
+   {t:"NNN 47 ngày · Cole.vn 44 ngày", k:"f"}]},
+  {t:"Mới xuất hiện: DBD, LITADO, P.T. Biên", k:"f"},
+  {t:"CTCK: FireAnt, HDS dạy free đổi mở TK", k:"f"},
+  {t:"Cào lại sau 2–4 tuần", k:"s"}]},
+ {t:"Rủi ro & giới hạn", k:"b", side:"r", c:[
+  {t:"Không có số chi phí, chuyển đổi", k:"r"},
+  {t:"Chạy lâu chưa chắc là hiệu quả", k:"r"},
+  {t:"Page lừa đảo hứa lãi 58%/tuần", k:"r"},
+  {t:"Kolia (vàng): “tỷ lệ thắng 86–90%”", k:"r"},
+  {t:"Không hứa lợi nhuận trong QC", k:"s"}]}
+]};
+
+const svg = d3.select("#svg"), ROW = 34, PADX = 10, H = 24, GAP = 34;
+const ctx = document.createElement("canvas").getContext("2d");
+const tw = (t, k) => { ctx.font = (k === "b" ? "700 14px " : k === "i" || k === "s" ? "600 13px " : "400 13px ") + getComputedStyle(document.body).fontFamily; return ctx.measureText(t).width; };
+
+// trạng thái mở: mặc định hiện nhánh + tầng ngay dưới; tầng sâu hơn đóng
+function init(n, d) { n.open = d < 2; (n.c || []).forEach(x => init(x, d + 1)); }
+init(DATA, 0);
+
+function layoutSide(branches, dir) {
+  if (!branches.length) return [];
+  const h = d3.hierarchy({c: branches, open: true}, n => (n.open && n.c) ? n.c : null);
+  d3.tree().nodeSize([ROW, 1]).separation((a, b) => a.parent === b.parent ? 1 : 1.25)(h);
+  const nodes = h.descendants().slice(1);
+  const maxW = {};
+  nodes.forEach(n => { n.w = tw(n.data.t, n.data.k) + PADX * 2 + (n.data.c ? 18 : 0); maxW[n.depth] = Math.max(maxW[n.depth] || 0, n.w); });
+  const colX = {1: 0}; for (let d = 2; d <= d3.max(nodes, n => n.depth); d++) colX[d] = colX[d - 1] + maxW[d - 1] + GAP;
+  nodes.forEach(n => { n.px = dir * colX[n.depth]; n.py = n.x; });
+  return nodes;
+}
+
+function render() {
+  svg.selectAll("*").remove();
+  const L = DATA.c.filter(b => b.side === "l"), R = DATA.c.filter(b => b.side === "r");
+  const rootW = Math.max(tw(DATA.t, "b"), tw(DATA.sub, "f")) + 32, rootH = 54;
+  let ln = layoutSide(L, -1), rn = layoutSide(R, 1);
+  const off = rootW / 2 + 60;
+  // canh giữa mỗi phía theo chiều dọc quanh 0
+  [ln, rn].forEach(ns => { if (!ns.length) return; const mid = (d3.min(ns, n => n.py) + d3.max(ns, n => n.py)) / 2; ns.forEach(n => n.py -= mid); });
+  ln.forEach(n => n.px = n.px - off - n.w); rn.forEach(n => n.px = n.px + off);
+  const all = ln.concat(rn);
+  const minX = Math.min(-rootW / 2, d3.min(all, n => n.px)) - 20, maxX = Math.max(rootW / 2, d3.max(all, n => n.px + n.w)) + 20;
+  const minY = Math.min(-rootH / 2, d3.min(all, n => n.py - H / 2)) - 20, maxY = Math.max(rootH / 2, d3.max(all, n => n.py + H / 2)) + 20;
+  svg.attr("width", maxX - minX).attr("height", maxY - minY).attr("viewBox", [minX, minY, maxX - minX, maxY - minY]);
+
+  const link = (x1, y1, x2, y2) => { const m = (x1 + x2) / 2; return `M${x1},${y1}C${m},${y1} ${m},${y2} ${x2},${y2}`; };
+  const g = svg.append("g");
+  all.forEach(n => {
+    const left = n.px < 0, p = n.parent;
+    let x1, y1;
+    if (p.depth === 0) { x1 = left ? -rootW / 2 : rootW / 2; y1 = 0; } else { x1 = left ? p.px : p.px + p.w; y1 = p.py; }
+    const x2 = left ? n.px + n.w : n.px;
+    g.append("path").attr("class", "lk").attr("d", link(x1, y1, x2, n.py));
+  });
+  const r = svg.append("g").attr("class", "nd root");
+  r.append("rect").attr("x", -rootW / 2).attr("y", -rootH / 2).attr("width", rootW).attr("height", rootH).attr("rx", 4);
+  r.append("text").attr("text-anchor", "middle").attr("y", -4).text(DATA.t);
+  r.append("text").attr("class", "sub").attr("text-anchor", "middle").attr("y", 15).text(DATA.sub);
+
+  all.forEach(n => {
+    const d = n.data, has = !!d.c;
+    const ng = svg.append("g").attr("class", `nd ${d.k}${has ? " hasc tog" : ""}`).attr("transform", `translate(${n.px},${n.py - H / 2})`);
+    if (has) ng.attr("tabindex", 0).attr("role", "button").attr("aria-expanded", d.open ? "true" : "false")
+      .on("click", () => { d.open = !d.open; render(); })
+      .on("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); d.open = !d.open; render(); } });
+    ng.append("rect").attr("width", n.w).attr("height", H).attr("rx", 3);
+    ng.append("text").attr("x", PADX).attr("y", H / 2 + 4.5).text(d.t);
+    if (has) ng.append("text").attr("class", "pm").attr("x", n.w - 14).attr("y", H / 2 + 4.5).text(d.open ? "−" : "+");
+  });
+}
+
+function setAll(n, v, d) { if (n.c) { n.open = d === 0 ? true : v; n.c.forEach(x => setAll(x, v, d + 1)); } }
+document.getElementById("openAll").onclick = () => { setAll(DATA, true, 0); render(); };
+document.getElementById("closeAll").onclick = () => { DATA.c.forEach(b => { b.open = false; (b.c || []).forEach(x => setAll(x, false, 1)); }); render(); };
+render();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+// cuộn để gốc nằm giữa khung nhìn
+requestAnimationFrame(() => { const s = document.getElementById("stage"); s.scrollLeft = (s.scrollWidth - s.clientWidth) / 2; });
+</script>

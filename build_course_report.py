@@ -7,6 +7,7 @@ Cần: matplotlib, python-pptx, playwright (chromium). Đầu ra: projects/khoa-
 from __future__ import annotations
 
 import html
+import json
 import shutil
 from pathlib import Path
 
@@ -21,7 +22,7 @@ from dsc_theme import BASE_CSS, BRAND_STRIP
 ROOT = Path(__file__).resolve().parent
 PROJ = crd.PROJ
 OUT = PROJ / "bao-cao"
-STEM = "Khoa_hoc_chung_khoan_tai_chinh_Facebook_Ads_17-11-2026"
+STEM = "Khoa_hoc_chung_khoan_tai_chinh_Facebook_Ads_22-11-2026"
 CH = "Facebook Ads"
 
 INK, MUTED, LINE, ALT = "#272d2b", "#5b6260", "#d9dcdb", "#f3f4f4"
@@ -36,25 +37,36 @@ E = html.escape
 # ───────────────────────── Nội dung (viết từ số liệu) ─────────────────────────
 
 BRAND_NOTE = {
-    "Da Vinci Academy": "Chạy cùng lúc 3 page, mỗi page một vai trò: page chính đăng video trích từ buổi “Mạn đàm đánh giá tháng” của CEO Nguyễn Việt Hùng rồi mời nhắn tin; page “Sói già đầu tư” tặng lớp học online và tài liệu chứng khoán, Forex miễn phí qua Google Form; page Hồ Chí Minh quảng bá chuỗi 3 buổi chuyên đề và web học tập.",
-    "Đặng Trọng Khang": "Bán chương trình “Chiến lược tích sản cổ phiếu 2026–2027”, chốt bằng form ngay trên Facebook. Nhân 8 mẫu thành 30 QC; nhấn “còn 19 vé miễn phí” và “tài trợ 100% học phí khoá trực tuyến”.",
-    "AYP · Nguyễn Hữu Trí": "Toàn bộ 25 mẫu đều mới trong 14 ngày: thử nhiều câu chuyện khách hàng (lo đám cưới, lo cho con, trả nợ) cho hai chương trình Intelligent Money và The Intelligent Investor, dẫn về landing có form.",
-    "Nguyễn Ngọc Nghĩa": "Khoá “AI Trading” học offline 1 ngày tại hội trường; hứa dùng AI/EA đặt lệnh thay người. Có mẫu đã chạy 43 ngày.",
+    "Da Vinci Academy": "Có 4 page, 3 page đang chạy và mỗi page một vai trò: page chính chạy series video “Nhà đầu tư trưởng thành” (góc “quyền quyết định đang nằm ở điện thoại người khác”) rồi mời nhắn tin; page “Sói già đầu tư” tặng lớp học online và tài liệu miễn phí; page “Viện đào tạo thực hành” mới mở, dẫn về landing đăng ký ở Hà Nội. Page Hồ Chí Minh đã dừng QC.",
+    "Đặng Trọng Khang": "Bán chương trình “Chiến lược tích sản cổ phiếu 2026–2027”, chốt bằng form ngay trên Facebook. Vừa mở page thứ hai “Học đầu tư bài bản” cho chương trình 5 buổi tối online, dẫn về landing. Tổng 9 mẫu nhân thành 36 QC, toàn bộ mới trong 14 ngày.",
+    "AYP · Nguyễn Hữu Trí": "11 mẫu về tài chính, toàn bộ mới trong 14 ngày: thử nhiều câu chuyện khách hàng (lo đám cưới, lo cho con, trả nợ) cho Intelligent Money, The Intelligent Investor và coaching tài chính 1-1, dẫn về landing có form.",
+    "Nguyễn Ngọc Nghĩa": "Khoá “AI Trading” học offline 1 ngày tại hội trường; hứa dùng AI/EA đặt lệnh thay người. Có mẫu đã chạy 47 ngày.",
     "Cole.vn · Quant": "Chuyên đề Quant trading 12 buổi cho nhà đầu tư và người làm IT/Data; mọi mẫu chốt qua Messenger “nhận tư vấn miễn phí”. 3 mẫu đã chạy từ 30 ngày trở lên.",
-    "FlowCap · Trần Hữu Chung": "CEO Fialda quảng cáo khoá FlowCap Foundation: “nhận tài trợ 100% khoá học”, đánh vào thói quen nghe room phím hàng.",
+    "Quang Dũng DBD": "KOL phân tích dòng tiền: một video nội dung (“dụ vào để úp”) để kéo người xem, một mẫu chốt chương trình “Đọc vị dòng tiền qua mẫu hình biểu đồ” 6 buổi online, ưu đãi sinh nhật tới 30%, dẫn về landing.",
+    "Phạm Thành Biên": "Diễn giả tài chính cá nhân (206 nghìn like): bài viết “3 bước tích sản cổ phiếu” dẫn về webinar dòng tiền, và chương trình Richlife thiết kế bản đồ tài chính.",
+    "LITADO · Money Master": "Trường đào tạo digital marketing mở thêm lớp tài chính Money Master K100 (offline Hà Nội, khai giảng 18/12, Early Bird giảm 24%); nhân 2 mẫu thành nhiều QC, chốt qua Messenger.",
+    "ProX Community": "Cộng đồng học đầu tư, mồi là “trải nghiệm 2 tuần ProX Community”.",
+    "AFA Research & Education": "Bán khoá “Phân tích kinh tế vĩ mô ứng dụng trong đầu tư”, lấy chủ đề GDP, lạm phát 2027 làm nội dung kéo người xem.",
     "Bí Mật Đầu Tư CK": "Một mẫu “5 ngày học đầu tư chứng khoán nhân quả” chạy liên tục từ năm 2023; kể chuyện từng thua lỗ.",
-    "LPS": "366 QC kéo tải app LOOP. Khoảng một nửa số mẫu dùng “quà tặng tri thức” (100 video học, tài liệu) làm mồi, đi kèm quà tiền, cổ phiếu và miễn phí giao dịch.",
+    "LPS": "344 QC kéo tải app LOOP. Khoảng một nửa số mẫu dùng “quà tặng tri thức” (100 video học, tài liệu) làm mồi, đi kèm quà tiền, cổ phiếu và miễn phí giao dịch.",
     "DNSE": "Đẩy sự kiện DNSE Future Tech Summit (20/11) và công cụ DNSE MCP (AI phân tích, backtest). Chủ yếu dẫn về bài viết, chưa thu lead trực tiếp.",
+    "FireAnt": "2 page: FireAnt Education quảng bá nền tảng “học đầu tư chứng khoán miễn phí 100%”; FireAnt Invest dùng khoá học miễn phí về bạc phái sinh và bộ 27 chỉ báo làm mồi mở tài khoản hàng hoá phái sinh, kèm nhiều video ngắn kiến thức.",
+    "HDSecurities": "HDS ra mắt HD Academy: lộ trình học theo giai đoạn cho người mới (“Tân binh”), chốt qua Messenger và landing.",
     "SAPP Academy": "Brand lớn nhất, 5 page tách theo sản phẩm (CFA, CFA Online, ACCA, CMA, IFRS). Dùng đủ bộ “mồi” thu lead: học thử miễn phí, ebook và template, tư vấn lộ trình, webinar chuyên môn; nhấn cơ hội vào Big4 và ứng dụng AI.",
     "FTMS Global": "2 page theo cơ sở Hà Nội và Hồ Chí Minh; phần lớn mẫu đã chạy từ 30 ngày trở lên và gần như toàn bộ chốt qua Messenger. Nhấn hợp tác với CFA Institute, IMA và lộ trình pass CFA ngay lần đầu.",
     "AuditCare (ACV)": "Học IFRS bằng tiếng Việt, công bố giá 3.100.000đ, chốt qua Messenger.",
-    "Taca Tax Academy": "Một mẫu khoá báo cáo tài chính và thuế chuyên sâu, đã chạy 315 ngày.",
-    "Fintech · ĐH Bách khoa HN": "Khoá Fintech 76 giờ định hướng AI; 3 trên 4 mẫu đã chạy từ 30 ngày trở lên.",
+    "Taca Tax Academy": "Một mẫu khoá báo cáo tài chính và thuế chuyên sâu, đã chạy 319 ngày.",
+    "Fintech · ĐH Bách khoa HN": "Khoá Fintech 76 giờ định hướng AI; có mẫu đã chạy hơn 100 ngày.",
+    "amiCoach": "Học thử miễn phí CFA, FRM, Financial Modeling và tư vấn 1-1 với giảng viên, chốt qua Messenger.",
+    "FIDT": "Công ty hoạch định tài chính: vừa tuyển sinh khoá nền tảng CFP® cho người làm tài chính, vừa mời khách cá nhân “rà soát sức khoẻ tài chính 1-1”. Có mẫu chạy 129 ngày.",
     "Kolia Phan": "Đầu tư vàng và crypto: mời vào cộng đồng Telegram miễn phí, sau đó giới thiệu khoá “Đầu tư vàng thực chiến”.",
     "ATFX": "Sàn Forex dùng buổi đào tạo trực tuyến và live trade miễn phí, thu lead bằng form ngay trên Facebook.",
-    "ROVA Academy": "Landing bán khoá trading; kể chuyện thua lỗ kèm “link sắp đóng, chỉ còn 50 chỗ”.",
+    "AutoTrade Forex": "Một video thử nghiệm bot giao dịch tự động trên tài khoản nhỏ, nhân thành 31 QC, chốt qua Messenger.",
+    "SFVN": "Môi giới hàng hoá phái sinh: đa số QC là hoa hồng, quà giao dịch; chỉ vài mẫu nói về phương pháp giao dịch.",
+    "Gia Cát Lợi": "Hội thảo “Thực chiến đầu tư hàng hoá”, landing có form, nhấn “chỉ còn 19 vé miễn phí”; mẫu đã chạy 94 ngày.",
+    "Mr SL Trade": "Video “chỉ dành cho ai đang giao dịch Forex”: tặng 3 khoá Price Action “trị giá 100 triệu” để kéo về hoàn phí sàn Exness, XM.",
     "Giraffe Markets": "Sàn Forex cùng đối tác giới thiệu ZEU$ quảng bá masterclass phân tích cơ bản.",
-    "“Chuyên gia chứng khoán: NCB”": "Page 54 nghìn like tự xưng chuyên gia, mời “đầu tư nước ngoài”, hứa lợi nhuận 58%/tuần. Có dấu hiệu lừa đảo; QC đã chạy 1.199 ngày.",
+    "“Chuyên gia chứng khoán: NCB”": "Page 54 nghìn like tự xưng chuyên gia, mời “đầu tư nước ngoài”, hứa lợi nhuận 58%/tuần. Có dấu hiệu lừa đảo; QC đã chạy 1.203 ngày.",
 }
 
 
@@ -74,12 +86,13 @@ def findings(D):
          f"Nhóm chứng chỉ tài chính (CFA, ACCA…) lớn gấp {round(cc['designs'] / max(dt['designs'], 1))} lần, có {cc['d30']} mẫu chạy từ 30 ngày trở lên."),
         ("Một brand thường chạy nhiều fanpage",
          f"SAPP Academy chạy 5 page tách theo sản phẩm ({B['SAPP Academy']['designs']} mẫu); FTMS chạy 2 page theo cơ sở; "
-         f"Da Vinci Academy chạy 3 page nhưng mỗi page chốt một kiểu khác nhau (Messenger, Google Form, web học tập). "
+         f"Da Vinci Academy có 4 page, mỗi page chốt một kiểu khác nhau (Messenger, video, landing). Đặng Trọng Khang và FireAnt cũng vừa tách thêm page thứ hai. "
          "Báo cáo gộp số liệu theo brand để không tính một đối thủ thành nhiều."),
-        ("Đào tạo chứng khoán chốt chủ yếu bằng landing page có form",
-         f"{land}/{dt['designs']} mẫu dẫn về landing có form. Đặng Trọng Khang dùng form ngay trên Facebook; "
-         f"Da Vinci và Cole.vn chốt qua Messenger. Nhóm chứng chỉ dùng Messenger nhiều nhất ({cc['channels']['Nhắn tin Messenger']}/{cc['designs']} mẫu), "
-         "phù hợp khoá giá cao cần tư vấn."),
+        ("Cách chốt khách phụ thuộc thói quen từng brand",
+         f"{land}/{dt['designs']} mẫu dẫn về landing có form, nhưng 11 mẫu trong số đó là của AYP và 7 của Nguyễn Ngọc Nghĩa. "
+         f"Messenger ({dt['channels']['Nhắn tin Messenger']} mẫu) gần như chỉ có Cole.vn và Da Vinci; form ngay trên Facebook chỉ Đặng Trọng Khang dùng. "
+         f"Nhóm chứng chỉ dùng Messenger nhiều nhất ({cc['channels']['Nhắn tin Messenger']}/{cc['designs']} mẫu, chủ yếu FTMS). "
+         "Chưa có số liệu chi phí hay chuyển đổi để biết kênh nào hiệu quả hơn."),
         ("Ưu đãi của nhóm chứng khoán còn mỏng, nhóm chứng chỉ có “mồi” bài bản",
          f"Trong {dt['edu_designs']} mẫu đào tạo chứng khoán, ưu đãi gặp nhiều nhất chỉ là giới hạn suất ({dt['offers']['Giới hạn suất / hạn chót']} mẫu) "
          f"và tư vấn miễn phí ({dt['offers']['Tư vấn lộ trình miễn phí']}); không brand nào công bố học phí. "
@@ -95,16 +108,102 @@ def findings(D):
 
 OPPORTUNITIES = [
     ("Thêm “mồi” rõ ràng trước khi bán khoá",
-     "Buổi học thử, webinar, ebook hay checklist gần như chưa có ở nhóm chứng khoán, trong khi nhóm chứng chỉ (SAPP, FTMS) dùng thường xuyên. Có thể thử một lead magnet cụ thể thay cho lời mời đăng ký chung chung."),
-    ("Chọn một cách chốt nhất quán theo mức giá",
-     "Khoá giá thấp, quyết định nhanh hợp với form ngay trên Facebook hoặc landing; khoá giá cao hợp với Messenger để tư vấn. Da Vinci đang chia 3 page với 3 cách chốt khác nhau, khó đo và khó tối ưu."),
+     "Ở nhóm chứng khoán, học thử miễn phí chỉ có 10 mẫu và 7 trong số đó là của Đặng Trọng Khang; ebook, tài liệu có 5 mẫu. Nhóm chứng chỉ (SAPP, FTMS) dùng các mồi này đều hơn. Đây là hướng nên thử, chưa có số liệu hiệu quả để khẳng định."),
+    ("Tự kiểm chứng cách chốt thay vì chép số đếm",
+     "Số mẫu theo từng kênh chủ yếu phản ánh thói quen của 1–2 brand, không cho biết kênh nào ra học viên tốt hơn. Nên giữ cùng một mồi và chia ngân sách thử landing, form Facebook và Messenger, đo chi phí mỗi lead và tỉ lệ chốt."),
     ("Khai thác góc “tự ra quyết định, không phụ thuộc phím hàng”",
-     "Đây là nỗi đau thật của nhà đầu tư cá nhân nhưng mới vài mẫu sử dụng (Da Vinci, FlowCap, AYP). Nên kết hợp với bằng chứng cụ thể: lộ trình học, bài tập, kết quả học viên có kiểm chứng."),
+     "Đây là nỗi đau thật của nhà đầu tư cá nhân nhưng mới vài mẫu sử dụng (Da Vinci, AYP). Nên kết hợp với bằng chứng cụ thể: lộ trình học, bài tập, kết quả học viên có kiểm chứng."),
     ("Theo dõi các đối thủ đang tăng tốc",
-     "AYP (25 mẫu mới), Đặng Trọng Khang (nhân 8 mẫu thành 30 QC) và Da Vinci (7/8 mẫu mới) đều mới đẩy mạnh trong 2 tuần gần đây. Nên cào lại sau 2–4 tuần để xem mẫu nào còn chạy."),
+     "AYP (11 mẫu khoá tài chính, toàn bộ mới), Đặng Trọng Khang (9 mẫu nhân thành 36 QC, mở thêm page thứ hai) và FireAnt (khoá học miễn phí, 10/12 mẫu mới) đều mới đẩy mạnh trong 2 tuần gần đây. Nên cào lại sau 2–4 tuần để xem mẫu nào còn chạy."),
     ("Giữ thông điệp an toàn",
      "Tránh hứa lợi nhuận hay “thu nhập cao” như một số page Forex và page có dấu hiệu lừa đảo. Thông điệp về kỹ năng, phương pháp và quản trị rủi ro vừa an toàn vừa tạo khác biệt."),
 ]
+
+# ── Landing page: đọc từ projects/<project>/landing/deep (landing_deep.py), nội dung viết tay sau khi đọc từng trang ──
+LANDING_PATTERNS = [
+    ("Đa số dùng “học miễn phí” làm mồi, bán khoá sau",
+     "4/7 brand đào tạo chứng khoán có landing mời học miễn phí hoặc gần như miễn phí: Đặng Trọng Khang (2 landing), Da Vinci, "
+     "Phạm Thành Biên, Nguyễn Ngọc Nghĩa (vé 68–100 nghìn). Đặng Trọng Khang ghi thẳng trong FAQ: sau 5 buổi miễn phí sẽ giới thiệu khoá chuyên sâu."),
+    ("Rất ít landing công bố giá",
+     "Chỉ Quang Dũng DBD (gốc 13,7 triệu, ưu đãi còn 7,9–9,9 triệu) và AFA (9,8 triệu) ghi học phí, và cả hai đều kèm ưu đãi có hạn. "
+     "AYP, SAPP giấu giá, bắt điền form để tư vấn viên gọi."),
+    ("Neo giá trị “trị giá 5 triệu” và tạo khẩn cấp",
+     "Da Vinci tặng “khoá cơ bản trị giá 5.000.000đ”, Nguyễn Ngọc Nghĩa “khoá giá trị 5 triệu chỉ thu phí hội trường”, DBD tặng khoá “trị giá 5.000.000đ”. "
+     "Đồng hồ đếm ngược, “vé miễn phí còn…”, “phòng Zoom giới hạn”, hạn ưu đãi xuất hiện ở hầu hết landing."),
+    ("Form ngắn cho mồi miễn phí, form dài cho khoá đắt",
+     "Landing miễn phí chỉ hỏi 2–4 trường (tên, SĐT/Zalo, email, khu vực). AYP và SAPP hỏi 7–10 trường (mong đợi, công việc, từng học chưa…) "
+     "để lọc lead trước khi tư vấn."),
+    ("Kéo lead ra khỏi Facebook ngay sau đăng ký",
+     "Link học gửi qua SMS và email, mời vào nhóm Zalo kín (Đặng Trọng Khang, Phạm Thành Biên, Da Vinci). Đây là kênh nuôi lead để bán khoá trả phí."),
+    ("Niềm tin dựa vào con số và cam kết",
+     "“100.000+ nhà đầu tư” (Đặng Trọng Khang), “10.000+ học viên” (Da Vinci), hoàn tiền 100% sau 1 tháng (DBD), học lại miễn phí sau 6 tháng (AYP), "
+     "“không phím hàng, không khuyến nghị, không hưởng phí môi giới” (AYP, HDS)."),
+]
+LANDINGS = [  # id = tên file trong landing/deep; seg để nhóm
+    {"id": "74cb88a6ac5d", "brand": "Đặng Trọng Khang", "seg": "dt", "host": "dangtrongkhang.com",
+     "product": "“5 ngày Tự do tài chính cùng Chứng khoán Nhân quả”, 5 buổi tối online 20:00–22:00",
+     "price": "Miễn phí 100%",
+     "offer": ["Quà tặng miễn phí và “loạt ưu đãi khác” khi đăng ký", "Có replay trong 24 giờ, đồng hồ đếm ngược",
+               "Uy tín: 20+ năm, 100.000+ nhà đầu tư", "FAQ nói rõ sau 5 ngày sẽ giới thiệu khoá chuyên sâu Causality Investing"],
+     "form": "3 trường: tên, SĐT, email", "after": "Link học qua SMS và email"},
+    {"id": "8236fd0cf968", "brand": "Đặng Trọng Khang", "seg": "dt", "host": "deveerich.com",
+     "product": "“Chiến lược tích sản cổ phiếu 2026–2027”, live Zoom 19:30 ngày 25/11",
+     "price": "Vé miễn phí",
+     "offer": ["“Vé miễn phí còn…” kèm đồng hồ đếm", "Phòng Zoom giới hạn số lượng", "Diễn giả: chủ tịch Minh Bảo Tín, cộng đồng 115.000+ người"],
+     "form": "4 trường: tên, email, SĐT, khu vực (HCM/HN)", "after": "Vé gửi qua email, SMS; vào nhóm Zalo kín"},
+    {"id": "d1ce57fa29be", "brand": "Da Vinci Academy", "seg": "dt", "host": "hocdautu.davinci.edu.vn",
+     "product": "Tặng khoá “Đầu tư chứng khoán cơ bản”, học tại Hà Nội",
+     "price": "Miễn phí (neo “trị giá 5.000.000đ”)",
+     "offer": ["Form bật ngay màn hình đầu", "Giảng viên 25 năm, cựu GĐ phân tích Vàng 10 Techcombank",
+               "10.000+ học viên, 3 chi nhánh", "Quyền lợi học viên: nhóm Facebook/Zalo, gặp mặt, hỗ trợ 1-1"],
+     "form": "4 trường: tên, email, SĐT, thành phố", "after": "Tư vấn qua Zalo"},
+    {"id": "c25af9e99543", "brand": "Quang Dũng DBD", "seg": "dt", "host": "sach.ckdungdbd.com",
+     "product": "“Đọc vị dòng tiền qua mẫu hình biểu đồ”, 6 buổi Zoom, khai giảng 05/12",
+     "price": "Gốc 13.700.000đ → ưu đãi 7.868.000–9.868.000đ (tới 30%)",
+     "offer": ["Ưu đãi sinh nhật có hạn, đồng hồ đếm ngược; combo 2 khoá", "Tặng khoá “Nhận diện đỉnh đáy” trị giá 5 triệu (“chỉ tặng không bán”) và sách",
+               "3–5 buổi thực hành, hỗ trợ 1-1, cộng đồng 4 tháng", "Cam kết hoàn tiền 100% sau 1 tháng nếu không nhận được giá trị"],
+     "form": "Tên, SĐT, email, địa chỉ nhận sách, chọn gói", "after": "Chốt mua ngay trên trang"},
+    {"id": "8ac401bea179", "brand": "Phạm Thành Biên", "seg": "dt", "host": "event.phamthanhbien.com",
+     "product": "Webinar dòng tiền, 4 buổi tối 23–26/11 online (thêm landing Richlife ngày 12/12)",
+     "price": "Giữ chỗ miễn phí",
+     "offer": ["Nội dung: công thức 3 bể, tích sản, phương pháp “vùng hội tụ kỹ thuật”", "Nhiều nút “Nhận chỗ miễn phí” dọc trang"],
+     "form": "4 trường: tên, SĐT/Zalo, email, khu vực", "after": "Nhóm Zalo riêng nhắc lịch và gửi tài liệu"},
+    {"id": "5482be7e8f65", "brand": "Nguyễn Ngọc Nghĩa", "seg": "dt", "host": "svcorp.vn",
+     "product": "“AI Trading”, học offline 1 ngày 8:00–17:00 (HCM 25/11, HN 02/12)",
+     "price": "Vé 68.000–100.000đ (“phí thuê hội trường”)",
+     "offer": ["Neo “khoá học giá trị 5 triệu”, nhấn “không phải khoá học phễu”", "Mỗi người chỉ đăng ký 1 lần",
+               "Không hoàn phí, không bảo lưu", "Có mục cảnh báo mạo danh mời ủy thác"],
+     "form": "2 trường: tên, SĐT/Zalo", "after": "Liên hệ qua Zalo"},
+    {"id": "fe5bfc193e1e", "brand": "AYP · Nguyễn Hữu Trí", "seg": "dt", "host": "ayp.vn",
+     "product": "“The Intelligent Investor”: Good Company Cheap Price (và landing Intelligent Money)",
+     "price": "Không công bố (FAQ có trả góp học phí)",
+     "offer": ["Học lại miễn phí sau 6 tháng thực hành, Q&A 1-1, ôn tập trên cộng đồng",
+               "“Không phím hàng, không khuyến nghị, không hưởng phí môi giới”", "224 đánh giá Google 5,0"],
+     "form": "9 trường: hỏi mong đợi, từng học AYP chưa, Zalo…", "after": "Tư vấn viên gọi đặt lịch tư vấn"},
+    {"id": "ce70ffd2cda8", "brand": "AFA Research & Education", "seg": "dt", "host": "afa.edu.vn",
+     "product": "“Phân tích kinh tế vĩ mô ứng dụng trong đầu tư” (MAI), 6 module",
+     "price": "9.800.000đ",
+     "offer": ["Giảm 5% khi đóng sớm (đến 20/11)", "Ưu đãi nhóm từ 3 người", "Tặng 45 ngày dùng WiChart"],
+     "form": "Chọn địa điểm, ngày khai giảng, gói học phí", "after": "Đăng ký thẳng trên trang"},
+    {"id": "c34b66ab157d", "brand": "HDSecurities", "seg": "ctck", "host": "hdacademy.hdbs.vn",
+     "product": "HD Academy: lộ trình 4 cấp độ từ F0, AI Mentor 24/7",
+     "price": "Miễn phí trọn đời, cần mở tài khoản HD Invest (eKYC 3 phút)",
+     "offer": ["Học qua video ngắn, thực hành dữ liệu thật", "Tích HD Points đổi ưu đãi", "Thông điệp “nói không với phím hàng”"],
+     "form": "Không có form, nút mở tài khoản / tải app", "after": "Vào app HD Invest"},
+    {"id": "cfd55ec91ea1", "brand": "SAPP Academy", "seg": "cc", "host": "sapp.edu.vn",
+     "product": "Học thử CFA online trên hệ thống học thật (LMS Pro)",
+     "price": "Học thử miễn phí, không rút gọn",
+     "offer": ["Nhận tài khoản ngay sau đăng ký", "Theo dõi tiến độ, quiz từng module", "Trang khoá CMA: “ưu đãi tới 32% học phí gốc”, form 10 trường"],
+     "form": "Đăng ký tài khoản học thử", "after": "Tư vấn viên chăm sóc qua LMS, Zalo"},
+    {"id": "d531c13c3c0d", "brand": "Kolia Phan", "seg": "fx", "host": "koliaphan.com",
+     "product": "“Đầu tư vàng thực chiến”",
+     "price": "10.000.000đ → 7.000.000đ (giảm 30%)",
+     "offer": ["Tặng 3 tháng cộng đồng Pro Vàng / VIP Tích sản, cẩm nang MA", "Ghi “tỷ lệ thắng 86–90%”, “lợi nhuận kỳ vọng $300–2.000+/tháng”: dạng hứa hẹn lợi nhuận nên tránh"],
+     "form": "Tên, SĐT Zalo/Telegram, email, chọn khoá", "after": "Hỗ trợ qua Zalo/Telegram"},
+]
+LANDING_NONE = ("Không có landing (chốt qua Messenger hoặc form trên Facebook): Cole.vn Quant, LITADO, page chính Da Vinci, LPS (dẫn về app). "
+                "Landing của FireAnt Education chặn trình duyệt tự động nên không đọc được. AYP còn chạy 16 mẫu QC cho khoá kỹ năng mềm, hướng nghiệp: không đưa vào đây và không tính vào số liệu.")
+
 
 GLOSSARY = [
     (CH, "Quảng cáo trên Facebook, Instagram, Messenger, lấy từ Meta Ad Library (thư viện quảng cáo công khai của Meta), thị trường Việt Nam, chỉ QC đang chạy."),
@@ -248,6 +347,17 @@ tr.seg td{background:var(--surface-alt);font-weight:700;font-size:13px}
 .opp h3{margin:0 0 6px}
 .opp p{margin:0;font-size:14px}
 .warn{border:1px solid var(--hairline);padding:12px 14px;background:var(--surface-alt);font-size:14px}
+.lps{display:grid;grid-template-columns:1fr;gap:0}
+.lp{display:grid;grid-template-columns:170px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line);break-inside:avoid}
+.lp .shot img{width:170px;height:auto;max-height:368px;object-fit:cover;object-position:top;border:1px solid var(--line);display:block}
+.lp .shot a{font-size:12.5px;display:block;margin-top:6px}
+.lp h3{margin:0 0 2px;font-size:16px}
+.lp .host{font-size:12.5px;color:var(--ink-muted)}
+.lp dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 12px;margin:10px 0 0;font-size:14px}
+.lp dt{color:var(--ink-muted);font-weight:600}.lp dd{margin:0}
+.lp ul{margin:0;padding-left:18px}
+.price{font-weight:700}
+@media (max-width:640px){.lp{grid-template-columns:110px minmax(0,1fr)}.lp .shot img{width:110px}.lp dl{grid-template-columns:1fr}}
 @media (max-width:640px){.glo{grid-template-columns:1fr}.glo dt{border-bottom:0;padding-bottom:0}th.v{height:120px}}
 @media print{
   @page{size:A4;margin:14mm 12mm}
@@ -308,6 +418,32 @@ def brand_block(b):
             + tags + pages_tbl + f"<div class='cards'>{cards}</div></div>")
 
 
+def landing_html():
+    seg_title = {"dt": "Đào tạo đầu tư chứng khoán", "ctck": "Công ty chứng khoán dùng đào tạo", "cc": "Tham chiếu: chứng chỉ tài chính", "fx": "Tham chiếu: Forex / vàng"}
+    pat = "".join(f"<div><h3>{E(t)}</h3><p>{E(p)}</p></div>" for t, p in LANDING_PATTERNS)
+    rows = "".join(f"<tr><td><b>{E(l['brand'])}</b></td><td>{E(l['product'])}</td><td class='price'>{E(l['price'])}</td><td>{E(l['form'])}</td></tr>"
+                   for l in LANDINGS if l["seg"] == "dt")
+    cards = []
+    for seg in ("dt", "ctck", "cc", "fx"):
+        ll = [l for l in LANDINGS if l["seg"] == seg]
+        if not ll:
+            continue
+        cards.append(f"<h3 style='margin-top:28px'>{E(seg_title[seg])}</h3><div class='lps'>")
+        for l in ll:
+            j = json.loads((PROJ / f"landing/deep/{l['id']}.json").read_text(encoding="utf-8"))
+            offer = "".join(f"<li>{E(o)}</li>" for o in l["offer"])
+            cards.append(
+                f"<div class='lp'><div class='shot'><a href='landing/deep/{l['id']}_full.jpg'><img src='landing/deep/{l['id']}_top.jpg' alt='Màn hình đầu landing {E(l['brand'])}'></a>"
+                f"<a href='landing/deep/{l['id']}_full.jpg'>Xem toàn trang</a><a href='{E(j['final_url'])}'>Mở trang gốc</a></div>"
+                f"<div><h3>{E(l['brand'])}</h3><div class='host'>{E(l['host'])}</div><dl>"
+                f"<dt>Bán gì</dt><dd>{E(l['product'])}</dd><dt>Giá</dt><dd class='price'>{E(l['price'])}</dd>"
+                f"<dt>Offer</dt><dd><ul>{offer}</ul></dd><dt>Form</dt><dd>{E(l['form'])}</dd><dt>Sau đăng ký</dt><dd>{E(l['after'])}</dd></dl></div></div>")
+        cards.append("</div>")
+    return (f"<div class='opp'>{pat}</div>"
+            f"<h3 style='margin-top:28px'>So sánh nhanh: nhóm đào tạo chứng khoán</h3><div class='tbl'><table><thead><tr><th>Brand</th><th>Bán gì</th><th>Giá</th><th>Form</th></tr></thead><tbody>{rows}</tbody></table></div>"
+            + "".join(cards) + f"<p class='note'>{E(LANDING_NONE)}</p>")
+
+
 def build_html(D, path):
     S = {s["key"]: s for s in D["segments"]}
     T = D["totals"]
@@ -351,7 +487,7 @@ def build_html(D, path):
     toc = "".join(f"<a href='#{i}'>{E(t)}</a>" for i, t in [
         ("tom-tat", "Tóm tắt"), ("doc", "Cách đọc"), ("buc-tranh", "Bức tranh chung"), ("brand", "Brand nhiều page"),
         ("pheu", "Phễu & cách chốt"), ("uu-dai", "Ưu đãi"), ("thong-diep", "Thông điệp"), ("dinh-dang", "Định dạng"),
-        ("ho-so", "Hồ sơ từng brand"), ("goi-y", "Gợi ý"), ("phu-luc", "Phụ lục")])
+        ("ho-so", "Hồ sơ từng brand"), ("landing", "Landing page"), ("goi-y", "Gợi ý"), ("phu-luc", "Phụ lục")])
     doc = f"""<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Khoá học chứng khoán trên Facebook Ads</title><style>{CSS}</style></head><body>
 {BRAND_STRIP}<div class="wrap">
@@ -385,7 +521,7 @@ def build_html(D, path):
 <p class="lead">Ưu đãi được phân loại lại cho ngành đào tạo (học thử, tài liệu, tư vấn, học phí…) và chỉ tính trên QC nói về đào tạo. Ô càng đậm, tỉ lệ mẫu có ưu đãi đó càng cao.</p>
 <h3>Theo nhóm</h3>{html_heat_table('Nhóm', heat_rows(seg_main, D['offers_order'], 'offers'), D['offers_order'])}
 <h3>Theo brand</h3>{html_heat_table('Brand', brand_rows_o, D['offers_order'], seg_label)}
-<p class="note">Không brand đào tạo chứng khoán nào công bố học phí trong QC. “Tài trợ 100% học phí” (Đặng Trọng Khang, FlowCap) được xếp vào ưu đãi học phí.</p>
+<p class="note">Không brand đào tạo chứng khoán nào công bố học phí trong QC. “Tài trợ 100% học phí” (Đặng Trọng Khang) được xếp vào ưu đãi học phí.</p>
 
 <h2 id="thong-diep" class="pb">5. Thông điệp chính</h2>
 <p class="lead">Mỗi mẫu có thể mang nhiều thông điệp. Bảng cho biết tỉ lệ mẫu (về đào tạo) có nhắc tới từng góc tiếp cận.</p>
@@ -394,19 +530,23 @@ def build_html(D, path):
 
 <h2 id="dinh-dang">6. Định dạng creative</h2>
 <div class="tbl"><table><thead><tr><th>Brand</th><th class="n">Mẫu</th><th class="n">Video</th><th class="n">Độ dài video (trung vị)</th><th>Tỉ lệ khung phổ biến</th><th class="n">Mẫu lâu nhất (ngày)</th></tr></thead><tbody>{fmt_rows}</tbody></table></div>
-<p class="note">Các KOL chứng khoán dùng video dài 2–3,5 phút (trích buổi giảng, chia sẻ); LPS và ATFX dùng video ngắn khoảng 10 giây.</p>
+<p class="note">Các KOL chứng khoán dùng video dài 1–4 phút (trích buổi giảng, chia sẻ); LPS và ATFX dùng video ngắn khoảng 10 giây.</p>
 
 <h2 id="ho-so" class="pb">7. Hồ sơ từng brand</h2>
 <p class="note">Mỗi brand hiện tối đa 4 mẫu, ưu tiên mẫu về đào tạo chạy lâu nhất. Bấm vào mẫu để mở trên Meta Ad Library.</p>
 {profiles}
 
-<h2 id="goi-y" class="pb">8. Gợi ý cho chiến dịch khoá học chứng khoán</h2>
+<h2 id="landing" class="pb">8. Landing page: họ bán gì, offer gì</h2>
+<p class="lead">Mở từng link đích của QC bằng trình duyệt điện thoại, chụp toàn trang và đọc nội dung (ngày {D['snapshot']}). Bấm vào ảnh để xem toàn trang.</p>
+{landing_html()}
+
+<h2 id="goi-y" class="pb">9. Gợi ý cho chiến dịch khoá học chứng khoán</h2>
 <p class="note">Đây là các hướng nên thử, rút ra từ quan sát quảng cáo đang chạy, chưa có số liệu hiệu quả (chi phí, tỉ lệ chuyển đổi) của đối thủ.</p>
 <div class="opp">{opp}</div>
 
 <h2 id="phu-luc">Phụ lục · Phương pháp và giới hạn</h2>
 <ul>
-<li>Nguồn: Meta Ad Library, Việt Nam, chỉ QC đang chạy, cào ngày {D['snapshot']}. Danh sách đối thủ lấy từ 3 lượt tìm theo hơn 40 cụm từ khoá (khoá học chứng khoán, phân tích kỹ thuật, phân tích cơ bản, tài chính, CFA…), sau đó lọc tay.</li>
+<li>Nguồn: Meta Ad Library, Việt Nam, chỉ QC đang chạy, cào ngày {D['snapshot']}. Danh sách đối thủ lấy từ 4 lượt tìm theo hơn 90 cụm từ khoá (khoá học chứng khoán, phân tích kỹ thuật, price action, tích sản, phím hàng, tự do tài chính, CFA…), sau đó lọc tay.</li>
 <li>Chỉ giữ fanpage có ít nhất một QC nói về khoá học hoặc đào tạo. Tìm kiếm của Ad Library không ổn định giữa các lượt, nên danh sách có thể còn sót đơn vị nhỏ.</li>
 <li>Mẫu thiết kế được gộp theo hình ảnh hoặc video giống nhau. Cách chốt và tầng phễu được suy ra từ nút CTA và trang đích (đã mở {len(D.get('landings', [])) or 'các'} link bằng trình duyệt mobile).</li>
 <li>Ưu đãi và thông điệp được gắn nhãn bằng quy tắc từ khoá trên caption, đã đối chiếu mẫu thủ công; một số nhãn có thể sót hoặc nhầm ở mức nhỏ.</li>
@@ -472,7 +612,7 @@ def slide_specs(D):
                      "text": F[0][1]}]})
     add({"title": "Ai đang chạy nhiều nhất", "kicker": f"Số mẫu thiết kế mỗi brand đang chạy trên {CH}; phần sọc là mẫu mới trong 14 ngày.",
          "blocks": [{"type": "image", "x": 140, "y": 130, "w": 1000, "h": 560, "src": "bao-cao/charts/brands.png"}]})
-    multi = [b for b in D["brands"] if len(b["pages"]) > 1 and b["brand"] in ("Da Vinci Academy", "SAPP Academy", "FTMS Global")]
+    multi = [b for b in D["brands"] if len(b["pages"]) > 1 and b["brand"] in ("Da Vinci Academy", "Đặng Trọng Khang", "FireAnt")]
     blocks, y = [], 128
     for b in multi:
         rows = [[p["name"][:46], p["role"], p["ads"], p["designs"], p["new14"], p["channel"]] for p in b["pages"]]
@@ -491,17 +631,21 @@ def slide_specs(D):
         rows = heat_rows(seg_main, keys, field)
         add({"title": f"{kind} theo nhóm", "kicker": ftxt,
              "blocks": [{"type": "heat", "x": 60, "y": 170, "w": 1160, "h": 470, "keys": keys, "rows": rows, "first": 300}]})
-        bb = [b for b in D["brands"] if b["seg"] in ("dt", "ctck") and b["edu_designs"]]
-        add({"title": f"{kind}: nhóm đào tạo chứng khoán và CTCK, theo brand",
-             "kicker": "Tỉ lệ mẫu về đào tạo có nhắc tới từng mục. Ô càng đậm, tỉ lệ càng cao.",
-             "blocks": [{"type": "heat", "x": 60, "y": 150, "w": 1160, "h": 540, "keys": keys,
-                         "rows": heat_rows(bb, keys, field), "first": 300}]})
+        for seg in ("dt", "ctck"):  # mỗi nhóm một slide để bảng không tràn
+            bb = [b for b in D["brands"] if b["seg"] == seg and b["edu_designs"]]
+            add({"title": f"{kind}: {_seg_name(D, seg).lower()}, theo brand",
+                 "kicker": "Tỉ lệ mẫu về đào tạo có nhắc tới từng mục. Ô càng đậm, tỉ lệ càng cao.",
+                 "blocks": [{"type": "heat", "x": 60, "y": 150, "w": 1160, "h": 540, "keys": keys,
+                             "rows": heat_rows(bb, keys, field), "first": 300}]})
     fmt = [[b["brand"], b["designs"], f"{b['video_pct']}%", f"{b['video_median_s']} giây" if b["video_median_s"] else "–",
             b["aspect"] or "–", b["max_days"]] for b in main_brands(D)]
-    add({"title": "Định dạng creative", "kicker": "KOL chứng khoán dùng video dài 2–3,5 phút (trích buổi giảng); LPS, ATFX dùng video ngắn khoảng 10 giây.",
-         "blocks": [{"type": "table", "x": 60, "y": 128, "w": 1160, "h": 540, "cols": [380, 110, 120, 220, 180, 150],
-                     "header": ["Brand", "Mẫu", "Video", "Độ dài video (trung vị)", "Tỉ lệ khung", "Mẫu lâu nhất (ngày)"],
-                     "rows": fmt, "size": 11, "num_from": 1, "compact": True}]})
+    per = 16  # số dòng mỗi slide để bảng không tràn
+    for i in range(0, len(fmt), per):
+        add({"title": "Định dạng creative" + (f" ({i // per + 1})" if len(fmt) > per else ""),
+             "kicker": "KOL chứng khoán dùng video dài 1–4 phút (trích buổi giảng); LPS, ATFX dùng video ngắn khoảng 10 giây.",
+             "blocks": [{"type": "table", "x": 60, "y": 128, "w": 1160, "h": 540, "cols": [380, 110, 120, 220, 180, 150],
+                         "header": ["Brand", "Mẫu", "Video", "Độ dài video (trung vị)", "Tỉ lệ khung", "Mẫu lâu nhất (ngày)"],
+                         "rows": fmt[i:i + per], "size": 11, "num_from": 1, "compact": True}]})
     order = [("dt", "Hồ sơ: đào tạo đầu tư chứng khoán"), ("ctck", "Hồ sơ: CTCK dùng đào tạo"),
              ("cc", "Hồ sơ: chứng chỉ & nghề tài chính"), ("fx", "Hồ sơ: tham chiếu Forex / vàng")]
     for seg, title in order:
@@ -510,12 +654,22 @@ def slide_specs(D):
             chunk = bb[i:i + 3]
             add({"title": title + (f" ({i // 3 + 1})" if len(bb) > 3 else ""),
                  "blocks": [{"type": "profiles", "x": 60, "y": 120, "w": 1160, "h": 545, "brands": chunk}]})
+    add({"title": "Landing page: 6 điểm chung", "kicker": "Đọc toàn trang link đích của QC bằng trình duyệt điện thoại.",
+         "blocks": [{"type": "findings", "x": 60, "y": 130, "w": 1160, "h": 560, "items": LANDING_PATTERNS}]})
+    ll = [l for l in LANDINGS if l["seg"] == "dt"]
+    for i in range(0, len(ll), 2):
+        add({"title": f"Landing: đào tạo đầu tư chứng khoán ({i // 2 + 1}/{(len(ll) + 1) // 2})",
+             "blocks": [{"type": "landings", "x": 60, "y": 110, "w": 1160, "h": 570, "items": ll[i:i + 2]}]})
+    ll = [l for l in LANDINGS if l["seg"] != "dt"]
+    for i in range(0, len(ll), 2):
+        add({"title": f"Landing: CTCK và tham chiếu ({i // 2 + 1}/{(len(ll) + 1) // 2})", "kicker": LANDING_NONE if i == 0 else None,
+             "blocks": [{"type": "landings", "x": 60, "y": 150, "w": 1160, "h": 530, "items": ll[i:i + 2]}]})
     add({"title": "Gợi ý cho chiến dịch khoá học chứng khoán",
          "kicker": "Hướng nên thử rút ra từ QC đang chạy; chưa có số liệu hiệu quả của đối thủ.",
          "blocks": [{"type": "findings", "x": 60, "y": 150, "w": 1160, "h": 540, "items": OPPORTUNITIES}]})
     add({"title": "Phụ lục: phương pháp, giới hạn, loại trừ", "blocks": [
         {"type": "bullets", "x": 60, "y": 120, "w": 1160, "h": 250, "size": 14, "items": [
-            f"Nguồn: Meta Ad Library, Việt Nam, chỉ QC đang chạy, cào ngày {D['snapshot']}; hơn 40 cụm từ khoá, lọc tay.",
+            f"Nguồn: Meta Ad Library, Việt Nam, chỉ QC đang chạy, cào ngày {D['snapshot']}; hơn 90 cụm từ khoá qua 4 lượt tìm, lọc tay.",
             "Chỉ giữ fanpage có ít nhất một QC nói về khoá học/đào tạo. Tìm kiếm của Ad Library không ổn định nên có thể sót đơn vị nhỏ.",
             "Tỉ lệ tính theo mẫu thiết kế. Cách chốt, tầng phễu suy ra từ CTA và trang đích. Ưu đãi, thông điệp gắn nhãn bằng quy tắc từ khoá, đã đối chiếu mẫu.",
             "Số ngày chạy và số QC nhân bản là tín hiệu quan sát, không phải bằng chứng ngân sách hay hiệu quả.",
@@ -542,6 +696,11 @@ body{margin:0;background:#fff}
 .blk{position:absolute}
 .blk table{font-size:inherit}.blk th,.blk td{padding:6px 8px}
 .blk img{width:100%;height:100%;object-fit:contain}
+.lcs{display:grid;grid-template-columns:repeat(2,1fr);gap:36px;height:100%}
+.lc{display:grid;grid-template-columns:230px 1fr;gap:18px;border-top:3px solid var(--gunmetal);padding-top:12px;font-size:13.5px;line-height:1.45}
+.lc img{width:230px;height:498px;object-fit:cover;object-position:top;border:1px solid var(--line)}
+.lc h3{margin:0;font-size:17px}.lc .hs{color:var(--ink-muted);font-size:12px;margin-bottom:10px}
+.lc p{margin:0 0 8px}.lc ul{margin:0 0 8px;padding-left:16px}.lc li{margin-bottom:5px}
 .blk.cp th,.blk.cp td{padding:4px 8px}
 .fi{display:grid;grid-template-columns:36px 1fr;gap:4px 14px;margin-bottom:14px}
 .fi .n{font-weight:700;background:var(--lime-green);color:var(--gunmetal);width:30px;height:30px;display:grid;place-items:center}
@@ -605,6 +764,14 @@ def slide_html(spec, i, n):
                            + "".join(f"<td class='h{' z' if not p else ''}' style='background:{heat_bg(p)};font-size:12px'>{str(p) + '%' if p else '–'}</td>" for _, p in r[2:])
                            + "</tr>" for r in b["rows"])
             out.append(f"<div class='blk' style='{st}'><table style='table-layout:fixed;width:100%'>{head}<tbody>{body}</tbody></table></div>")
+        elif t == "landings":
+            cards = []
+            for l in b["items"]:
+                offer = "".join(f"<li>{E(o)}</li>" for o in l["offer"])
+                cards.append(f"<div class='lc'><img src='../landing/deep/{l['id']}_top.jpg' alt=''><div><h3>{E(l['brand'])}</h3>"
+                             f"<div class='hs'>{E(l['host'])}</div><p><b>Bán:</b> {E(l['product'])}</p><p><b>Giá:</b> {E(l['price'])}</p>"
+                             f"<ul>{offer}</ul><p><b>Form:</b> {E(l['form'])}</p><p><b>Sau đăng ký:</b> {E(l['after'])}</p></div></div>")
+            out.append(f"<div class='blk' style='{st}'><div class='lcs'>{''.join(cards)}</div></div>")
         elif t == "profiles":
             cards = []
             for br in b["brands"]:
@@ -768,6 +935,23 @@ def build_pptx(specs, path):
                 table(s, b)
             elif t == "heat":
                 table(s, b, heat=True)
+            elif t == "landings":
+                cw = (b["w"] - 36) / 2
+                ih = min(498, b["h"] - 20)
+                for k, l in enumerate(b["items"]):
+                    x = b["x"] + k * (cw + 36)
+                    rect(s, x, b["y"], cw, 3, INK)
+                    f = PROJ / f"landing/deep/{l['id']}_top.jpg"
+                    if f.exists():
+                        s.shapes.add_picture(str(f), px(x), px(b["y"] + 14), width=px(ih * 390 / 844), height=px(ih))
+                    tx = x + ih * 390 / 844 + 18
+                    tb(s, tx, b["y"] + 12, x + cw - tx, b["h"] - 14,
+                       [[(l["brand"], True, 14, INK)], [(l["host"], False, 9.5, MUTED)],
+                        [("Bán: ", True, 11, INK), (l["product"], False, 11, INK)],
+                        [("Giá: ", True, 11, INK), (l["price"], False, 11, INK)]]
+                       + [[("• " + o, False, 11, INK)] for o in l["offer"]]
+                       + [[("Form: ", True, 11, INK), (l["form"], False, 11, INK)],
+                          [("Sau đăng ký: ", True, 11, INK), (l["after"], False, 11, INK)]])
             elif t == "profiles":
                 cw = (b["w"] - 36) / 3
                 for k, br in enumerate(b["brands"]):

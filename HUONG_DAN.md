@@ -116,6 +116,12 @@ python3 competitor_intel.py analyze --project chung-khoan
 ```
 Script mở từng link bằng trình duyệt mobile, ghi URL cuối sau redirect, loại trang (App Store / Google Play / landing có form / bài viết / Google Form / Zalo…), có Meta Pixel hay không, và chụp màn hình vào `landing/`. Có cache 7 ngày.
 
+**Đọc sâu landing (offer, giá, form):** `landing_crawl.py` chỉ chụp màn hình đầu. Muốn xem đối thủ bán gì, giá bao nhiêu, form hỏi gì thì chạy:
+```bash
+python3 landing_deep.py --project khoa-hoc-chung-khoan --urls urls.tsv   # mỗi dòng: url<TAB>nhãn
+```
+Script chụp toàn trang trên giao diện điện thoại (`landing/deep/<id>_full.jpg`), màn hình đầu (`<id>_top.jpg`) và lưu chữ, form, nút, giá tìm thấy vào `<id>.json`. Nội dung offer trong báo cáo khoá học (`LANDINGS` trong `build_course_report.py`) được viết tay sau khi đọc các file này.
+
 **Loại chiến dịch (suy luận):** Ad Library không công bố objective, nên script suy ra từ nút CTA, link và trang đích thật. Kết quả gồm Cài app, Lead form trên FB, Lead/chuyển đổi trên web, Tin nhắn, Traffic (landing / bài viết / form ngoài), Like trang và Tương tác / video view. Mỗi loại được gán vào một tầng phễu (Nhận biết / Cân nhắc / Chuyển đổi). Cột `objective_confidence` trong `all_ads.csv` ghi mức tin cậy cho từng QC. Report có sơ đồ luồng "chủ đề → loại chiến dịch → trang đích" cho từng đối thủ.
 
 **Mẫu và biến thể:** report đếm theo **mẫu** (một thiết kế), không đếm theo từng QC. Hai QC cùng fanpage có thumbnail gần giống nhau được tính là một mẫu, dù caption, nút bấm hay đích khác nhau. Các bản chỉ đổi chữ hoặc con số trên ảnh là **biến thể** của mẫu đó. Với video, script so 2 khung hình (30% và 70% thời lượng), vì khung đầu thường trống. Kết quả nằm ở cột `asset_id` (mẫu) và `variant_id` (biến thể) trong `all_ads.csv`.
