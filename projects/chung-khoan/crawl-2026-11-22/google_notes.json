@@ -1,0 +1,40 @@
+{
+  "_note": "Nhận xét giới hạn trong snapshot; số liệu lấy từ bảng tự tính. Không suy ra CPA, ngân sách hoặc campaign type từ nhãn nền tảng.",
+  "_updated": "29/10/2026",
+  "Top 10": {
+    "1": [
+      "Số creative phản ánh quy mô triển khai quan sát được. Cần đọc cùng số mẫu và độ phủ tài khoản; không dùng để suy ra thị phần hoặc mức cạnh tranh đấu giá."
+    ],
+    "2": [
+      "Nhãn Search, YouTube, Maps và Shopping cho biết nơi creative được ghi nhận. Loại chiến dịch chỉ là suy luận; dữ liệu không xác nhận từ khoá bid hoặc mục tiêu tối ưu."
+    ],
+    "5": [
+      "SSI có tài sản video được duy trì lâu, gồm hướng dẫn mở tài khoản. Đây là nguồn tham khảo cấu trúc; chưa biết chi phí hoặc chất lượng khách hàng. Mẫu gắn ưu đãi và mẫu evergreen cần được so riêng."
+    ]
+  },
+  "Ngoài Top 10": {
+    "xu": [
+      "So sánh nhịp xuất hiện creative trong cùng cửa sổ thời gian. Creative mới không đồng nghĩa thử nghiệm mới, tăng ngân sách hoặc mở rộng thị phần."
+    ],
+    "1": [
+      "Đối chiếu số creative với số mẫu trước khi kết luận mức độ đa dạng nội dung. Khác biệt giữa các công ty có thể chịu ảnh hưởng của số tài khoản được tìm thấy."
+    ]
+  },
+  "Hồ sơ": {
+    "SSI": [
+      "Hướng dẫn mở tài khoản và thông điệp tích sản là hai cấu trúc đáng khảo sát. Chạy lâu là tín hiệu duy trì; không xác nhận lợi nhuận hoặc hiệu quả chuyển đổi."
+    ],
+    "KIS": [
+      "Một số video dùng template tương tự và thay thông điệp ưu đãi. Việc nhiều creative có cùng ngày hiển thị cuối chưa chứng minh nguyên nhân dừng."
+    ],
+    "DSC": [
+      "Có dữ liệu Google trong danh sách đã kiểm tra. DSC chưa được kiểm tra tương đương trên Meta; chưa đủ căn cứ xác định kênh chính."
+    ],
+    "Vietcap": [
+      "Video Vietcap IQ minh hoạ hướng bán công cụ bằng tình huống sử dụng. Không kết luận đây là bên duy nhất dùng người thật vì còn video chưa lấy được nội dung."
+    ],
+    "LPS": [
+      "Theo dõi cách đóng gói ưu đãi và điều kiện áp dụng. Số bản lớn chưa xác nhận ngân sách, lượt cài hoặc hiệu quả."
+    ]
+  }
+}

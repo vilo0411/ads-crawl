@@ -1,0 +1,340 @@
+[
+ {
+  "platform": "Facebook Ads",
+  "company": "CTCP Chứng khoán Rồng Việt",
+  "old_active": 1,
+  "gone": 1
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng Khoán An Bình - ABS",
+  "old_active": 25,
+  "new_active": 23,
+  "new_ids": 2,
+  "gone": 4
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng Khoán KIRIN",
+  "old_active": 1,
+  "new_active": 1
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng Khoán Mirae Asset Việt Nam",
+  "old_active": 2,
+  "gone": 2
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng Khoán SSI",
+  "old_active": 13,
+  "new_active": 17,
+  "new_ids": 5,
+  "gone": 1
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng Khoán Shinhan Việt Nam - SSV",
+  "old_active": 2,
+  "new_active": 35,
+  "new_ids": 35,
+  "gone": 2
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng Khoán Yuanta Việt Nam - YSVN",
+  "old_active": 16,
+  "new_active": 20,
+  "new_ids": 9,
+  "gone": 5
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán ACB - ACBS",
+  "old_active": 2,
+  "new_active": 4,
+  "new_ids": 2
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán HSC",
+  "old_active": 3,
+  "new_active": 5,
+  "new_ids": 5,
+  "gone": 3
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán KIS",
+  "old_active": 25,
+  "new_active": 25,
+  "new_ids": 5,
+  "gone": 5
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán LPS",
+  "old_active": 568,
+  "new_active": 345,
+  "new_ids": 138,
+  "gone": 361
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán MB",
+  "old_active": 107,
+  "new_active": 69,
+  "new_ids": 18,
+  "gone": 56
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán Nhất Việt - VFS",
+  "old_active": 37,
+  "new_active": 11,
+  "new_ids": 11,
+  "gone": 37
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán Tân Việt",
+  "old_active": 1,
+  "new_active": 1
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán VPBank - VPBank Securities",
+  "old_active": 6,
+  "new_active": 9,
+  "new_ids": 3
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Chứng khoán Vietcap",
+  "old_active": 13,
+  "new_active": 3,
+  "new_ids": 2,
+  "gone": 12
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Công ty Cổ phần Chứng khoán DNSE",
+  "old_active": 6,
+  "new_active": 5,
+  "new_ids": 2,
+  "gone": 3
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "HD Securities",
+  "old_active": 8,
+  "new_active": 10,
+  "new_ids": 2
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "KB Securities Vietnam",
+  "old_active": 4,
+  "new_active": 14,
+  "new_ids": 14,
+  "gone": 4
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Smart Invest Securities - AAS",
+  "old_active": 10,
+  "gone": 10
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "TPS - Chứng Khoán Tiên Phong",
+  "old_active": 3,
+  "new_active": 5,
+  "new_ids": 2
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Techcom Securities - TCBS",
+  "old_active": 1,
+  "new_active": 6,
+  "new_ids": 5
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "VNDIRECT Securities Corporation",
+  "old_active": 11,
+  "new_active": 28,
+  "new_ids": 28,
+  "gone": 11
+ },
+ {
+  "platform": "Facebook Ads",
+  "company": "Vietcombank Securities - VCBS",
+  "old_active": 3,
+  "new_active": 3,
+  "new_ids": 3,
+  "gone": 3
+ },
+ {
+  "platform": "Google Ads",
+  "company": "ACBS",
+  "new_total": 27
+ },
+ {
+  "platform": "Google Ads",
+  "company": "ASEAN",
+  "new_total": 13
+ },
+ {
+  "platform": "Google Ads",
+  "company": "An Bình - ABS",
+  "old_active": 8,
+  "new_total": 41,
+  "new_active": 8,
+  "new_ids": 1
+ },
+ {
+  "platform": "Google Ads",
+  "company": "DNSE",
+  "old_active": 1,
+  "new_total": 75,
+  "new_active": 1
+ },
+ {
+  "platform": "Google Ads",
+  "company": "DSC",
+  "old_active": 4,
+  "new_total": 31,
+  "new_active": 10
+ },
+ {
+  "platform": "Google Ads",
+  "company": "HSC",
+  "new_total": 24,
+  "new_active": 4,
+  "new_ids": 4
+ },
+ {
+  "platform": "Google Ads",
+  "company": "KB Securities",
+  "old_active": 2,
+  "new_total": 172,
+  "new_active": 2,
+  "new_ids": 1
+ },
+ {
+  "platform": "Google Ads",
+  "company": "KIS",
+  "old_active": 7,
+  "new_total": 261,
+  "new_active": 7,
+  "new_ids": 1
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Kiến Thiết - CSI",
+  "new_total": 1
+ },
+ {
+  "platform": "Google Ads",
+  "company": "LPS",
+  "old_active": 30,
+  "new_total": 59,
+  "new_active": 34,
+  "new_ids": 20
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Nhất Việt - VFS",
+  "old_active": 53,
+  "new_total": 73
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Pinetree",
+  "new_total": 2
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Rồng Việt",
+  "new_total": 32,
+  "new_ids": 1
+ },
+ {
+  "platform": "Google Ads",
+  "company": "SHS",
+  "new_total": 2
+ },
+ {
+  "platform": "Google Ads",
+  "company": "SSI",
+  "old_active": 65,
+  "new_total": 262,
+  "new_active": 57,
+  "new_ids": 7
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Shinhan - SSV",
+  "old_active": 5,
+  "new_total": 343,
+  "new_active": 17,
+  "new_ids": 23
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Smart Invest - AAS",
+  "old_active": 5,
+  "new_total": 34,
+  "new_active": 9,
+  "new_ids": 4
+ },
+ {
+  "platform": "Google Ads",
+  "company": "TCBS",
+  "new_total": 1
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Thiên Việt - TVS",
+  "new_total": 22
+ },
+ {
+  "platform": "Google Ads",
+  "company": "VCBS",
+  "new_total": 2
+ },
+ {
+  "platform": "Google Ads",
+  "company": "VNDirect",
+  "old_active": 6,
+  "new_total": 50,
+  "new_active": 6,
+  "new_ids": 2
+ },
+ {
+  "platform": "Google Ads",
+  "company": "VPBankS",
+  "new_total": 43
+ },
+ {
+  "platform": "Google Ads",
+  "company": "VPS",
+  "new_total": 14
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Vietcap",
+  "old_active": 2,
+  "new_total": 29,
+  "new_active": 2
+ },
+ {
+  "platform": "Google Ads",
+  "company": "Yuanta",
+  "new_total": 22,
+  "new_active": 6,
+  "new_ids": 3
+ }
+]

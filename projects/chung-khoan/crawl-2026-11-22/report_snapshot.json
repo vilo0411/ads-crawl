@@ -1,0 +1,7 @@
+{
+  "reference_at": "2026-11-22T15:51:00+07:00",
+  "baseline": "../crawl-2026-11-11/report_snapshot.json",
+  "rebuilt_from": "Meta Ad Library and Google Ads Transparency Center, Vietnam",
+  "meta": {"ads": 639, "assets": 184, "brands": 21, "monitored_pages": 25, "new_ids": 291},
+  "google": {"creatives": 1635, "active": 163, "monitored_accounts": 31, "new_ids": 67, "app_creatives": 194, "active_app_creatives": 29}
+}

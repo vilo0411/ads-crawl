@@ -1,0 +1,14 @@
+{
+  "_note": "Thứ tự = độ ưu tiên khi chọn 'chủ đề chính' của 1 QC (tín hiệu khớp đầu tiên).",
+  "Giới thiệu bạn bè": "gioi thieu|referral|ma gioi thieu|moi ban",
+  "Margin / lãi vay": "margin|ky quy|lai suat|lai vay|du no|ung truoc",
+  "Quà / tiền thưởng": "qua tang|tang (ngay|qua|co phieu|\\d)|nhan (ngay|qua|\\d)|tien thuong|phan thuong|\\bthuong (\\d|ngay|nong|toi)|hoan tien|cashback|voucher|\\b\\d+\\s?k\\b",
+  "Miễn / giảm phí": "mien phi|zero fee|giam phi|phi giao dich|\\b0 ?(d|dong)? ?phi|phi (giao dich )?(0|bang 0)\\b|0%",
+  "Kiến thức / webinar": "webinar|hoi thao|chuyen de|kien thuc|tim hieu|la gi|huong dan|zoom|livestream|khoa hoc",
+  "Phân tích / khuyến nghị": "khuyen nghi|nhan dinh|phan tich|bao cao|co phieu tiem nang|danh muc|vn-?index|xu huong thi truong",
+  "Tích sản / dài hạn": "tich san|dai han|dau tu dinh ky|tich luy|tai san|quy mo|chung chi quy|trai phieu",
+  "Uy tín / thương hiệu": "top \\d|hang dau|so 1|giai thuong|uy tin|thi phan|ngan hang|\\bbank\\b",
+  "App / nền tảng": "\\bapp\\b|ung dung|tai app|ikis|iboard|dtrade|smartone|tcinvest|vpbanks|mbs mobile|ios|android",
+  "Mở tài khoản / eKYC": "mo (tai khoan|tk)|dang ky tai khoan|ekyc|mo moi|tai khoan moi|khach hang moi",
+  "Hạn ưu đãi / khẩn cấp": "chi (con|tu)|den het|han cuoi|truoc ngay|\\b\\d{1,2}/\\d{1,2}(/20\\d\\d)?\\b|so luong co han|duy nhat"
+}
