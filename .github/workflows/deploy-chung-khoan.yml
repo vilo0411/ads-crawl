@@ -16,7 +16,7 @@ jobs:
       - run: git lfs pull --include "projects/chung-khoan/**"
 
       - name: Build site
-        run: rsync -a --exclude '.DS_Store' --exclude '_thu_cong_*' projects/chung-khoan/ site/
+        run: rsync -a --max-size=25m --exclude '.DS_Store' --exclude '_thu_cong_*' --exclude '*.zip' projects/chung-khoan/ site/  # Pages giới hạn 25 MiB/file
 
       - name: Deploy to Cloudflare Pages
         run: npx -y wrangler@4 pages deploy site --project-name chung-khoan-report --branch main --commit-dirty=true
